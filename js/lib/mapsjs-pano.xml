@@ -1,0 +1,406 @@
+<?xml version="1.0"?>
+<modules>
+  <module name="mapsjs-pano">
+    <symbols>
+      <ns name="H.map.render.panorama" local-name="panorama" access="public" scope="static" virtual="false" published="true" exported="false">
+        <description>
+          <prose><p>Contains functionality specific to Panorama renderer</p></prose>
+        </description>
+        <class name="H.map.render.panorama.RenderEngine" local-name="RenderEngine" access="public" scope="static" virtual="false" published="true" exported="true">
+          <description>
+            <prose><p>Panorama rendering engine is responsible for presenting the geo
+position provided by the view model as a 'street view'. In addition
+it provides extra functionality specific to 'street view'.</p></prose>
+          </description>
+          <extends>
+            <type ref="H.map.render.RenderEngine"/>
+          </extends>
+          <constructor local-name="RenderEngine" name="H.map.render.panorama.RenderEngine">
+            <param name="viewPort">
+              <types>
+                <type ref="H.map.ViewPort"/>
+              </types>
+              <ctype>
+                <name name="H.map.ViewPort"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <param name="viewModel">
+              <types>
+                <type ref="H.map.ViewModel"/>
+              </types>
+              <ctype>
+                <name name="H.map.ViewModel"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <param name="dataModel">
+              <types>
+                <type ref="H.map.DataModel"/>
+              </types>
+              <ctype>
+                <name name="H.map.DataModel"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <param name="opt_options" optional="true">
+              <types>
+                <type ref="H.map.render.p2d.RenderEngine.Options"/>
+              </types>
+              <ctype>
+                <name name="H.map.render.p2d.RenderEngine.Options" optional="true"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+          </constructor>
+          <property name="H.map.render.panorama.RenderEngine.POV_CHANGED_" local-name="POV_CHANGED_" access="private" scope="static" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+            <types>
+              <type ref="string"/>
+            </types>
+            <ctype>
+              <name name="string"/>
+            </ctype>
+          </property>
+          <property name="H.map.render.panorama.RenderEngine#type" local-name="type" access="public" scope="instance" virtual="false" published="false" exported="true">
+            <description>
+              <prose></prose>
+            </description>
+          </property>
+          <method name="H.map.render.panorama.RenderEngine.getClosestPanoramas" local-name="getClosestPanoramas" access="public" scope="static" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>Searches for the closest panoramas for given geo coordinate. You can call this
+method method multiple times without waiting for the callback, but intermediate
+calls are implicitly cancelled and the callback gets 'undefined' as parameter.</p></prose>
+            </description>
+            <param name="coord">
+              <types>
+                <type ref="H.geo.IPoint"/>
+              </types>
+              <ctype>
+                <name name="H.geo.IPoint"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <param name="callback">
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <func nullable="false">
+                  <param>
+                    <typed>
+                      <base>
+                        <name name="Array"/>
+                      </base>
+                      <app>
+                        <name name="H.map.render.panorama.RenderEngine.Panorama"/>
+                      </app>
+                    </typed>
+                  </param>
+                </func>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.map.render.panorama.RenderEngine.getImageUrl" local-name="getImageUrl" access="public" scope="static" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>Method returns URL of the panoorama preview based on the provided panorama object.</p></prose>
+            </description>
+            <param name="pano">
+              <types>
+                <type ref="H.map.render.panorama.RenderEngine.Panorama"/>
+              </types>
+              <ctype>
+                <name name="H.map.render.panorama.RenderEngine.Panorama" nullable="false"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="string"/>
+              </types>
+              <ctype>
+                <name name="string"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.map.render.panorama.RenderEngine.configure" local-name="configure" access="public" scope="static" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>Method implemnts <code>H.platform.IConfigurable</code> interface. Must be called
+before engine can be set on the map or any method invoked.</p></prose>
+            </description>
+            <param name="appId">
+              <types>
+                <type ref="string"/>
+              </types>
+              <ctype>
+                <name name="string"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <param name="appCode">
+              <types>
+                <type ref="string"/>
+              </types>
+              <ctype>
+                <name name="string"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <param name="useHTTPS">
+              <types>
+                <type ref="boolean"/>
+              </types>
+              <ctype>
+                <name name="boolean"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.map.render.panorama.RenderEngine#checkConfigured_" local-name="checkConfigured_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+          </method>
+          <method name="H.map.render.panorama.RenderEngine#zoomAt" local-name="zoomAt" access="public" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+            <param name="zoom">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <param name="opt_x" optional="true">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number" optional="true"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <param name="opt_y" optional="true">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number" optional="true"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.map.render.panorama.RenderEngine#disposeInternal" local-name="disposeInternal" access="protected" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+          </method>
+          <method name="H.map.render.panorama.RenderEngine#synchronize_" local-name="synchronize_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Function synchronizes current engine values with the view model</p></prose>
+            </description>
+            <param name="ev">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.map.render.panorama.RenderEngine#rendered_" local-name="rendered_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+            <param name="ev">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.map.render.panorama.RenderEngine#onViewUpdate" local-name="onViewUpdate" access="protected" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+            <param name="ev">
+              <types>
+                <type ref="H.map.ViewModel.UpdateEvent"/>
+              </types>
+              <ctype>
+                <name name="H.map.ViewModel.UpdateEvent"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.map.render.panorama.RenderEngine#cameraToPov_" local-name="cameraToPov_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Method convers camera to panorama specific PoV object</p></prose>
+            </description>
+            <param name="camera">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="H.PanoramaUtil.types.Panorama"/>
+              </types>
+              <ctype>
+                <name name="H.PanoramaUtil.types.Panorama"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.map.render.panorama.RenderEngine#povToCamera_" local-name="povToCamera_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Method coverts panorama specific PoV object into camera</p></prose>
+            </description>
+            <param name="pov">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.map.render.panorama.RenderEngine#getPanoramaId" local-name="getPanoramaId" access="public" scope="instance" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>Method returns the id of the currently displayed panorama.</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="string"/>
+              </types>
+              <ctype>
+                <name name="string"/>
+              </ctype>
+              <description>
+                <prose><p>panorama id or empty string if no panorama is not loaded</p></prose>
+              </description>
+            </returns>
+          </method>
+          <typedef name="H.map.render.panorama.RenderEngine.Panorama" local-name="Panorama" access="public" scope="static" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>The type represents object that desccribes minimum set of data for panorama.</p></prose>
+            </description>
+            <types>
+              <type ref="Object"/>
+            </types>
+            <ctype>
+              <record>
+                <field>
+                  <key>
+                    <name name="id"/>
+                  </key>
+                  <value>
+                    <name name="number"/>
+                  </value>
+                </field>
+                <field>
+                  <key>
+                    <name name="position"/>
+                  </key>
+                  <value>
+                    <name name="H.geo.IPoint"/>
+                  </value>
+                </field>
+              </record>
+            </ctype>
+            <property name="H.map.render.panorama.RenderEngine.Panorama#id" local-name="id" access="public" scope="" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>unique panorama identifier</p></prose>
+              </description>
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+            </property>
+            <property name="H.map.render.panorama.RenderEngine.Panorama#position" local-name="position" access="public" scope="" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>position of the given panorama</p></prose>
+              </description>
+              <types>
+                <type ref="position"/>
+              </types>
+              <ctype>
+                <name name="position"/>
+              </ctype>
+            </property>
+          </typedef>
+        </class>
+      </ns>
+    </symbols>
+  </module>
+</modules>

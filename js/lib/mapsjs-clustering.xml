@@ -1,0 +1,2857 @@
+<?xml version="1.0"?>
+<modules>
+  <module name="mapsjs-clustering">
+    <symbols>
+      <ns name="H.clustering" local-name="clustering" access="public" scope="static" virtual="false" published="true" exported="false">
+        <description>
+          <prose><p>This namespace contains classes and functionality to enable marker clustering.</p></prose>
+        </description>
+        <interface name="H.clustering.IResult" local-name="IResult" access="public" scope="static" virtual="false" published="true" exported="false">
+          <description>
+            <prose><p>This interface represents the result item of a clustering operation.</p></prose>
+          </description>
+          <method name="H.clustering.IResult#getPosition" local-name="getPosition" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Returns the geographical position of this cluster result.</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="H.geo.Point"/>
+              </types>
+              <ctype>
+                <name name="H.geo.Point"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.IResult#getWeight" local-name="getWeight" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Returns the weight of this cluster result.</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.IResult#isCluster" local-name="isCluster" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>To indicate whether this cluster result is a cluster or noise point</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="boolean"/>
+              </types>
+              <ctype>
+                <name name="boolean"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.IResult#getMinZoom" local-name="getMinZoom" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Returns the minimum zoom level where this item is not part of another cluster</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+        </interface>
+        <interface name="H.clustering.ICluster" local-name="ICluster" access="public" scope="static" virtual="false" published="true" exported="false">
+          <description>
+            <prose><p>This interface describes a cluster of data points, which fulfill the clustering specification
+(i.e. data points are within the epsilon and there are enough points to form a cluster).</p>
+<p>
+We can make an analogue with <link ref="http://en.wikipedia.org/w/index.php?search=Tree+(data+structure)" />.
+In that case given cluster is a node in a tree, children of that node are sub-clusters and leafs of that
+sub-tree are the noise points.
+</p>
+
+<p>
+Sub-clusters of a cluster can be seen on a map when changing a zoom level, that time parent cluster splits into
+smaller clusters and possible noise points.
+</p></prose>
+          </description>
+          <method name="H.clustering.ICluster#getMaxZoom" local-name="getMaxZoom" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Returns the maximum zoom level where this cluster doesn't fall apart into sub clusters and/or noise poinst</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.ICluster#getBounds" local-name="getBounds" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Returns the bounding rectangle of this cluster.</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="H.geo.Rect"/>
+              </types>
+              <ctype>
+                <name name="H.geo.Rect"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.ICluster#forEachEntry" local-name="forEachEntry" access="public" scope="instance" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>Invokes the specified callback for each &quot;entry&quot; of the cluster. That &quot;entry&quot; can be either a cluster
+which implements <link ref="H.clustering.ICluster" /> interface or a noise point which
+implements <link ref="H.clustering.INoisePoint" /> interface.</p>
+<p>
+In analogue example from this class description, method traverses through all nodes of the tree beside the root.
+</p></prose>
+            </description>
+            <param name="callback">
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <func>
+                  <param>
+                    <name name="H.clustering.IResult"/>
+                  </param>
+                </func>
+              </ctype>
+              <description>
+                <prose><p>The callback gets the currently traversed entry as an argument, which is cluster or noise point.</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.clustering.ICluster#forEachDataPoint" local-name="forEachDataPoint" access="public" scope="instance" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>Invokes the specified callback for each data point which is part of this cluster, even indirectly.</p>
+<p>
+In analogue example from this class description, method traverses only through leaf nodes of the tree.
+</p></prose>
+            </description>
+            <param name="callback">
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <func>
+                  <param>
+                    <name name="H.clustering.INoisePoint"/>
+                  </param>
+                </func>
+              </ctype>
+              <description>
+                <prose><p>The callback gets the currently traversed noise point as argument.</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.clustering.ICluster#getPosition" local-name="getPosition" access="public" scope="instance" virtual="false" published="true" exported="false" inherited="H.clustering.IResult#getPosition">
+            <description>
+              <prose><p>Returns the geographical position of this cluster result.</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="H.geo.Point"/>
+              </types>
+              <ctype>
+                <name name="H.geo.Point"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.ICluster#getWeight" local-name="getWeight" access="public" scope="instance" virtual="false" published="true" exported="false" inherited="H.clustering.IResult#getWeight">
+            <description>
+              <prose><p>Returns the weight of this cluster result.</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.ICluster#isCluster" local-name="isCluster" access="public" scope="instance" virtual="false" published="true" exported="false" inherited="H.clustering.IResult#isCluster">
+            <description>
+              <prose><p>To indicate whether this cluster result is a cluster or noise point</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="boolean"/>
+              </types>
+              <ctype>
+                <name name="boolean"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.ICluster#getMinZoom" local-name="getMinZoom" access="public" scope="instance" virtual="false" published="true" exported="false" inherited="H.clustering.IResult#getMinZoom">
+            <description>
+              <prose><p>Returns the minimum zoom level where this item is not part of another cluster</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+        </interface>
+        <interface name="H.clustering.INoisePoint" local-name="INoisePoint" access="public" scope="static" virtual="false" published="true" exported="false">
+          <description>
+            <prose><p>This interface represents a data point which does not belong to a cluster.</p></prose>
+          </description>
+          <method name="H.clustering.INoisePoint#getData" local-name="getData" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>This method returns data which coresponds to
+this noise point.</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="*"/>
+              </types>
+              <ctype>
+                <all/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.INoisePoint#getPosition" local-name="getPosition" access="public" scope="instance" virtual="false" published="true" exported="false" inherited="H.clustering.IResult#getPosition">
+            <description>
+              <prose><p>Returns the geographical position of this cluster result.</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="H.geo.Point"/>
+              </types>
+              <ctype>
+                <name name="H.geo.Point"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.INoisePoint#getWeight" local-name="getWeight" access="public" scope="instance" virtual="false" published="true" exported="false" inherited="H.clustering.IResult#getWeight">
+            <description>
+              <prose><p>Returns the weight of this cluster result.</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.INoisePoint#isCluster" local-name="isCluster" access="public" scope="instance" virtual="false" published="true" exported="false" inherited="H.clustering.IResult#isCluster">
+            <description>
+              <prose><p>To indicate whether this cluster result is a cluster or noise point</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="boolean"/>
+              </types>
+              <ctype>
+                <name name="boolean"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.INoisePoint#getMinZoom" local-name="getMinZoom" access="public" scope="instance" virtual="false" published="true" exported="false" inherited="H.clustering.IResult#getMinZoom">
+            <description>
+              <prose><p>Returns the minimum zoom level where this item is not part of another cluster</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+        </interface>
+        <class name="H.clustering.NoisePoint" local-name="NoisePoint" access="public" scope="static" virtual="false" published="false" exported="true">
+          <description>
+            <prose><p>This class represents a data point which does not belong to a cluster.</p></prose>
+          </description>
+          <extends>
+            <type ref="H.clustering.INoisePoint"/>
+          </extends>
+          <constructor local-name="NoisePoint" name="H.clustering.NoisePoint">
+            <param name="clusterer">
+              <types>
+                <type ref="H.clustering.Clusterer"/>
+              </types>
+              <ctype>
+                <name name="H.clustering.Clusterer"/>
+              </ctype>
+              <description>
+                <prose><p>The clusterer which produces this noise point</p></prose>
+              </description>
+            </param>
+            <param name="entry">
+              <types>
+                <type ref="H.clustering.quadtree.Tree.Entry"/>
+              </types>
+              <ctype>
+                <name name="H.clustering.quadtree.Tree.Entry"/>
+              </ctype>
+              <description>
+                <prose><p>The according quadtree entry of this noise point</p></prose>
+              </description>
+            </param>
+            <param name="minDepth">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose><p>The minimum depth level where the noise point is not part of a cluster</p></prose>
+              </description>
+            </param>
+          </constructor>
+          <property name="H.clustering.NoisePoint#clusterer_" local-name="clusterer_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+            <types>
+              <type ref="H.clustering.Clusterer"/>
+            </types>
+            <ctype>
+              <name name="H.clustering.Clusterer"/>
+            </ctype>
+          </property>
+          <property name="H.clustering.NoisePoint#entry_" local-name="entry_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+            <types>
+              <type ref="H.clustering.quadtree.Tree.Entry"/>
+            </types>
+            <ctype>
+              <name name="H.clustering.quadtree.Tree.Entry"/>
+            </ctype>
+          </property>
+          <property name="H.clustering.NoisePoint#minDepth_" local-name="minDepth_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+            <types>
+              <type ref="number"/>
+            </types>
+            <ctype>
+              <name name="number"/>
+            </ctype>
+          </property>
+          <property name="H.clustering.NoisePoint#position_" local-name="position_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+            <types>
+              <type ref="H.geo.Point"/>
+            </types>
+            <ctype>
+              <name name="H.geo.Point"/>
+            </ctype>
+          </property>
+          <method name="H.clustering.NoisePoint#getData" local-name="getData" access="public" scope="instance" virtual="false" published="true" exported="false" inherited="H.clustering.INoisePoint#getData">
+            <description>
+              <prose><p>This method returns data which coresponds to
+this noise point.</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="*"/>
+              </types>
+              <ctype>
+                <all/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.NoisePoint#getPosition" local-name="getPosition" access="public" scope="instance" virtual="false" published="true" exported="false" inherited="H.clustering.IResult#getPosition">
+            <description>
+              <prose><p>Returns the geographical position of this cluster result.</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="H.geo.Point"/>
+              </types>
+              <ctype>
+                <name name="H.geo.Point"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.NoisePoint#getWeight" local-name="getWeight" access="public" scope="instance" virtual="false" published="true" exported="false" inherited="H.clustering.IResult#getWeight">
+            <description>
+              <prose><p>Returns the weight of this cluster result.</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.NoisePoint#isCluster" local-name="isCluster" access="public" scope="instance" virtual="false" published="true" exported="false" inherited="H.clustering.IResult#isCluster">
+            <description>
+              <prose><p>To indicate whether this cluster result is a cluster or noise point</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="boolean"/>
+              </types>
+              <ctype>
+                <name name="boolean"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.NoisePoint#getMinZoom" local-name="getMinZoom" access="public" scope="instance" virtual="false" published="true" exported="false" inherited="H.clustering.IResult#getMinZoom">
+            <description>
+              <prose><p>Returns the minimum zoom level where this item is not part of another cluster</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+        </class>
+        <class name="H.clustering.Cluster" local-name="Cluster" access="public" scope="static" virtual="false" published="false" exported="true">
+          <description>
+            <prose><p>This class represents a cluster of data points, which fulfill the clustering specification (i.e. data points are
+  within the epsilon and there are enough points to form a cluster).</p></prose>
+          </description>
+          <extends>
+            <type ref="H.clustering.ICluster"/>
+          </extends>
+          <constructor local-name="Cluster" name="H.clustering.Cluster">
+            <param name="clusterer">
+              <types>
+                <type ref="H.clustering.Clusterer"/>
+              </types>
+              <ctype>
+                <name name="H.clustering.Clusterer"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <param name="node">
+              <types>
+                <type ref="H.clustering.quadtree.Node"/>
+              </types>
+              <ctype>
+                <name name="H.clustering.quadtree.Node"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <param name="minDepth">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose><p>The minimum clustering depth where the cluster is valid</p></prose>
+              </description>
+            </param>
+            <param name="maxDepth">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose><p>The maximum clustering depth where the cluster is valid</p></prose>
+              </description>
+            </param>
+          </constructor>
+          <property name="H.clustering.Cluster#clusterer_" local-name="clusterer_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+            <types>
+              <type ref="H.clustering.Clusterer"/>
+            </types>
+            <ctype>
+              <name name="H.clustering.Clusterer"/>
+            </ctype>
+          </property>
+          <property name="H.clustering.Cluster#node_" local-name="node_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+            <types>
+              <type ref="H.clustering.quadtree.Node"/>
+            </types>
+            <ctype>
+              <name name="H.clustering.quadtree.Node"/>
+            </ctype>
+          </property>
+          <property name="H.clustering.Cluster#minDepth_" local-name="minDepth_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+            <types>
+              <type ref="number"/>
+            </types>
+            <ctype>
+              <name name="number"/>
+            </ctype>
+          </property>
+          <property name="H.clustering.Cluster#maxDepth_" local-name="maxDepth_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+            <types>
+              <type ref="number"/>
+            </types>
+            <ctype>
+              <name name="number"/>
+            </ctype>
+          </property>
+          <property name="H.clustering.Cluster#position_" local-name="position_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+            <types>
+              <type ref="H.geo.Point"/>
+            </types>
+            <ctype>
+              <name name="H.geo.Point"/>
+            </ctype>
+          </property>
+          <property name="H.clustering.Cluster#bounds_" local-name="bounds_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+            <types>
+              <type ref="H.geo.Rect"/>
+            </types>
+            <ctype>
+              <name name="H.geo.Rect"/>
+            </ctype>
+          </property>
+          <property name="H.clustering.Cluster#forEachEntryCallback_" local-name="forEachEntryCallback_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Holds a reference to the callback function which was most recently passed to the forEachEntry method</p></prose>
+            </description>
+            <types>
+              <type ref="function"/>
+            </types>
+            <ctype>
+              <func>
+                <param>
+                  <name name="H.clustering.IResult"/>
+                </param>
+              </func>
+            </ctype>
+          </property>
+          <method name="H.clustering.Cluster#forEachEntryTraverser_" local-name="forEachEntryTraverser_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>A callback function used for clustering.quadtree.Tree.Node#traverse() to collect collect all directly sub clusters
+and data points.</p></prose>
+            </description>
+            <param name="node">
+              <types>
+                <type ref="H.clustering.quadtree.Node"/>
+              </types>
+              <ctype>
+                <name name="H.clustering.quadtree.Node"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <param name="depth">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="boolean"/>
+              </types>
+              <ctype>
+                <name name="boolean"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <property name="H.clustering.Cluster#forEachDataPointCallback_" local-name="forEachDataPointCallback_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Holds a reference to the callback function which was most recently passed to the forEachDataPoint method</p></prose>
+            </description>
+            <types>
+              <type ref="function"/>
+            </types>
+            <ctype>
+              <name name="Function"/>
+            </ctype>
+          </property>
+          <method name="H.clustering.Cluster#forEachDataPointTraverser_" local-name="forEachDataPointTraverser_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>A callback function used to traverse the corresponding node of this cluster and its child nodes to collect all
+sub clusters and directly clustered data points.</p></prose>
+            </description>
+            <param name="node">
+              <types>
+                <type ref="H.clustering.quadtree.Node"/>
+              </types>
+              <ctype>
+                <name name="H.clustering.quadtree.Node"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <param name="depth">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="boolean"/>
+              </types>
+              <ctype>
+                <name name="boolean"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.Cluster#getMaxZoom" local-name="getMaxZoom" access="public" scope="instance" virtual="false" published="true" exported="false" inherited="H.clustering.ICluster#getMaxZoom">
+            <description>
+              <prose><p>Returns the maximum zoom level where this cluster doesn't fall apart into sub clusters and/or noise poinst</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.Cluster#getBounds" local-name="getBounds" access="public" scope="instance" virtual="false" published="true" exported="false" inherited="H.clustering.ICluster#getBounds">
+            <description>
+              <prose><p>Returns the bounding rectangle of this cluster.</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="H.geo.Rect"/>
+              </types>
+              <ctype>
+                <name name="H.geo.Rect"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.Cluster#forEachEntry" local-name="forEachEntry" access="public" scope="instance" virtual="false" published="true" exported="true" inherited="H.clustering.ICluster#forEachEntry">
+            <description>
+              <prose><p>Invokes the specified callback for each &quot;entry&quot; of the cluster. That &quot;entry&quot; can be either a cluster
+which implements <link ref="H.clustering.ICluster" /> interface or a noise point which
+implements <link ref="H.clustering.INoisePoint" /> interface.</p>
+<p>
+In analogue example from this class description, method traverses through all nodes of the tree beside the root.
+</p></prose>
+            </description>
+            <param name="callback">
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <func>
+                  <param>
+                    <name name="H.clustering.IResult"/>
+                  </param>
+                </func>
+              </ctype>
+              <description>
+                <prose><p>The callback gets the currently traversed entry as an argument, which is cluster or noise point.</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.clustering.Cluster#forEachDataPoint" local-name="forEachDataPoint" access="public" scope="instance" virtual="false" published="true" exported="true" inherited="H.clustering.ICluster#forEachDataPoint">
+            <description>
+              <prose><p>Invokes the specified callback for each data point which is part of this cluster, even indirectly.</p>
+<p>
+In analogue example from this class description, method traverses only through leaf nodes of the tree.
+</p></prose>
+            </description>
+            <param name="callback">
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <func>
+                  <param>
+                    <name name="H.clustering.INoisePoint"/>
+                  </param>
+                </func>
+              </ctype>
+              <description>
+                <prose><p>The callback gets the currently traversed noise point as argument.</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.clustering.Cluster#getPosition" local-name="getPosition" access="public" scope="instance" virtual="false" published="true" exported="false" inherited="H.clustering.IResult#getPosition">
+            <description>
+              <prose><p>Returns the geographical position of this cluster result.</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="H.geo.Point"/>
+              </types>
+              <ctype>
+                <name name="H.geo.Point"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.Cluster#getWeight" local-name="getWeight" access="public" scope="instance" virtual="false" published="true" exported="false" inherited="H.clustering.IResult#getWeight">
+            <description>
+              <prose><p>Returns the weight of this cluster result.</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.Cluster#isCluster" local-name="isCluster" access="public" scope="instance" virtual="false" published="true" exported="false" inherited="H.clustering.IResult#isCluster">
+            <description>
+              <prose><p>To indicate whether this cluster result is a cluster or noise point</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="boolean"/>
+              </types>
+              <ctype>
+                <name name="boolean"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.Cluster#getMinZoom" local-name="getMinZoom" access="public" scope="instance" virtual="false" published="true" exported="false" inherited="H.clustering.IResult#getMinZoom">
+            <description>
+              <prose><p>Returns the minimum zoom level where this item is not part of another cluster</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+        </class>
+        <class name="H.clustering.Clusterer" local-name="Clusterer" access="public" scope="static" virtual="false" published="false" exported="false">
+          <description>
+            <prose></prose>
+          </description>
+          <constructor local-name="Clusterer" name="H.clustering.Clusterer">
+            <param name="opt_options" optional="true">
+              <types>
+                <type ref="H.clustering.Clusterer.Options"/>
+              </types>
+              <ctype>
+                <name name="H.clustering.Clusterer.Options" optional="true"/>
+              </ctype>
+              <description>
+                <prose><p>The optional parameters to initialze the Clusterer</p></prose>
+              </description>
+            </param>
+          </constructor>
+          <property name="H.clustering.Clusterer#projection_" local-name="projection_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>The projection to use</p></prose>
+            </description>
+            <types>
+              <type ref="H.geo.IProjection"/>
+            </types>
+            <ctype>
+              <name name="H.geo.IProjection"/>
+            </ctype>
+          </property>
+          <property name="H.clustering.Clusterer#minZoom_" local-name="minZoom_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>The minimum zoom level where clusters are computed</p></prose>
+            </description>
+            <types>
+              <type ref="number"/>
+            </types>
+            <ctype>
+              <name name="number"/>
+            </ctype>
+          </property>
+          <property name="H.clustering.Clusterer#maxZoom_" local-name="maxZoom_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>The maximum zoom level where clusters are computed</p></prose>
+            </description>
+            <types>
+              <type ref="number"/>
+            </types>
+            <ctype>
+              <name name="number"/>
+            </ctype>
+          </property>
+          <property name="H.clustering.Clusterer#minWeight" local-name="minWeight" access="public" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>The minimum number of points that must be present within a cluster</p></prose>
+            </description>
+            <types>
+              <type ref="number"/>
+            </types>
+            <ctype>
+              <name name="number"/>
+            </ctype>
+          </property>
+          <property name="H.clustering.Clusterer#depthLevelOffset_" local-name="depthLevelOffset_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>The offset between zoom levels and tree depth levels
+Example: max zoom is 22, eps is 32px, the offset must be 2 to get clusters for quad cells with a radius
+of 32 pixel (64x64 px):</p></prose>
+            </description>
+            <types>
+              <type ref="number"/>
+            </types>
+            <ctype>
+              <name name="number"/>
+            </ctype>
+          </property>
+          <property name="H.clustering.Clusterer#_2_POWER_31_" local-name="_2_POWER_31_" access="private" scope="instance" virtual="false" published="false" exported="false" constant="true">
+            <description>
+              <prose><p>The cached result of 2^31, used for radius and center of the quadtree</p></prose>
+            </description>
+            <types>
+              <type ref="number"/>
+            </types>
+            <ctype>
+              <name name="number"/>
+            </ctype>
+          </property>
+          <property name="H.clustering.Clusterer#_2_POWER_32_" local-name="_2_POWER_32_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>The cached result of 2^32, used for projected coordinates</p></prose>
+            </description>
+            <types>
+              <type ref="number"/>
+            </types>
+            <ctype>
+              <name name="number"/>
+            </ctype>
+          </property>
+          <method name="H.clustering.Clusterer#setDataPoints" local-name="setDataPoints" access="public" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Sets the data points for the clustering</p></prose>
+            </description>
+            <param name="dataPoints">
+              <types>
+                <type ref="Array.&lt;H.clustering.DataPoint&gt;"/>
+              </types>
+              <ctype>
+                <typed>
+                  <base>
+                    <name name="Array"/>
+                  </base>
+                  <app>
+                    <name name="H.clustering.DataPoint"/>
+                  </app>
+                </typed>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.clustering.Clusterer#scalePixel_" local-name="scalePixel_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>To scale pixel coordinates for a specified zoom level</p></prose>
+            </description>
+            <param name="pxPoint">
+              <types>
+                <type ref="H.math.Point"/>
+              </types>
+              <ctype>
+                <name name="H.math.Point"/>
+              </ctype>
+              <description>
+                <prose><p>The pixel coordinates to scale</p></prose>
+              </description>
+            </param>
+            <param name="zoom">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose><p>The zoom level to scale the pixel coordinates for</p></prose>
+              </description>
+            </param>
+            <param name="scaledPxPoint">
+              <types>
+                <type ref="H.geo.Point"/>
+              </types>
+              <ctype>
+                <name name="H.geo.Point"/>
+              </ctype>
+              <description>
+                <prose><p>The pixel coordinates where to store the result</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.clustering.Clusterer#xyToGeo" local-name="xyToGeo" access="public" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>To convert a weighted pixel address to georgraphical coordinates
+Don't publish it, API internally use only!</p></prose>
+            </description>
+            <param name="x">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose><p>The pixel adress on x-axis</p></prose>
+              </description>
+            </param>
+            <param name="y">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose><p>The pixel adress on y-axis</p></prose>
+              </description>
+            </param>
+            <param name="weight">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <param name="opt_out" optional="true">
+              <types>
+                <type ref="H.geo.Point"/>
+              </types>
+              <ctype>
+                <name name="H.geo.Point" optional="true"/>
+              </ctype>
+              <description>
+                <prose><p>The optional geo point to store the result</p></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="H.geo.Point"/>
+              </types>
+              <ctype>
+                <name name="H.geo.Point"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.Clusterer#depthToZoom" local-name="depthToZoom" access="public" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>To convert a weighted pixel address to georgraphical coordinates
+Don't publish it, API internally use only!</p></prose>
+            </description>
+            <param name="depth">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.Clusterer#getResults" local-name="getResults" access="public" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Returns the clustering results</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="H.clustering.Clusterer.Result"/>
+              </types>
+              <ctype>
+                <name name="H.clustering.Clusterer.Result"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <typedef name="H.clustering.Clusterer.PendingCluster" local-name="PendingCluster" access="public" scope="static" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+            <types>
+              <type ref="Object"/>
+            </types>
+            <ctype>
+              <record>
+                <field>
+                  <key>
+                    <name name="node"/>
+                  </key>
+                  <value>
+                    <union>
+                      <type>
+                        <name name="H.clustering.quadtree.Node"/>
+                      </type>
+                    </union>
+                  </value>
+                </field>
+                <field>
+                  <key>
+                    <name name="depth"/>
+                  </key>
+                  <value>
+                    <union>
+                      <type>
+                        <name name="number"/>
+                      </type>
+                    </union>
+                  </value>
+                </field>
+              </record>
+            </ctype>
+          </typedef>
+          <method name="H.clustering.Clusterer#computeResults_" local-name="computeResults_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>To compute the clustering for a given node</p></prose>
+            </description>
+            <param name="node">
+              <types>
+                <type ref="H.clustering.quadtree.Node"/>
+              </types>
+              <ctype>
+                <name name="H.clustering.quadtree.Node"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <param name="depth">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose><p>The depth leel of the node</p></prose>
+              </description>
+            </param>
+            <param name="residualDepth">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose><p>The residual depth levels to traverse (relative to the current level)</p></prose>
+              </description>
+            </param>
+            <param name="lastClusterDepth">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose><p>The depth level where the last cluster on ancestor axis was found</p></prose>
+              </description>
+            </param>
+            <param name="result">
+              <types>
+                <type ref="H.clustering.Clusterer.Result"/>
+              </types>
+              <ctype>
+                <name name="H.clustering.Clusterer.Result"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <param name="pendingCluster" nullable="true">
+              <types>
+                <type ref="H.clustering.Clusterer.PendingCluster"/>
+              </types>
+              <ctype>
+                <name name="H.clustering.Clusterer.PendingCluster" nullable="true"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.clustering.Clusterer#finalizePendingCluster_" local-name="finalizePendingCluster_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>To finalize a pending cluster</p></prose>
+            </description>
+            <param name="pendingCluster">
+              <types>
+                <type ref="H.clustering.Clusterer.PendingCluster"/>
+              </types>
+              <ctype>
+                <name name="H.clustering.Clusterer.PendingCluster"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <param name="maxDepth">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose><p>The maximum depth level where the cluster doesn't fall apart into sub clusters and/or noise</p></prose>
+              </description>
+            </param>
+            <param name="result">
+              <types>
+                <type ref="H.clustering.Clusterer.Result"/>
+              </types>
+              <ctype>
+                <name name="H.clustering.Clusterer.Result"/>
+              </ctype>
+              <description>
+                <prose><p>The result object where to store the cluster</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.clustering.Clusterer#collectNoisePoints_" local-name="collectNoisePoints_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>To collect all noise points for the given node on self-or-descandants axis</p></prose>
+            </description>
+            <param name="node">
+              <types>
+                <type ref="H.clustering.quadtree.Node"/>
+              </types>
+              <ctype>
+                <name name="H.clustering.quadtree.Node"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <param name="minDepth">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose><p>The minimum depth level where the noise points ar not part of a cluster</p></prose>
+              </description>
+            </param>
+            <param name="result">
+              <types>
+                <type ref="H.clustering.Clusterer.Result"/>
+              </types>
+              <ctype>
+                <name name="H.clustering.Clusterer.Result"/>
+              </ctype>
+              <description>
+                <prose><p>The result object where to store the noise points</p></prose>
+              </description>
+            </param>
+          </method>
+          <typedef name="H.clustering.Clusterer.Result" local-name="Result" access="public" scope="static" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>An aggregation of clustering results which provides a colection of cluster points and a collection of noise points.</p></prose>
+            </description>
+            <types>
+              <type ref="Object"/>
+            </types>
+            <ctype>
+              <record>
+                <field>
+                  <key>
+                    <name name="clusters"/>
+                  </key>
+                  <value>
+                    <union>
+                      <type>
+                        <typed>
+                          <base>
+                            <name name="Array"/>
+                          </base>
+                          <app>
+                            <name name="H.clustering.Cluster"/>
+                          </app>
+                        </typed>
+                      </type>
+                    </union>
+                  </value>
+                </field>
+                <field>
+                  <key>
+                    <name name="noisePoints"/>
+                  </key>
+                  <value>
+                    <union>
+                      <type>
+                        <typed>
+                          <base>
+                            <name name="Array"/>
+                          </base>
+                          <app>
+                            <name name="H.clustering.NoisePoint"/>
+                          </app>
+                        </typed>
+                      </type>
+                    </union>
+                  </value>
+                </field>
+              </record>
+            </ctype>
+            <property name="H.clustering.Clusterer.Result#clusters" local-name="clusters" access="public" scope="" virtual="false" published="false" exported="false">
+              <description>
+                <prose></prose>
+              </description>
+              <types>
+                <type ref="Array.&lt;H.clustering.Cluster&gt;"/>
+              </types>
+              <ctype>
+                <typed>
+                  <base>
+                    <name name="Array"/>
+                  </base>
+                  <app>
+                    <name name="H.clustering.Cluster"/>
+                  </app>
+                </typed>
+              </ctype>
+            </property>
+            <property name="H.clustering.Clusterer.Result#noisePoints" local-name="noisePoints" access="public" scope="" virtual="false" published="false" exported="false">
+              <description>
+                <prose></prose>
+              </description>
+              <types>
+                <type ref="Array.&lt;H.clustering.NoisePoint&gt;"/>
+              </types>
+              <ctype>
+                <typed>
+                  <base>
+                    <name name="Array"/>
+                  </base>
+                  <app>
+                    <name name="H.clustering.NoisePoint"/>
+                  </app>
+                </typed>
+              </ctype>
+            </property>
+          </typedef>
+          <typedef name="H.clustering.Clusterer.Options" local-name="Options" access="public" scope="static" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Options used to initialize a clusterer</p></prose>
+            </description>
+            <types>
+              <type ref="Object"/>
+            </types>
+            <ctype>
+              <record>
+                <field>
+                  <key>
+                    <name name="projection"/>
+                  </key>
+                  <value>
+                    <union>
+                      <type>
+                        <name name="H.geo.IProjection"/>
+                      </type>
+                      <type>
+                        <undefined/>
+                      </type>
+                    </union>
+                  </value>
+                </field>
+                <field>
+                  <key>
+                    <name name="min"/>
+                  </key>
+                  <value>
+                    <union>
+                      <type>
+                        <name name="number"/>
+                      </type>
+                      <type>
+                        <undefined/>
+                      </type>
+                    </union>
+                  </value>
+                </field>
+                <field>
+                  <key>
+                    <name name="max"/>
+                  </key>
+                  <value>
+                    <union>
+                      <type>
+                        <name name="number"/>
+                      </type>
+                      <type>
+                        <undefined/>
+                      </type>
+                    </union>
+                  </value>
+                </field>
+                <field>
+                  <key>
+                    <name name="eps"/>
+                  </key>
+                  <value>
+                    <union>
+                      <type>
+                        <name name="number"/>
+                      </type>
+                      <type>
+                        <undefined/>
+                      </type>
+                    </union>
+                  </value>
+                </field>
+                <field>
+                  <key>
+                    <name name="minWeight"/>
+                  </key>
+                  <value>
+                    <union>
+                      <type>
+                        <name name="number"/>
+                      </type>
+                      <type>
+                        <undefined/>
+                      </type>
+                    </union>
+                  </value>
+                </field>
+              </record>
+            </ctype>
+            <property name="H.clustering.Clusterer.Options#projection" local-name="projection" access="public" scope="" virtual="false" published="false" exported="false" optional="true">
+              <description>
+                <prose><p>The projection to use for the clustering, defaults to <link ref="H.geo.mercator" /></p></prose>
+              </description>
+              <types>
+                <type ref="H.geo.IProjection"/>
+              </types>
+              <ctype>
+                <name name="H.geo.IProjection" optional="true"/>
+              </ctype>
+            </property>
+            <property name="H.clustering.Clusterer.Options#min" local-name="min" access="public" scope="" virtual="false" published="false" exported="false" optional="true">
+              <description>
+                <prose><p>The minimum zoom level for which the clusters should be created,
+          default is <code>0</code></p></prose>
+              </description>
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number" optional="true"/>
+              </ctype>
+            </property>
+            <property name="H.clustering.Clusterer.Options#max" local-name="max" access="public" scope="" virtual="false" published="false" exported="false" optional="true">
+              <description>
+                <prose><p>The maximum zoom level for which the clusters should be created,
+          default is <code>22</code></p></prose>
+              </description>
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number" optional="true"/>
+              </ctype>
+            </property>
+            <property name="H.clustering.Clusterer.Options#eps" local-name="eps" access="public" scope="" virtual="false" published="false" exported="false" optional="true">
+              <description>
+                <prose><p>The epsilon value to use for clustering, must be 2^n, where n is an integer <code>&gt;=0</code>,
+          default is  <code>32</code></p></prose>
+              </description>
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number" optional="true"/>
+              </ctype>
+            </property>
+            <property name="H.clustering.Clusterer.Options#minWeight" local-name="minWeight" access="public" scope="" virtual="false" published="false" exported="false" optional="true">
+              <description>
+                <prose><p>The smallest number of points that must be present within a cluster in range <code>[2 ...]</code>,
+          default is  <code>2</code>.</p></prose>
+              </description>
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number" optional="true"/>
+              </ctype>
+            </property>
+          </typedef>
+        </class>
+        <interface name="H.clustering.ITheme" local-name="ITheme" access="public" scope="static" virtual="false" published="true" exported="false">
+          <description>
+            <prose><p>Interface which specifies the methods a theme must implement.</p>
+<p>Themes can be used to style the output of a clustering process when overlaying clustered data on the map.</p></prose>
+          </description>
+          <method name="H.clustering.ITheme#getClusterPresentation" local-name="getClusterPresentation" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Function returns a cluster presentation as a map object.</p></prose>
+            </description>
+            <param name="cluster">
+              <types>
+                <type ref="H.clustering.ICluster"/>
+              </types>
+              <ctype>
+                <name name="H.clustering.ICluster"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="H.map.Object"/>
+              </types>
+              <ctype>
+                <name name="H.map.Object"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.ITheme#getNoisePresentation" local-name="getNoisePresentation" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Function returns noise point presentation as a map object</p></prose>
+            </description>
+            <param name="noisePoint">
+              <types>
+                <type ref="H.clustering.INoisePoint"/>
+              </types>
+              <ctype>
+                <name name="H.clustering.INoisePoint"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="H.map.Object"/>
+              </types>
+              <ctype>
+                <name name="H.map.Object"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+        </interface>
+        <class name="H.clustering.DefaultTheme" local-name="DefaultTheme" access="public" scope="static" virtual="false" published="false" exported="true">
+          <description>
+            <prose><p>Implementation for a default clustering theme.</p></prose>
+          </description>
+          <extends>
+            <type ref="H.clustering.ITheme"/>
+          </extends>
+          <constructor local-name="DefaultTheme" name="H.clustering.DefaultTheme"/>
+          <property name="H.clustering.DefaultTheme#noisePointIcon_" local-name="noisePointIcon_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Noise point icon</p></prose>
+            </description>
+          </property>
+          <property name="H.clustering.DefaultTheme#clusterBackgrounds_" local-name="clusterBackgrounds_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Cluster backgrounds</p></prose>
+            </description>
+          </property>
+          <property name="H.clustering.DefaultTheme#clusterIcons_" local-name="clusterIcons_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Cluster icons cache (for reuse)</p></prose>
+            </description>
+          </property>
+          <method name="H.clustering.DefaultTheme#getClusterVisual_" local-name="getClusterVisual_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>This method returns cluster background image depending on size</p></prose>
+            </description>
+            <param name="weight">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="H.clustering.DefaultTheme.ClusterVisual"/>
+              </types>
+              <ctype>
+                <name name="H.clustering.DefaultTheme.ClusterVisual"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.DefaultTheme#createClusterBg_" local-name="createClusterBg_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>This method creates cluster iamge background</p></prose>
+            </description>
+            <param name="size">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <param name="rgbString">
+              <types>
+                <type ref="string"/>
+              </types>
+              <ctype>
+                <name name="string"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="Element"/>
+              </types>
+              <ctype>
+                <name name="Element"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.DefaultTheme#createNoisePointIcon_" local-name="createNoisePointIcon_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>This method creates reusable noise point icon</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="H.map.Icon"/>
+              </types>
+              <ctype>
+                <name name="H.map.Icon"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <typedef name="H.clustering.DefaultTheme.ClusterVisual" local-name="ClusterVisual" access="public" scope="static" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Visual definition for cluster</p></prose>
+            </description>
+            <types>
+              <type ref="Object"/>
+            </types>
+            <ctype>
+              <record>
+                <field>
+                  <key>
+                    <name name="bg"/>
+                  </key>
+                  <value>
+                    <union>
+                      <type>
+                        <name name="HTMLCanvasElement" nullable="false"/>
+                      </type>
+                    </union>
+                  </value>
+                </field>
+                <field>
+                  <key>
+                    <name name="textCoord"/>
+                  </key>
+                  <value>
+                    <union>
+                      <type>
+                        <name name="H.math.IPoint" nullable="false"/>
+                      </type>
+                    </union>
+                  </value>
+                </field>
+              </record>
+            </ctype>
+            <property name="H.clustering.DefaultTheme.ClusterVisual#bg" local-name="bg" access="public" scope="" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>background canvas image</p></prose>
+              </description>
+              <types>
+                <type ref="HTMLCanvasElement"/>
+              </types>
+              <ctype>
+                <name name="HTMLCanvasElement" nullable="false"/>
+              </ctype>
+            </property>
+            <property name="H.clustering.DefaultTheme.ClusterVisual#textCoord" local-name="textCoord" access="public" scope="" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>coordinates for textCoord</p></prose>
+              </description>
+              <types>
+                <type ref="H.math.IPoint"/>
+              </types>
+              <ctype>
+                <name name="H.math.IPoint" nullable="false"/>
+              </ctype>
+            </property>
+          </typedef>
+          <method name="H.clustering.DefaultTheme#getClusterPresentation" local-name="getClusterPresentation" access="public" scope="instance" virtual="false" published="true" exported="false" inherited="H.clustering.ITheme#getClusterPresentation">
+            <description>
+              <prose><p>Function returns a cluster presentation as a map object.</p></prose>
+            </description>
+            <param name="cluster">
+              <types>
+                <type ref="H.clustering.ICluster"/>
+              </types>
+              <ctype>
+                <name name="H.clustering.ICluster"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="H.map.Object"/>
+              </types>
+              <ctype>
+                <name name="H.map.Object"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.DefaultTheme#getNoisePresentation" local-name="getNoisePresentation" access="public" scope="instance" virtual="false" published="true" exported="false" inherited="H.clustering.ITheme#getNoisePresentation">
+            <description>
+              <prose><p>Function returns noise point presentation as a map object</p></prose>
+            </description>
+            <param name="noisePoint">
+              <types>
+                <type ref="H.clustering.INoisePoint"/>
+              </types>
+              <ctype>
+                <name name="H.clustering.INoisePoint"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="H.map.Object"/>
+              </types>
+              <ctype>
+                <name name="H.map.Object"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+        </class>
+        <class name="H.clustering.DataPoint" local-name="DataPoint" access="public" scope="static" virtual="false" published="true" exported="true">
+          <description>
+            <prose><p>This class represents the input data structure for data points to be clustered.</p></prose>
+          </description>
+          <extends>
+            <type ref="H.geo.IPoint"/>
+          </extends>
+          <constructor local-name="DataPoint" name="H.clustering.DataPoint">
+            <param name="lat">
+              <types>
+                <type ref="H.geo.Latitude"/>
+              </types>
+              <ctype>
+                <name name="H.geo.Latitude"/>
+              </ctype>
+              <description>
+                <prose><p>The latitude coordinate of the data point's position</p></prose>
+              </description>
+            </param>
+            <param name="lng">
+              <types>
+                <type ref="H.geo.Longitude"/>
+              </types>
+              <ctype>
+                <name name="H.geo.Longitude"/>
+              </ctype>
+              <description>
+                <prose><p>The longitude coordinate of the data point's position</p></prose>
+              </description>
+            </param>
+            <param name="opt_weight" optional="true">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number" optional="true"/>
+              </ctype>
+              <description>
+                <prose><p>The weight of the data point as a positive number <code>&gt; 0</code>. If not specified it
+          , default is <code>1</code>.</p></prose>
+              </description>
+            </param>
+            <param name="opt_data" optional="true">
+              <types>
+                <type ref="*"/>
+              </types>
+              <ctype>
+                <all optional="true"/>
+              </ctype>
+              <description>
+                <prose><p>Optional data, which will be associated with this DataPoint</p></prose>
+              </description>
+            </param>
+          </constructor>
+          <property name="H.clustering.DataPoint#lat" local-name="lat" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>The latitude coordinate of the data point's position</p></prose>
+            </description>
+            <types>
+              <type ref="H.geo.Latitude"/>
+            </types>
+            <ctype>
+              <name name="H.geo.Latitude"/>
+            </ctype>
+          </property>
+          <property name="H.clustering.DataPoint#lng" local-name="lng" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>The longitude coordinate of the data point's position</p></prose>
+            </description>
+            <types>
+              <type ref="H.geo.Longitude"/>
+            </types>
+            <ctype>
+              <name name="H.geo.Longitude"/>
+            </ctype>
+          </property>
+          <property name="H.clustering.DataPoint#wt" local-name="wt" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>The weight of the data point</p></prose>
+            </description>
+            <types>
+              <type ref="number"/>
+            </types>
+            <ctype>
+              <name name="number"/>
+            </ctype>
+          </property>
+          <property name="H.clustering.DataPoint#data" local-name="data" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Data associated with this data point</p></prose>
+            </description>
+            <types>
+              <type ref="*"/>
+            </types>
+            <ctype>
+              <all/>
+            </ctype>
+          </property>
+        </class>
+        <class name="H.clustering.Provider" local-name="Provider" access="public" scope="static" virtual="false" published="true" exported="true">
+          <description>
+            <prose><p>The clustering provider serves clusters and noise point representation
+for the map depending on the provided data set. Levels for clustering
+as well as custom cluster representation can be set via Options.</p></prose>
+            <example>var dataPoints = [
+    new H.clustering.DataPoint(52, 1),
+    new H.clustering.DataPoint(52.1, 1)
+];
+
+var cluteringProvider = new H.clustering.Provider(dataPoints, {
+  clusteringOptions: {
+     minWeight: 1,
+     eps: 32
+  }
+});
+//clustering should be used with ObjectLayer
+var clusteringLayer = new H.map.layer.ObjectLayer(clusteringPprovider);
+map.addLayer(clusteringLayer);</example>
+          </description>
+          <extends>
+            <type ref="H.util.EventTarget"/>
+          </extends>
+          <constructor local-name="Provider" name="H.clustering.Provider">
+            <param name="dataPoints">
+              <types>
+                <type ref="Array.&lt;H.clustering.DataPoint&gt;"/>
+              </types>
+              <ctype>
+                <typed>
+                  <base>
+                    <name name="Array"/>
+                  </base>
+                  <app>
+                    <name name="H.clustering.DataPoint"/>
+                  </app>
+                </typed>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <param name="opt_options" optional="true">
+              <types>
+                <type ref="H.clustering.Provider.Options"/>
+              </types>
+              <ctype>
+                <name name="H.clustering.Provider.Options" optional="true"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+          </constructor>
+          <method name="H.clustering.Provider#addEventListener" local-name="addEventListener" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>This method allows to listen for specific event triggered by the object</p></prose>
+            </description>
+            <param name="type">
+              <types>
+                <type ref="string"/>
+              </types>
+              <ctype>
+                <name name="string"/>
+              </ctype>
+              <description>
+                <prose><p>name of event</p></prose>
+              </description>
+            </param>
+            <param name="handler">
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <name name="Function" nullable="false"/>
+              </ctype>
+              <description>
+                <prose><p>event handler function</p></prose>
+              </description>
+            </param>
+            <param name="opt_capture" optional="true">
+              <types>
+                <type ref="boolean"/>
+              </types>
+              <ctype>
+                <name name="boolean" optional="true"/>
+              </ctype>
+              <description>
+                <prose><p>if set to true will listen in the capture phase (bubble otherwise)</p></prose>
+              </description>
+            </param>
+            <param name="opt_scope" optional="true">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object" optional="true"/>
+              </ctype>
+              <description>
+                <prose><p>scope for the handler function</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.clustering.Provider#removeEventListener" local-name="removeEventListener" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>This method will removed previously added listener from the event target</p></prose>
+            </description>
+            <param name="type">
+              <types>
+                <type ref="string"/>
+              </types>
+              <ctype>
+                <name name="string"/>
+              </ctype>
+              <description>
+                <prose><p>name of event</p></prose>
+              </description>
+            </param>
+            <param name="handler">
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <name name="Function" nullable="false"/>
+              </ctype>
+              <description>
+                <prose><p>previously added event handler</p></prose>
+              </description>
+            </param>
+            <param name="opt_capture" optional="true">
+              <types>
+                <type ref="boolean"/>
+              </types>
+              <ctype>
+                <name name="boolean" optional="true"/>
+              </ctype>
+              <description>
+                <prose><p>if set to true will listen in the capture phase (bubble otherwise)</p></prose>
+              </description>
+            </param>
+            <param name="opt_scope" optional="true">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object" optional="true"/>
+              </ctype>
+              <description>
+                <prose><p>scope for the handler function</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.clustering.Provider#dispatchEvent" local-name="dispatchEvent" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>This method will dispatch event on the event target object</p></prose>
+            </description>
+            <param name="evt">
+              <types>
+                <type ref="H.util.Event"/>
+                <type ref="string"/>
+              </types>
+              <ctype>
+                <union>
+                  <type>
+                    <name name="H.util.Event"/>
+                  </type>
+                  <type>
+                    <name name="string"/>
+                  </type>
+                </union>
+              </ctype>
+              <description>
+                <prose><p>event object or event name</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.clustering.Provider#dispose" local-name="dispose" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Removes listeners from this object. Classes that extend EventTarget may
+need to override this method in order to remove references to DOM Elements
+and additional listeners.</p></prose>
+            </description>
+          </method>
+          <method name="H.clustering.Provider#addOnDisposeCallback" local-name="addOnDisposeCallback" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>This method adds callback which is triggered when the object is being disposed</p></prose>
+            </description>
+            <param name="callback">
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <name name="Function" nullable="false"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <param name="opt_scope" optional="true">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object" optional="true"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+          </method>
+          <property name="H.clustering.Provider#clusterer_" local-name="clusterer_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+            <types>
+              <type ref="H.clustering.Clusterer"/>
+            </types>
+            <ctype>
+              <name name="H.clustering.Clusterer"/>
+            </ctype>
+          </property>
+          <property name="H.clustering.Provider#theme_" local-name="theme_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+            <types>
+              <type ref="H.clustering.ITheme"/>
+            </types>
+            <ctype>
+              <name name="H.clustering.ITheme"/>
+            </ctype>
+          </property>
+          <property name="H.clustering.Provider.objectProvider_" local-name="objectProvider_" access="private" scope="static" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+            <types>
+              <type ref="H.map.provider.LocalObjectProvider"/>
+            </types>
+            <ctype>
+              <name name="H.map.provider.LocalObjectProvider"/>
+            </ctype>
+          </property>
+          <enum name="H.clustering.Provider#EventType" local-name="EventType" access="public" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Events fired by Provider</p></prose>
+            </description>
+            <types>
+              <type ref="string"/>
+            </types>
+            <ctype>
+              <name name="string"/>
+            </ctype>
+            <value name="H.clustering.Provider#EventType.UPDATE" local-name="UPDATE">
+              <description>
+                <prose></prose>
+              </description>
+            </value>
+          </enum>
+          <property name="H.clustering.Provider#min" local-name="min" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Minimum zoom level at which provider can cluster data</p></prose>
+            </description>
+            <types>
+              <type ref="number"/>
+            </types>
+            <ctype>
+              <name name="number"/>
+            </ctype>
+          </property>
+          <property name="H.clustering.Provider#max" local-name="max" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Maximum zoom level at which provider can cluster data</p></prose>
+            </description>
+            <types>
+              <type ref="number"/>
+            </types>
+            <ctype>
+              <name name="number"/>
+            </ctype>
+          </property>
+          <property name="H.clustering.Provider#result_" local-name="result_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Result from current clustering</p></prose>
+            </description>
+            <types>
+              <type ref="Object"/>
+            </types>
+            <ctype>
+              <name name="Object"/>
+            </ctype>
+          </property>
+          <method name="H.clustering.Provider#dispatchUpdate" local-name="dispatchUpdate" access="protected" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>This method dispatches update event</p></prose>
+            </description>
+          </method>
+          <method name="H.clustering.Provider#cluster_" local-name="cluster_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Function clears LOP and starts clustering</p></prose>
+            </description>
+          </method>
+          <method name="H.clustering.Provider#applyThemedResults_" local-name="applyThemedResults_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>This method applies theme to cluster</p></prose>
+            </description>
+          </method>
+          <method name="H.clustering.Provider#clearObjects_" local-name="clearObjects_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>This method clear the object provider</p></prose>
+            </description>
+          </method>
+          <method name="H.clustering.Provider#setTheme" local-name="setTheme" access="public" scope="instance" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>This method sets new theme on the provider. Calling this method will
+change visuals for displayed clusters and noise points.</p></prose>
+            </description>
+            <param name="theme">
+              <types>
+                <type ref="H.clustering.ITheme"/>
+              </types>
+              <ctype>
+                <name name="H.clustering.ITheme"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.clustering.Provider#getTheme" local-name="getTheme" access="public" scope="instance" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>This method returns current theme used for creating
+cluster visualization</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="H.clustering.ITheme"/>
+              </types>
+              <ctype>
+                <name name="H.clustering.ITheme"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.Provider#setDataPoints" local-name="setDataPoints" access="public" scope="instance" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>This method sets new data to the provider</p></prose>
+            </description>
+            <param name="data">
+              <types>
+                <type ref="Array.&lt;H.clustering.DataPoint&gt;"/>
+              </types>
+              <ctype>
+                <typed>
+                  <base>
+                    <name name="Array"/>
+                  </base>
+                  <app>
+                    <name name="H.clustering.DataPoint"/>
+                  </app>
+                </typed>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.clustering.Provider#providesDomMarkers" local-name="providesDomMarkers" access="public" scope="instance" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>This method returns true if Provider supplies map with dom markers</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="boolean"/>
+              </types>
+              <ctype>
+                <name name="boolean"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.Provider#requestDomMarkers" local-name="requestDomMarkers" access="public" scope="instance" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>Returns all DomMarker cluster and noise point
+representations which intersect with the provided rectangular area.</p></prose>
+            </description>
+            <param name="geoRect">
+              <types>
+                <type ref="H.geo.Rect"/>
+              </types>
+              <ctype>
+                <name name="H.geo.Rect"/>
+              </ctype>
+              <description>
+                <prose><p>A rectangular area in geo space to intersect with</p></prose>
+              </description>
+            </param>
+            <param name="zoomLevel">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose><p>The zoom level for which the objects are requested</p></prose>
+              </description>
+            </param>
+            <param name="visiblesOnly">
+              <types>
+                <type ref="boolean"/>
+              </types>
+              <ctype>
+                <name name="boolean"/>
+              </ctype>
+              <description>
+                <prose><p>Indicates whether only invisible objects are to be considered</p></prose>
+              </description>
+            </param>
+            <param name="cacheOnly">
+              <types>
+                <type ref="boolean"/>
+              </types>
+              <ctype>
+                <name name="boolean"/>
+              </ctype>
+              <description>
+                <prose><p>Indicates whether only cached objects are to be considered</p></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="Array.&lt;H.map.DomMarker&gt;"/>
+              </types>
+              <ctype>
+                <typed>
+                  <base>
+                    <name name="Array"/>
+                  </base>
+                  <app>
+                    <name name="H.map.DomMarker"/>
+                  </app>
+                </typed>
+              </ctype>
+              <description>
+                <prose><p>a list of intersecting objects</p></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.Provider#providesMarkers" local-name="providesMarkers" access="public" scope="instance" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>This method returns true if Provider supplies map with bitmap markers</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="boolean"/>
+              </types>
+              <ctype>
+                <name name="boolean"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.Provider#requestMarkers" local-name="requestMarkers" access="public" scope="instance" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>Returns all cluster and noise point markers
+which intersect with the provided rectangular area.</p></prose>
+            </description>
+            <param name="geoRect">
+              <types>
+                <type ref="H.geo.Rect"/>
+              </types>
+              <ctype>
+                <name name="H.geo.Rect"/>
+              </ctype>
+              <description>
+                <prose><p>A rectangular area in geo space to intersect with</p></prose>
+              </description>
+            </param>
+            <param name="zoomLevel">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose><p>The zoom level for which the objects are requested</p></prose>
+              </description>
+            </param>
+            <param name="visiblesOnly">
+              <types>
+                <type ref="boolean"/>
+              </types>
+              <ctype>
+                <name name="boolean"/>
+              </ctype>
+              <description>
+                <prose><p>Indicates whether only invisible objects are to be considered</p></prose>
+              </description>
+            </param>
+            <param name="cacheOnly">
+              <types>
+                <type ref="boolean"/>
+              </types>
+              <ctype>
+                <name name="boolean"/>
+              </ctype>
+              <description>
+                <prose><p>Indicates whether only cached objects are to be considered</p></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="Array.&lt;H.map.Marker&gt;"/>
+              </types>
+              <ctype>
+                <typed>
+                  <base>
+                    <name name="Array"/>
+                  </base>
+                  <app>
+                    <name name="H.map.Marker"/>
+                  </app>
+                </typed>
+              </ctype>
+              <description>
+                <prose><p>a list of intersecting objects</p></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.Provider#providesSpatials" local-name="providesSpatials" access="public" scope="instance" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>This method returns true if Provider supplies map with spatial objects</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="boolean"/>
+              </types>
+              <ctype>
+                <name name="boolean"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.Provider#requestSpatials" local-name="requestSpatials" access="public" scope="instance" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>Returns all polyline, polygon, circle and rect objects which represent cluster and
+noise points and intersect with the provided area.</p></prose>
+            </description>
+            <param name="geoRect">
+              <types>
+                <type ref="H.geo.Rect"/>
+              </types>
+              <ctype>
+                <name name="H.geo.Rect"/>
+              </ctype>
+              <description>
+                <prose><p>A rectangular area in geo space to intersect with</p></prose>
+              </description>
+            </param>
+            <param name="zoomLevel">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose><p>The zoom level for which the objects are requested</p></prose>
+              </description>
+            </param>
+            <param name="visiblesOnly">
+              <types>
+                <type ref="boolean"/>
+              </types>
+              <ctype>
+                <name name="boolean"/>
+              </ctype>
+              <description>
+                <prose><p>Indicates whether only invisible objects are to be considered</p></prose>
+              </description>
+            </param>
+            <param name="cacheOnly">
+              <types>
+                <type ref="boolean"/>
+              </types>
+              <ctype>
+                <name name="boolean"/>
+              </ctype>
+              <description>
+                <prose><p>Indicates whether only cached objects are to be considered</p></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="Array.&lt;H.map.Spatial&gt;"/>
+              </types>
+              <ctype>
+                <typed>
+                  <base>
+                    <name name="Array"/>
+                  </base>
+                  <app>
+                    <name name="H.map.Spatial"/>
+                  </app>
+                </typed>
+              </ctype>
+              <description>
+                <prose><p>a list of intersecting objects</p></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.Provider#getInvalidations" local-name="getInvalidations" access="public" scope="instance" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>Returns the accumulate invalidations of this provider's objects that have occurred.</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="H.map.provider.Invalidations"/>
+              </types>
+              <ctype>
+                <name name="H.map.provider.Invalidations"/>
+              </ctype>
+              <description>
+                <prose><p>an invalidations object</p></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.Provider#invalidateObject" local-name="invalidateObject" access="public" scope="instance" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>To signal to this provider that a map object has been changed.
+The method updates the Invalidations of this provider and the given map object and triggers dispatchUpdate()</p></prose>
+            </description>
+            <param name="mapObject">
+              <types>
+                <type ref="H.map.Object"/>
+              </types>
+              <ctype>
+                <name name="H.map.Object" nullable="false"/>
+              </ctype>
+              <description>
+                <prose><p>The map object to be invalidated</p></prose>
+              </description>
+            </param>
+            <param name="changes">
+              <types>
+                <type ref="H.math.BitMask"/>
+              </types>
+              <ctype>
+                <name name="H.math.BitMask"/>
+              </ctype>
+              <description>
+                <prose><p>The flags indicating the types of occurred changes</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.clustering.Provider#getCopyrights" local-name="getCopyrights" access="public" scope="instance" virtual="false" published="false" exported="true">
+            <description>
+              <prose><p>This method returns the copyrights of the provided content for a certain geographical area at a specified zoom level.</p></prose>
+            </description>
+            <param name="bounds">
+              <types>
+                <type ref="H.geo.Rect"/>
+              </types>
+              <ctype>
+                <name name="H.geo.Rect"/>
+              </ctype>
+              <description>
+                <prose><p>The bounding area for which to retrieve the copyright information</p></prose>
+              </description>
+            </param>
+            <param name="level">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose><p>The zoom level for which to retrieve the copyright information</p></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="?Array.&lt;H.map.ICopyright&gt;"/>
+              </types>
+              <ctype>
+                <typed nullable="true">
+                  <base>
+                    <name name="Array"/>
+                  </base>
+                  <app>
+                    <name name="H.map.ICopyright"/>
+                  </app>
+                </typed>
+              </ctype>
+              <description>
+                <prose><p>a list of copyright information objects for the provided area and zoom level</p></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.clustering.Provider#dispose" local-name="dispose" access="protected" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>This method manages object disposal</p></prose>
+            </description>
+          </method>
+          <typedef name="H.clustering.Provider.Options" local-name="Options" access="public" scope="static" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Options which are used to initialize the clustering Provider</p></prose>
+            </description>
+            <types>
+              <type ref="Object"/>
+            </types>
+            <ctype>
+              <record>
+                <field>
+                  <key>
+                    <name name="min"/>
+                  </key>
+                  <value>
+                    <union>
+                      <type>
+                        <name name="number"/>
+                      </type>
+                      <type>
+                        <undefined/>
+                      </type>
+                    </union>
+                  </value>
+                </field>
+                <field>
+                  <key>
+                    <name name="max"/>
+                  </key>
+                  <value>
+                    <union>
+                      <type>
+                        <name name="number"/>
+                      </type>
+                      <type>
+                        <undefined/>
+                      </type>
+                    </union>
+                  </value>
+                </field>
+                <field>
+                  <key>
+                    <name name="clusteringOptions"/>
+                  </key>
+                  <value>
+                    <union>
+                      <type>
+                        <name name="H.clustering.Provider.ClusteringOptions"/>
+                      </type>
+                      <type>
+                        <undefined/>
+                      </type>
+                    </union>
+                  </value>
+                </field>
+                <field>
+                  <key>
+                    <name name="theme"/>
+                  </key>
+                  <value>
+                    <union>
+                      <type>
+                        <name name="H.clustering.ITheme"/>
+                      </type>
+                      <type>
+                        <undefined/>
+                      </type>
+                    </union>
+                  </value>
+                </field>
+              </record>
+            </ctype>
+            <property name="H.clustering.Provider.Options#min" local-name="min" access="public" scope="" virtual="false" published="false" exported="false" optional="true">
+              <description>
+                <prose><p>The minimal supported zoom level, default is <code>0</code></p></prose>
+              </description>
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number" optional="true"/>
+              </ctype>
+            </property>
+            <property name="H.clustering.Provider.Options#max" local-name="max" access="public" scope="" virtual="false" published="false" exported="false" optional="true">
+              <description>
+                <prose><p>The maximal supported zoom level, default is <code>22</code></p></prose>
+              </description>
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number" optional="true"/>
+              </ctype>
+            </property>
+            <property name="H.clustering.Provider.Options#clusteringOptions" local-name="clusteringOptions" access="public" scope="" virtual="false" published="false" exported="false" optional="true">
+              <description>
+                <prose><p>options for clustering algorithm</p></prose>
+              </description>
+              <types>
+                <type ref="H.clustering.Provider.ClusteringOptions"/>
+              </types>
+              <ctype>
+                <name name="H.clustering.Provider.ClusteringOptions" optional="true"/>
+              </ctype>
+            </property>
+            <property name="H.clustering.Provider.Options#theme" local-name="theme" access="public" scope="" virtual="false" published="false" exported="false" optional="true">
+              <description>
+                <prose><p>cluster and noise point graphical representation</p></prose>
+              </description>
+              <types>
+                <type ref="H.clustering.ITheme"/>
+              </types>
+              <ctype>
+                <name name="H.clustering.ITheme" optional="true"/>
+              </ctype>
+            </property>
+          </typedef>
+          <typedef name="H.clustering.Provider.ClusteringOptions" local-name="ClusteringOptions" access="public" scope="static" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Options which are used within cluster calculations.</p></prose>
+            </description>
+            <types>
+              <type ref="Object"/>
+            </types>
+            <ctype>
+              <record>
+                <field>
+                  <key>
+                    <name name="eps"/>
+                  </key>
+                  <value>
+                    <union>
+                      <type>
+                        <name name="number"/>
+                      </type>
+                      <type>
+                        <undefined/>
+                      </type>
+                    </union>
+                  </value>
+                </field>
+                <field>
+                  <key>
+                    <name name="minWeight"/>
+                  </key>
+                  <value>
+                    <union>
+                      <type>
+                        <name name="number"/>
+                      </type>
+                      <type>
+                        <undefined/>
+                      </type>
+                    </union>
+                  </value>
+                </field>
+                <field>
+                  <key>
+                    <name name="projection"/>
+                  </key>
+                  <value>
+                    <union>
+                      <type>
+                        <name name="H.geo.IProjection"/>
+                      </type>
+                      <type>
+                        <undefined/>
+                      </type>
+                    </union>
+                  </value>
+                </field>
+              </record>
+            </ctype>
+            <property name="H.clustering.Provider.ClusteringOptions#eps" local-name="eps" access="public" scope="" virtual="false" published="false" exported="false" optional="true">
+              <description>
+                <prose><p>epsilon parameter for cluster calculation</p></prose>
+              </description>
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number" optional="true"/>
+              </ctype>
+            </property>
+            <property name="H.clustering.Provider.ClusteringOptions#minWeight" local-name="minWeight" access="public" scope="" virtual="false" published="false" exported="false" optional="true">
+              <description>
+                <prose><p>the minimum points weight sum to form a cluster</p></prose>
+              </description>
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number" optional="true"/>
+              </ctype>
+            </property>
+            <property name="H.clustering.Provider.ClusteringOptions#projection" local-name="projection" access="public" scope="" virtual="false" published="false" exported="false" optional="true">
+              <description>
+                <prose><p>projection to use for clustering, default is
+   <link ref="H.geo.mercator" /></p></prose>
+              </description>
+              <types>
+                <type ref="H.geo.IProjection"/>
+              </types>
+              <ctype>
+                <name name="H.geo.IProjection" optional="true"/>
+              </ctype>
+            </property>
+          </typedef>
+        </class>
+        <method name="H.clustering.buildInfo" local-name="buildInfo" access="public" scope="static" virtual="false" published="false" exported="true">
+          <description>
+            <prose><p>Function returns build information</p></prose>
+          </description>
+          <returns>
+            <types>
+              <type ref="Object"/>
+            </types>
+            <ctype>
+              <name name="Object"/>
+            </ctype>
+            <description>
+              <prose></prose>
+            </description>
+          </returns>
+        </method>
+      </ns>
+    </symbols>
+  </module>
+</modules>

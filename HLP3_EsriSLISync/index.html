@@ -1,0 +1,174 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Esri Maps + HERE Street View Demo</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no"/>
+
+    <link rel="stylesheet" type="text/css" href="http://js.arcgis.com/3.9compact/js/dojo/dijit/themes/claro/claro.css">
+
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <link rel="stylesheet" href="http://js.arcgis.com/3.8/js/esri/css/esri.css">
+    <link rel="stylesheet" type="text/css" href="defaults.css">
+    <!--<script>-->
+        <!--// configure dojo loader-->
+        <!--(function(){-->
+            <!--var path = location.pathname.replace(/\/[^/]+$/, '/');-->
+            <!--window.dojoConfig = {-->
+                <!--parseOnLoad: false,-->
+                <!--async: true,-->
+                <!--packages: [-->
+                    <!--{-->
+                        <!--name: "app",-->
+                        <!--location: path-->
+                    <!--}-->
+                <!--]-->
+            <!--};-->
+        <!--}());-->
+    <!--</script>-->
+    <script src="//js.arcgis.com/3.9/"></script>
+    <script type="text/javascript" charset="UTF-8" src="defaults.js"></script>
+    <script src="Detector.js"></script>
+    <script>
+    /*
+		require(["dojo/mouse", "dojo/on", "dojo/dom", "dojo/dom-class"], function(mouse, on, dom){
+		  on(dom.byId("thumbnail"), mouse.enter, function(evt){
+		  	alert("enter");
+		    domClass.add("large-img","show");
+		  });
+		  on(dom.byId("thumbnail"), mouse.out, function(evt){
+		  	alert("exit");
+			domClass.remove("large-img","show");
+		  });
+		  on(dom.byId("large-img"), mouse.out, function(evt){
+		  	
+		    domClass.remove("large-img","show");
+		  });
+		  on(dom.byId("large-img"), mouse.enter, function(evt){
+		    domClass.add("large-img","show");
+		  });
+		  
+		  
+		});
+	*/
+//        require([
+//            "dojo/dom-style",
+//
+//            "esri/arcgis/Portal",
+//
+//            "app/config",
+//            "app/OAuthHelper",
+//
+//            "dojo/domReady!"
+//        ], function(
+//                domStyle,
+//                esriPortal,
+//                config, OAuthHelper
+//                ) {
+//
+//            // check if signed in
+//            OAuthHelper.init(config.oauthOptions);
+//            if (OAuthHelper.isSignedIn()) {
+//                // check if user is public account
+//                new esriPortal.Portal(OAuthHelper.portal).signIn().then(function(portalUser) {
+//                    if (!portalUser.orgId) {
+//                        // show access constraint message
+//                        document.getElementById("loginMessageContainer").style.display = 'block';
+//                        document.getElementById("appContainer").style.display = 'none';
+//
+//                        OAuthHelper.signOut(true);
+//                    } else {
+//                        // show content
+//                        document.getElementById("loginMessageContainer").style.display = 'none';
+//                        document.getElementById("appContainer").style.display = 'block';
+//
+//                        // // init application
+//                        // OAuthHelper.signIn();
+//                    }
+//                });
+//            } else {
+//              // sign in via OAuth
+//              OAuthHelper.signIn();
+//            }
+//        });
+    </script>
+	
+
+	
+</head>
+<body>
+
+<div id="appContainer">
+    <div id="wrapper">
+
+	<div id="left-col">
+	    <div class="sidebar" id="header-box">
+	    	<img src="herelogo.png" alt="here logo" style="width:80px;"/>
+	        <p class="demoTitle">HERE Street Level Imagery <br>for Esri ArcGIS Online</p>
+			
+			<div id="search-container">
+				<input id='search'  type='text' placeholder='Type an address' onkeydown="if(event.keyCode == 13) document.getElementById('searchButton').click()" />
+	        	<img id="search-icon" src="search-icon.png" onclick="document.getElementById('searchButton').click()">
+			</div>
+	      
+	
+	        <input type="submit" id="searchButton" style="display: none;" />
+	
+	        <div id="feedbackTxt" style="left:0; top:0; z-index: 0;"></div>
+	    
+	    </div>
+		<div class="enlarge">
+	        <p class="textOverlay">Nokia HERE's SLI Coverage Map</p>
+	        <img id="thumbnail" src="CoverageThumbnail.PNG " alt="Nokia HERE 's SLI Coverage Map" onclick="
+	        	var limg = document.getElementById('large-img');
+	        	if(limg.className == 'shown') limg.className ='';
+	        	else limg.className = 'shown';
+	        ">
+	        <img id="large-img" src="StreetViewCoverage.PNG" alt="" onclick="document.getElementById('large-img').className ='';">
+	    </div>
+	    <div class="sidebar" id="info-box">
+			<div class="text">	
+			       	<p>
+			            For more information about HERE as an Esri Platinum Partner, visit <a href="http://www.esri.com/here">www.esri.com/here</a>
+			        </p>
+			        <p>
+			            To provide feedback or to enquire about HERE SLI, email
+			            <a href="mailto:esri@here.com">esri@here.com</a>
+			        </p>
+			</div>
+		</div>
+	</div>
+
+    <div id="right-col">
+        <div id="esriMapContainer" style="width: 82%; height: 50%; position: absolute; top: 0; left: 275px; overflow:hidden">
+		<div id="BasemapToggle"></div>
+    </div>
+
+    <div id="streetViewContainer" style="width: 82%; height: 50%; position: absolute; bottom: 0; left: 275px; overflow:hidden">
+
+<script>if (!Detector.webgl) {
+        Detector.addGetWebGLMessage();
+    }
+    else{
+        document.getElementById("nowebgl").style.display = "block";
+        document.getElementById("mapContainer").style.display = "none";
+    }</script>
+                <div id="nowebgl" style="display:none">
+                    <h2>Cannot show street-view</h2>
+                    <p>Unfortunately your browser does not support WebGL.</p>
+                    <p>Please use the latest versions of <a href="https://www.google.com/intl/en/chrome/browser/" title="Click here to get the latest version of Google Chrome" target="_blank">Google Chrome</a> or <a href="http://www.mozilla.org/en-US/firefox/new/" title="Click here to get the latest version of Mozilla Firefox">Mozilla Firefox</a> along with a WebGL capable graphics card.</p>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    <script type="text/javascript" src="main.js"></script>
+    
+
+</div>
+    
+</body>
+
+</html>

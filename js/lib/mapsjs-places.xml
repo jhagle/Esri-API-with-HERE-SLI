@@ -1,0 +1,1793 @@
+<?xml version="1.0"?>
+<modules>
+  <module name="mapsjs-places">
+    <symbols>
+      <ns name="H.places" local-name="places" access="public" scope="static" virtual="false" published="true" exported="false">
+        <description>
+          <prose><p>H.places is a thin javascript layer wrapper around The HERE Places API.
+The HERE Places API is a web service that allows your applications to use the HERE Places information and search
+facilities.</p>
+<p>This library is built as a wish to help developers start using Places API more easily.
+The Places API is a REST API that serves hyper-media responses. Some functionality can be accessed through
+entrypoints that can be called directly,
+while other functionality is accessed by following links in the responses of previous calls. Library tries
+to simplify this by adding Endpoint abstraction for different kind of requests
+and by decorating response with helper functions.</p>
+<p>This document list all of possible entrypoints and operation available in the library.
+For tutorial how to use Places API in general head to <a href="http://places.demo.api.here.com/places/">playground</a>.
+More detailed <a href="http://places.demo.api.here.com/places/static/doc/public/">Places API documentation</a>
+is also available.</p></prose>
+        </description>
+        <class name="H.places.PlacesEndpoint" local-name="PlacesEndpoint" access="public" scope="static" virtual="false" published="false" exported="true">
+          <description>
+            <prose><p>PlacesEndpoint places request class.</p></prose>
+          </description>
+          <constructor local-name="PlacesEndpoint" name="H.places.PlacesEndpoint">
+            <param name="service">
+              <types>
+                <type ref="H.service.PlacesService"/>
+              </types>
+              <ctype>
+                <name name="H.service.PlacesService"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <param name="endpointName">
+              <types>
+                <type ref="string"/>
+              </types>
+              <ctype>
+                <name name="string"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+          </constructor>
+          <method name="H.places.PlacesEndpoint#request" local-name="request" access="public" scope="instance" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>Executes request to endpoint.</p></prose>
+            </description>
+            <param name="params">
+              <types>
+                <type ref="H.service.ServiceParameters"/>
+              </types>
+              <ctype>
+                <name name="H.service.ServiceParameters"/>
+              </ctype>
+              <description>
+                <prose><p>encapsulates URL parameters to be sent to endpoint.</p></prose>
+              </description>
+            </param>
+            <param name="headers">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>required by the endpoint</p></prose>
+              </description>
+            </param>
+            <param name="onResult">
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <name name="Function"/>
+              </ctype>
+              <description>
+                <prose><p>callback that gets triggered with the full response of the request.</p></prose>
+              </description>
+            </param>
+            <param name="onError">
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <name name="Function"/>
+              </ctype>
+              <description>
+                <prose><p>callback gets triggered in case of network errors or in case of invalid request</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.places.PlacesEndpoint#processResponseFn" local-name="processResponseFn" access="public" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Creates function for processing response from passed functions as arguments based
+on functional composition</p></prose>
+            </description>
+            <param name="var_args">
+              <types>
+                <type ref="?"/>
+              </types>
+              <ctype>
+                <unknown repeatable="true"/>
+              </ctype>
+              <description>
+                <prose><p>function that are all returning the same type</p></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <name name="Function"/>
+              </ctype>
+              <description>
+                <prose><p>returns composed function. For example compose(f, g)(x) is f(g(x))</p></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.places.PlacesEndpoint#renderSuccess" local-name="renderSuccess" access="public" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Renders success of the request endpoint. TODO: split this into two function</p></prose>
+            </description>
+            <param name="result">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>that needs to be validated</p></prose>
+              </description>
+            </param>
+            <param name="onResult">
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <name name="Function"/>
+              </ctype>
+              <description>
+                <prose><p>that returns the full response of the request. If not defined onResult defined on the
+endpoint is used.</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.places.PlacesEndpoint#toResultSet" local-name="toResultSet" access="public" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Creates ResultSet from the passed request result object</p></prose>
+            </description>
+            <param name="result">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>that needs to be validated</p></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>result</p></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.places.PlacesEndpoint#toLink" local-name="toLink" access="public" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Creates Link objects from passed request result object</p></prose>
+            </description>
+            <param name="result">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>that needs to be validated</p></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>result</p></prose>
+              </description>
+            </returns>
+          </method>
+        </class>
+        <class name="H.places.Explore" local-name="Explore" access="public" scope="static" virtual="false" published="true" exported="true">
+          <description>
+            <prose><p>The Explore endpoint retrieves a list of relevant places nearby a given position or area. It answers the question
+&quot;What interesting places are in the viewport of the map?&quot;
+The results presented to the user are confined to those located in the current map
+view or search area and are ordered by popularity.
+For more visit
+<a href="http://places.demo.api.here.com/places/static/doc/public/#topics/resource-explore.html">Places API documentation</a></p></prose>
+          </description>
+          <extends>
+            <type ref="H.places.PlacesEndpoint"/>
+          </extends>
+          <constructor local-name="Explore" name="H.places.Explore">
+            <param name="service">
+              <types>
+                <type ref="H.service.PlacesService"/>
+              </types>
+              <ctype>
+                <name name="H.service.PlacesService"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+          </constructor>
+          <method name="H.places.Explore#request" local-name="request" access="public" scope="instance" virtual="false" published="true" exported="true" inherited="H.places.PlacesEndpoint#request">
+            <description>
+              <prose><p>Executes request to endpoint.</p></prose>
+            </description>
+            <param name="params">
+              <types>
+                <type ref="H.service.ServiceParameters"/>
+              </types>
+              <ctype>
+                <name name="H.service.ServiceParameters"/>
+              </ctype>
+              <description>
+                <prose><p>encapsulates URL parameters to be sent to endpoint.</p></prose>
+              </description>
+            </param>
+            <param name="headers">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>required by the endpoint</p></prose>
+              </description>
+            </param>
+            <param name="onResult">
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <name name="Function"/>
+              </ctype>
+              <description>
+                <prose><p>callback that gets triggered with the full response of the request.</p></prose>
+              </description>
+            </param>
+            <param name="onError">
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <name name="Function"/>
+              </ctype>
+              <description>
+                <prose><p>callback gets triggered in case of network errors or in case of invalid request</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.places.Explore#processResponseFn" local-name="processResponseFn" access="public" scope="instance" virtual="false" published="false" exported="false" inherited="H.places.PlacesEndpoint#processResponseFn">
+            <description>
+              <prose><p>Creates function for processing response from passed functions as arguments based
+on functional composition</p></prose>
+            </description>
+            <param name="var_args">
+              <types>
+                <type ref="?"/>
+              </types>
+              <ctype>
+                <unknown repeatable="true"/>
+              </ctype>
+              <description>
+                <prose><p>function that are all returning the same type</p></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <name name="Function"/>
+              </ctype>
+              <description>
+                <prose><p>returns composed function. For example compose(f, g)(x) is f(g(x))</p></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.places.Explore#renderSuccess" local-name="renderSuccess" access="public" scope="instance" virtual="false" published="false" exported="false" inherited="H.places.PlacesEndpoint#renderSuccess">
+            <description>
+              <prose><p>Renders success of the request endpoint. TODO: split this into two function</p></prose>
+            </description>
+            <param name="result">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>that needs to be validated</p></prose>
+              </description>
+            </param>
+            <param name="onResult">
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <name name="Function"/>
+              </ctype>
+              <description>
+                <prose><p>that returns the full response of the request. If not defined onResult defined on the
+endpoint is used.</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.places.Explore#toResultSet" local-name="toResultSet" access="public" scope="instance" virtual="false" published="false" exported="false" inherited="H.places.PlacesEndpoint#toResultSet">
+            <description>
+              <prose><p>Creates ResultSet from the passed request result object</p></prose>
+            </description>
+            <param name="result">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>that needs to be validated</p></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>result</p></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.places.Explore#toLink" local-name="toLink" access="public" scope="instance" virtual="false" published="false" exported="false" inherited="H.places.PlacesEndpoint#toLink">
+            <description>
+              <prose><p>Creates Link objects from passed request result object</p></prose>
+            </description>
+            <param name="result">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>that needs to be validated</p></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>result</p></prose>
+              </description>
+            </returns>
+          </method>
+        </class>
+        <class name="H.places.Search" local-name="Search" access="public" scope="static" virtual="false" published="true" exported="true">
+          <description>
+            <prose><p>The Search endpoint processes text string queries based on the user's input to find specific places.
+It answers questions of &quot;what&quot; and &quot;where&quot; for an online search of POI or address.
+For more visit
+<a href="http://places.demo.api.here.com/places/static/doc/public/#topics/resource-search.html">Places API documentation</a></p></prose>
+          </description>
+          <extends>
+            <type ref="H.places.PlacesEndpoint"/>
+          </extends>
+          <constructor local-name="Search" name="H.places.Search">
+            <param name="service">
+              <types>
+                <type ref="H.service.PlacesService"/>
+              </types>
+              <ctype>
+                <name name="H.service.PlacesService"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+          </constructor>
+          <method name="H.places.Search#request" local-name="request" access="public" scope="instance" virtual="false" published="true" exported="true" inherited="H.places.PlacesEndpoint#request">
+            <description>
+              <prose><p>Executes request to endpoint.</p></prose>
+            </description>
+            <param name="params">
+              <types>
+                <type ref="H.service.ServiceParameters"/>
+              </types>
+              <ctype>
+                <name name="H.service.ServiceParameters"/>
+              </ctype>
+              <description>
+                <prose><p>encapsulates URL parameters to be sent to endpoint.</p></prose>
+              </description>
+            </param>
+            <param name="headers">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>required by the endpoint</p></prose>
+              </description>
+            </param>
+            <param name="onResult">
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <name name="Function"/>
+              </ctype>
+              <description>
+                <prose><p>callback that gets triggered with the full response of the request.</p></prose>
+              </description>
+            </param>
+            <param name="onError">
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <name name="Function"/>
+              </ctype>
+              <description>
+                <prose><p>callback gets triggered in case of network errors or in case of invalid request</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.places.Search#processResponseFn" local-name="processResponseFn" access="public" scope="instance" virtual="false" published="false" exported="false" inherited="H.places.PlacesEndpoint#processResponseFn">
+            <description>
+              <prose><p>Creates function for processing response from passed functions as arguments based
+on functional composition</p></prose>
+            </description>
+            <param name="var_args">
+              <types>
+                <type ref="?"/>
+              </types>
+              <ctype>
+                <unknown repeatable="true"/>
+              </ctype>
+              <description>
+                <prose><p>function that are all returning the same type</p></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <name name="Function"/>
+              </ctype>
+              <description>
+                <prose><p>returns composed function. For example compose(f, g)(x) is f(g(x))</p></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.places.Search#renderSuccess" local-name="renderSuccess" access="public" scope="instance" virtual="false" published="false" exported="false" inherited="H.places.PlacesEndpoint#renderSuccess">
+            <description>
+              <prose><p>Renders success of the request endpoint. TODO: split this into two function</p></prose>
+            </description>
+            <param name="result">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>that needs to be validated</p></prose>
+              </description>
+            </param>
+            <param name="onResult">
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <name name="Function"/>
+              </ctype>
+              <description>
+                <prose><p>that returns the full response of the request. If not defined onResult defined on the
+endpoint is used.</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.places.Search#toResultSet" local-name="toResultSet" access="public" scope="instance" virtual="false" published="false" exported="false" inherited="H.places.PlacesEndpoint#toResultSet">
+            <description>
+              <prose><p>Creates ResultSet from the passed request result object</p></prose>
+            </description>
+            <param name="result">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>that needs to be validated</p></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>result</p></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.places.Search#toLink" local-name="toLink" access="public" scope="instance" virtual="false" published="false" exported="false" inherited="H.places.PlacesEndpoint#toLink">
+            <description>
+              <prose><p>Creates Link objects from passed request result object</p></prose>
+            </description>
+            <param name="result">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>that needs to be validated</p></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>result</p></prose>
+              </description>
+            </returns>
+          </method>
+        </class>
+        <class name="H.places.Here" local-name="Here" access="public" scope="static" virtual="false" published="true" exported="true">
+          <description>
+            <prose><p>The Here endpoint answers the questions &quot;Where am I?&quot; and &quot;What's right here where I am standing?&quot;
+The search results consist of a list of places with addresses that lie within the vicinity of the search location.
+The feature is typically used by applications that include &quot;check-in&quot; or &quot;click on map
+to get more information&quot; options.
+For more visit
+<a href="http://places.demo.api.here.com/places/static/doc/public/#topics/resource-here.html">Places API documentation</a></p></prose>
+          </description>
+          <extends>
+            <type ref="H.places.PlacesEndpoint"/>
+          </extends>
+          <constructor local-name="Here" name="H.places.Here">
+            <param name="service">
+              <types>
+                <type ref="H.service.PlacesService"/>
+              </types>
+              <ctype>
+                <name name="H.service.PlacesService"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+          </constructor>
+          <method name="H.places.Here#request" local-name="request" access="public" scope="instance" virtual="false" published="true" exported="true" inherited="H.places.PlacesEndpoint#request">
+            <description>
+              <prose><p>Executes request to endpoint.</p></prose>
+            </description>
+            <param name="params">
+              <types>
+                <type ref="H.service.ServiceParameters"/>
+              </types>
+              <ctype>
+                <name name="H.service.ServiceParameters"/>
+              </ctype>
+              <description>
+                <prose><p>encapsulates URL parameters to be sent to endpoint.</p></prose>
+              </description>
+            </param>
+            <param name="headers">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>required by the endpoint</p></prose>
+              </description>
+            </param>
+            <param name="onResult">
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <name name="Function"/>
+              </ctype>
+              <description>
+                <prose><p>callback that gets triggered with the full response of the request.</p></prose>
+              </description>
+            </param>
+            <param name="onError">
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <name name="Function"/>
+              </ctype>
+              <description>
+                <prose><p>callback gets triggered in case of network errors or in case of invalid request</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.places.Here#processResponseFn" local-name="processResponseFn" access="public" scope="instance" virtual="false" published="false" exported="false" inherited="H.places.PlacesEndpoint#processResponseFn">
+            <description>
+              <prose><p>Creates function for processing response from passed functions as arguments based
+on functional composition</p></prose>
+            </description>
+            <param name="var_args">
+              <types>
+                <type ref="?"/>
+              </types>
+              <ctype>
+                <unknown repeatable="true"/>
+              </ctype>
+              <description>
+                <prose><p>function that are all returning the same type</p></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <name name="Function"/>
+              </ctype>
+              <description>
+                <prose><p>returns composed function. For example compose(f, g)(x) is f(g(x))</p></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.places.Here#renderSuccess" local-name="renderSuccess" access="public" scope="instance" virtual="false" published="false" exported="false" inherited="H.places.PlacesEndpoint#renderSuccess">
+            <description>
+              <prose><p>Renders success of the request endpoint. TODO: split this into two function</p></prose>
+            </description>
+            <param name="result">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>that needs to be validated</p></prose>
+              </description>
+            </param>
+            <param name="onResult">
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <name name="Function"/>
+              </ctype>
+              <description>
+                <prose><p>that returns the full response of the request. If not defined onResult defined on the
+endpoint is used.</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.places.Here#toResultSet" local-name="toResultSet" access="public" scope="instance" virtual="false" published="false" exported="false" inherited="H.places.PlacesEndpoint#toResultSet">
+            <description>
+              <prose><p>Creates ResultSet from the passed request result object</p></prose>
+            </description>
+            <param name="result">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>that needs to be validated</p></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>result</p></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.places.Here#toLink" local-name="toLink" access="public" scope="instance" virtual="false" published="false" exported="false" inherited="H.places.PlacesEndpoint#toLink">
+            <description>
+              <prose><p>Creates Link objects from passed request result object</p></prose>
+            </description>
+            <param name="result">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>that needs to be validated</p></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>result</p></prose>
+              </description>
+            </returns>
+          </method>
+        </class>
+        <class name="H.places.Around" local-name="Around" access="public" scope="static" virtual="false" published="true" exported="true">
+          <description>
+            <prose><p>The Around endpoint represents sets of places within a specific location context, usually the location of the user.
+This endpoint is intended for applications that employ features such as augmented reality,
+where places around the user's location are displayed on a device.
+It is intended to provide places that are likely to
+be visible to the user as well as important places that are further away.
+For more visit
+<a href="http://places.demo.api.here.com/places/static/doc/public/#topics/resource-around.html">Places API documentation</a></p></prose>
+          </description>
+          <extends>
+            <type ref="H.places.PlacesEndpoint"/>
+          </extends>
+          <constructor local-name="Around" name="H.places.Around">
+            <param name="service">
+              <types>
+                <type ref="H.service.PlacesService"/>
+              </types>
+              <ctype>
+                <name name="H.service.PlacesService"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+          </constructor>
+          <method name="H.places.Around#request" local-name="request" access="public" scope="instance" virtual="false" published="true" exported="true" inherited="H.places.PlacesEndpoint#request">
+            <description>
+              <prose><p>Executes request to endpoint.</p></prose>
+            </description>
+            <param name="params">
+              <types>
+                <type ref="H.service.ServiceParameters"/>
+              </types>
+              <ctype>
+                <name name="H.service.ServiceParameters"/>
+              </ctype>
+              <description>
+                <prose><p>encapsulates URL parameters to be sent to endpoint.</p></prose>
+              </description>
+            </param>
+            <param name="headers">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>required by the endpoint</p></prose>
+              </description>
+            </param>
+            <param name="onResult">
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <name name="Function"/>
+              </ctype>
+              <description>
+                <prose><p>callback that gets triggered with the full response of the request.</p></prose>
+              </description>
+            </param>
+            <param name="onError">
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <name name="Function"/>
+              </ctype>
+              <description>
+                <prose><p>callback gets triggered in case of network errors or in case of invalid request</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.places.Around#processResponseFn" local-name="processResponseFn" access="public" scope="instance" virtual="false" published="false" exported="false" inherited="H.places.PlacesEndpoint#processResponseFn">
+            <description>
+              <prose><p>Creates function for processing response from passed functions as arguments based
+on functional composition</p></prose>
+            </description>
+            <param name="var_args">
+              <types>
+                <type ref="?"/>
+              </types>
+              <ctype>
+                <unknown repeatable="true"/>
+              </ctype>
+              <description>
+                <prose><p>function that are all returning the same type</p></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <name name="Function"/>
+              </ctype>
+              <description>
+                <prose><p>returns composed function. For example compose(f, g)(x) is f(g(x))</p></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.places.Around#renderSuccess" local-name="renderSuccess" access="public" scope="instance" virtual="false" published="false" exported="false" inherited="H.places.PlacesEndpoint#renderSuccess">
+            <description>
+              <prose><p>Renders success of the request endpoint. TODO: split this into two function</p></prose>
+            </description>
+            <param name="result">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>that needs to be validated</p></prose>
+              </description>
+            </param>
+            <param name="onResult">
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <name name="Function"/>
+              </ctype>
+              <description>
+                <prose><p>that returns the full response of the request. If not defined onResult defined on the
+endpoint is used.</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.places.Around#toResultSet" local-name="toResultSet" access="public" scope="instance" virtual="false" published="false" exported="false" inherited="H.places.PlacesEndpoint#toResultSet">
+            <description>
+              <prose><p>Creates ResultSet from the passed request result object</p></prose>
+            </description>
+            <param name="result">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>that needs to be validated</p></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>result</p></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.places.Around#toLink" local-name="toLink" access="public" scope="instance" virtual="false" published="false" exported="false" inherited="H.places.PlacesEndpoint#toLink">
+            <description>
+              <prose><p>Creates Link objects from passed request result object</p></prose>
+            </description>
+            <param name="result">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>that needs to be validated</p></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>result</p></prose>
+              </description>
+            </returns>
+          </method>
+        </class>
+        <class name="H.places.Categories" local-name="Categories" access="public" scope="static" virtual="false" published="true" exported="true">
+          <description>
+            <prose><p>Categories endpoint is used to obtain the place categories available for a given location.
+The Place Categories endpoint represents sets of locally relevant categories that
+are organized in a directed acyclic graph.
+The category graph may change in the future and may differ depending on the location of the request.
+For more visti
+<a href="http://places.demo.api.here.com/places/static/doc/public/#topics/resource-place-categories.html">Places API
+documentation</a></p></prose>
+          </description>
+          <extends>
+            <type ref="H.places.PlacesEndpoint"/>
+          </extends>
+          <constructor local-name="Categories" name="H.places.Categories">
+            <param name="service">
+              <types>
+                <type ref="H.service.PlacesService"/>
+              </types>
+              <ctype>
+                <name name="H.service.PlacesService"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+          </constructor>
+          <method name="H.places.Categories#request" local-name="request" access="public" scope="instance" virtual="false" published="true" exported="true" inherited="H.places.PlacesEndpoint#request">
+            <description>
+              <prose><p>Executes request to endpoint.</p></prose>
+            </description>
+            <param name="params">
+              <types>
+                <type ref="H.service.ServiceParameters"/>
+              </types>
+              <ctype>
+                <name name="H.service.ServiceParameters"/>
+              </ctype>
+              <description>
+                <prose><p>encapsulates URL parameters to be sent to endpoint.</p></prose>
+              </description>
+            </param>
+            <param name="headers">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>required by the endpoint</p></prose>
+              </description>
+            </param>
+            <param name="onResult">
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <name name="Function"/>
+              </ctype>
+              <description>
+                <prose><p>callback that gets triggered with the full response of the request.</p></prose>
+              </description>
+            </param>
+            <param name="onError">
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <name name="Function"/>
+              </ctype>
+              <description>
+                <prose><p>callback gets triggered in case of network errors or in case of invalid request</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.places.Categories#processResponseFn" local-name="processResponseFn" access="public" scope="instance" virtual="false" published="false" exported="false" inherited="H.places.PlacesEndpoint#processResponseFn">
+            <description>
+              <prose><p>Creates function for processing response from passed functions as arguments based
+on functional composition</p></prose>
+            </description>
+            <param name="var_args">
+              <types>
+                <type ref="?"/>
+              </types>
+              <ctype>
+                <unknown repeatable="true"/>
+              </ctype>
+              <description>
+                <prose><p>function that are all returning the same type</p></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <name name="Function"/>
+              </ctype>
+              <description>
+                <prose><p>returns composed function. For example compose(f, g)(x) is f(g(x))</p></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.places.Categories#renderSuccess" local-name="renderSuccess" access="public" scope="instance" virtual="false" published="false" exported="false" inherited="H.places.PlacesEndpoint#renderSuccess">
+            <description>
+              <prose><p>Renders success of the request endpoint. TODO: split this into two function</p></prose>
+            </description>
+            <param name="result">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>that needs to be validated</p></prose>
+              </description>
+            </param>
+            <param name="onResult">
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <name name="Function"/>
+              </ctype>
+              <description>
+                <prose><p>that returns the full response of the request. If not defined onResult defined on the
+endpoint is used.</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.places.Categories#toResultSet" local-name="toResultSet" access="public" scope="instance" virtual="false" published="false" exported="false" inherited="H.places.PlacesEndpoint#toResultSet">
+            <description>
+              <prose><p>Creates ResultSet from the passed request result object</p></prose>
+            </description>
+            <param name="result">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>that needs to be validated</p></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>result</p></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.places.Categories#toLink" local-name="toLink" access="public" scope="instance" virtual="false" published="false" exported="false" inherited="H.places.PlacesEndpoint#toLink">
+            <description>
+              <prose><p>Creates Link objects from passed request result object</p></prose>
+            </description>
+            <param name="result">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>that needs to be validated</p></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>result</p></prose>
+              </description>
+            </returns>
+          </method>
+        </class>
+        <class name="H.places.Suggest" local-name="Suggest" access="public" scope="static" virtual="false" published="true" exported="true">
+          <description>
+            <prose><p>The Search Suggestions endpoint represents lists of suggested search terms related to a given (partial)
+search term and location context.
+This endpoint is used to help users to provide suggested search terms to the user while typing.
+For more visti
+<a href="http://places.demo.api.here.com/places/static/doc/public/#topics/resource-suggest.html">Places API Documentation</a></p></prose>
+          </description>
+          <extends>
+            <type ref="H.places.PlacesEndpoint"/>
+          </extends>
+          <constructor local-name="Suggest" name="H.places.Suggest">
+            <param name="service">
+              <types>
+                <type ref="H.service.PlacesService"/>
+              </types>
+              <ctype>
+                <name name="H.service.PlacesService"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+          </constructor>
+          <method name="H.places.Suggest#request" local-name="request" access="public" scope="instance" virtual="false" published="true" exported="true" inherited="H.places.PlacesEndpoint#request">
+            <description>
+              <prose><p>Executes request to endpoint.</p></prose>
+            </description>
+            <param name="params">
+              <types>
+                <type ref="H.service.ServiceParameters"/>
+              </types>
+              <ctype>
+                <name name="H.service.ServiceParameters"/>
+              </ctype>
+              <description>
+                <prose><p>encapsulates URL parameters to be sent to endpoint.</p></prose>
+              </description>
+            </param>
+            <param name="headers">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>required by the endpoint</p></prose>
+              </description>
+            </param>
+            <param name="onResult">
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <name name="Function"/>
+              </ctype>
+              <description>
+                <prose><p>callback that gets triggered with the full response of the request.</p></prose>
+              </description>
+            </param>
+            <param name="onError">
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <name name="Function"/>
+              </ctype>
+              <description>
+                <prose><p>callback gets triggered in case of network errors or in case of invalid request</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.places.Suggest#processResponseFn" local-name="processResponseFn" access="public" scope="instance" virtual="false" published="false" exported="false" inherited="H.places.PlacesEndpoint#processResponseFn">
+            <description>
+              <prose><p>Creates function for processing response from passed functions as arguments based
+on functional composition</p></prose>
+            </description>
+            <param name="var_args">
+              <types>
+                <type ref="?"/>
+              </types>
+              <ctype>
+                <unknown repeatable="true"/>
+              </ctype>
+              <description>
+                <prose><p>function that are all returning the same type</p></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <name name="Function"/>
+              </ctype>
+              <description>
+                <prose><p>returns composed function. For example compose(f, g)(x) is f(g(x))</p></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.places.Suggest#renderSuccess" local-name="renderSuccess" access="public" scope="instance" virtual="false" published="false" exported="false" inherited="H.places.PlacesEndpoint#renderSuccess">
+            <description>
+              <prose><p>Renders success of the request endpoint. TODO: split this into two function</p></prose>
+            </description>
+            <param name="result">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>that needs to be validated</p></prose>
+              </description>
+            </param>
+            <param name="onResult">
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <name name="Function"/>
+              </ctype>
+              <description>
+                <prose><p>that returns the full response of the request. If not defined onResult defined on the
+endpoint is used.</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.places.Suggest#toResultSet" local-name="toResultSet" access="public" scope="instance" virtual="false" published="false" exported="false" inherited="H.places.PlacesEndpoint#toResultSet">
+            <description>
+              <prose><p>Creates ResultSet from the passed request result object</p></prose>
+            </description>
+            <param name="result">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>that needs to be validated</p></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>result</p></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.places.Suggest#toLink" local-name="toLink" access="public" scope="instance" virtual="false" published="false" exported="false" inherited="H.places.PlacesEndpoint#toLink">
+            <description>
+              <prose><p>Creates Link objects from passed request result object</p></prose>
+            </description>
+            <param name="result">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>that needs to be validated</p></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>result</p></prose>
+              </description>
+            </returns>
+          </method>
+        </class>
+        <class name="H.places.Lookup" local-name="Lookup" access="public" scope="static" virtual="false" published="true" exported="true">
+          <description>
+            <prose><p>Lookup Endpoint provides ability to find a place by its foreign ID.
+For more visti
+<a href="http://places.demo.api.here.com/places/static/doc/public/#topics/resource-lookup.html">Places API Documentation</a></p></prose>
+          </description>
+          <extends>
+            <type ref="H.places.PlacesEndpoint"/>
+          </extends>
+          <constructor local-name="Lookup" name="H.places.Lookup">
+            <param name="service">
+              <types>
+                <type ref="H.service.PlacesService"/>
+              </types>
+              <ctype>
+                <name name="H.service.PlacesService"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+          </constructor>
+          <method name="H.places.Lookup#request" local-name="request" access="public" scope="instance" virtual="false" published="true" exported="true" inherited="H.places.PlacesEndpoint#request">
+            <description>
+              <prose><p>Executes request to endpoint.</p></prose>
+            </description>
+            <param name="params">
+              <types>
+                <type ref="H.service.ServiceParameters"/>
+              </types>
+              <ctype>
+                <name name="H.service.ServiceParameters"/>
+              </ctype>
+              <description>
+                <prose><p>encapsulates URL parameters to be sent to endpoint.</p></prose>
+              </description>
+            </param>
+            <param name="headers">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>required by the endpoint</p></prose>
+              </description>
+            </param>
+            <param name="onResult">
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <name name="Function"/>
+              </ctype>
+              <description>
+                <prose><p>callback that gets triggered with the full response of the request.</p></prose>
+              </description>
+            </param>
+            <param name="onError">
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <name name="Function"/>
+              </ctype>
+              <description>
+                <prose><p>callback gets triggered in case of network errors or in case of invalid request</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.places.Lookup#processResponseFn" local-name="processResponseFn" access="public" scope="instance" virtual="false" published="false" exported="false" inherited="H.places.PlacesEndpoint#processResponseFn">
+            <description>
+              <prose><p>Creates function for processing response from passed functions as arguments based
+on functional composition</p></prose>
+            </description>
+            <param name="var_args">
+              <types>
+                <type ref="?"/>
+              </types>
+              <ctype>
+                <unknown repeatable="true"/>
+              </ctype>
+              <description>
+                <prose><p>function that are all returning the same type</p></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <name name="Function"/>
+              </ctype>
+              <description>
+                <prose><p>returns composed function. For example compose(f, g)(x) is f(g(x))</p></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.places.Lookup#renderSuccess" local-name="renderSuccess" access="public" scope="instance" virtual="false" published="false" exported="false" inherited="H.places.PlacesEndpoint#renderSuccess">
+            <description>
+              <prose><p>Renders success of the request endpoint. TODO: split this into two function</p></prose>
+            </description>
+            <param name="result">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>that needs to be validated</p></prose>
+              </description>
+            </param>
+            <param name="onResult">
+              <types>
+                <type ref="function"/>
+              </types>
+              <ctype>
+                <name name="Function"/>
+              </ctype>
+              <description>
+                <prose><p>that returns the full response of the request. If not defined onResult defined on the
+endpoint is used.</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.places.Lookup#toResultSet" local-name="toResultSet" access="public" scope="instance" virtual="false" published="false" exported="false" inherited="H.places.PlacesEndpoint#toResultSet">
+            <description>
+              <prose><p>Creates ResultSet from the passed request result object</p></prose>
+            </description>
+            <param name="result">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>that needs to be validated</p></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>result</p></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.places.Lookup#toLink" local-name="toLink" access="public" scope="instance" virtual="false" published="false" exported="false" inherited="H.places.PlacesEndpoint#toLink">
+            <description>
+              <prose><p>Creates Link objects from passed request result object</p></prose>
+            </description>
+            <param name="result">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>that needs to be validated</p></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>result</p></prose>
+              </description>
+            </returns>
+          </method>
+        </class>
+        <ns name="H.places.model" local-name="model" access="public" scope="static" virtual="false" published="true" exported="false">
+          <description>
+            <prose></prose>
+          </description>
+          <method name="H.places.model.LinkFactory" local-name="LinkFactory" access="public" scope="static" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Recursively goes through object and finds href properties. For each href property
+it adds a appropriate utility method that will allow end user to call href</p></prose>
+            </description>
+            <param name="object">
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <param name="service">
+              <types>
+                <type ref="H.service.PlacesService"/>
+              </types>
+              <ctype>
+                <name name="H.service.PlacesService"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <name name="Object"/>
+              </ctype>
+              <description>
+                <prose><p>object that has decorate any href field</p></prose>
+              </description>
+            </returns>
+          </method>
+          <class name="H.places.model.GetLink" local-name="GetLink" access="public" scope="static" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>GetLink - is abstraction that wraps passed object and creates method for executing GET requests against
+href value of the object.</p>
+<p>Our responses from the server are processed in the way that every object that contains href
+property is wrapped in GetLink in case it href points to GET endpoint.</p></prose>
+            </description>
+            <constructor local-name="GetLink" name="H.places.model.GetLink">
+              <param name="obj">
+                <types>
+                  <type ref="Object"/>
+                </types>
+                <ctype>
+                  <name name="Object"/>
+                </ctype>
+                <description>
+                  <prose><p>that we are wrapping into GetLink instance. Should contain href property</p></prose>
+                </description>
+              </param>
+              <param name="service">
+                <types>
+                  <type ref="H.service.PlacesService"/>
+                </types>
+                <ctype>
+                  <name name="H.service.PlacesService"/>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </param>
+            </constructor>
+            <method name="H.places.model.GetLink#follow" local-name="follow" access="public" scope="instance" virtual="false" published="true" exported="true">
+              <description>
+                <prose><p>Follows available href by executing ajax get request against it.</p></prose>
+              </description>
+              <param name="onResult">
+                <types>
+                  <type ref="function"/>
+                </types>
+                <ctype>
+                  <name name="Function"/>
+                </ctype>
+                <description>
+                  <prose><p>gets called when result of follow request gets completed</p></prose>
+                </description>
+              </param>
+              <param name="onError">
+                <types>
+                  <type ref="function"/>
+                </types>
+                <ctype>
+                  <name name="Function"/>
+                </ctype>
+                <description>
+                  <prose><p>gets called if something goes wrong when trying to follow link</p></prose>
+                </description>
+              </param>
+              <param name="queryParams">
+                <types>
+                  <type ref="Object"/>
+                </types>
+                <ctype>
+                  <name name="Object"/>
+                </ctype>
+                <description>
+                  <prose><p>contains additional query params that should be passed when following link.</p></prose>
+                </description>
+              </param>
+            </method>
+          </class>
+          <class name="H.places.model.PostLink" local-name="PostLink" access="public" scope="static" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>PostLink - is abstraction that wraps passed object and creates method for executing POST request against
+href value of the object.</p>
+<p>Our responses from the server are processed in the way that every object that contains href
+property is wrapped in PostLink in case it href points to POST endpoint.</p></prose>
+            </description>
+            <constructor local-name="PostLink" name="H.places.model.PostLink">
+              <param name="obj">
+                <types>
+                  <type ref="Object"/>
+                </types>
+                <ctype>
+                  <name name="Object"/>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </param>
+            </constructor>
+            <method name="H.places.model.PostLink#post" local-name="post" access="public" scope="instance" virtual="false" published="true" exported="true">
+              <description>
+                <prose><p>Executes post ajax request against object's href property with data as a body</p></prose>
+              </description>
+              <param name="body">
+                <types>
+                  <type ref="Object"/>
+                </types>
+                <ctype>
+                  <name name="Object"/>
+                </ctype>
+                <description>
+                  <prose><p>of the POST request</p></prose>
+                </description>
+              </param>
+              <param name="onResult">
+                <types>
+                  <type ref="function"/>
+                </types>
+                <ctype>
+                  <name name="Function"/>
+                </ctype>
+                <description>
+                  <prose><p>gets called when result of post request gets completed</p></prose>
+                </description>
+              </param>
+              <param name="onError">
+                <types>
+                  <type ref="function"/>
+                </types>
+                <ctype>
+                  <name name="Function"/>
+                </ctype>
+                <description>
+                  <prose><p>gets called if something goes wrong when trying to post</p></prose>
+                </description>
+              </param>
+              <param name="queryParams">
+                <types>
+                  <type ref="Object"/>
+                </types>
+                <ctype>
+                  <name name="Object"/>
+                </ctype>
+                <description>
+                  <prose><p>contains additional query params that should be passed when posting</p></prose>
+                </description>
+              </param>
+            </method>
+          </class>
+          <class name="H.places.model.ResultSet" local-name="ResultSet" access="public" scope="static" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>ResultSet - wraps the Discover Result Set and adds auxiliary functions. For more information about Discover Result
+Set visit our
+<a href="http://places.demo.api.here.com/places/static/doc/public/#topics/media-type-search-results.html">Places API
+documentation</a></p></prose>
+            </description>
+            <constructor local-name="ResultSet" name="H.places.model.ResultSet">
+              <param name="resultSet">
+                <types>
+                  <type ref="Object"/>
+                </types>
+                <ctype>
+                  <name name="Object"/>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </param>
+              <param name="service">
+                <types>
+                  <type ref="H.service.PlacesService"/>
+                </types>
+                <ctype>
+                  <name name="H.service.PlacesService"/>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </param>
+            </constructor>
+            <method name="H.places.model.ResultSet#fetchNext" local-name="fetchNext" access="public" scope="instance" virtual="false" published="true" exported="true">
+              <description>
+                <prose><p>Function that follow next link. In case of large collections, next link leads to the next page of the collection.
+Presence of this function depends if the next parameter on resultSet exist.</p>
+<p>Follow next link is a Ajax GET request.</p></prose>
+              </description>
+              <param name="onResult">
+                <types>
+                  <type ref="function"/>
+                </types>
+                <ctype>
+                  <name name="Function"/>
+                </ctype>
+                <description>
+                  <prose><p>callback that gets triggered with the full response of the next request.</p></prose>
+                </description>
+              </param>
+              <param name="onError">
+                <types>
+                  <type ref="function"/>
+                </types>
+                <ctype>
+                  <name name="Function"/>
+                </ctype>
+                <description>
+                  <prose><p>callback gets triggered in case of network errors or in case of invalid request</p></prose>
+                </description>
+              </param>
+            </method>
+            <method name="H.places.model.ResultSet#fetchPrevious" local-name="fetchPrevious" access="public" scope="instance" virtual="false" published="true" exported="true">
+              <description>
+                <prose><p>Function that follow previous link. In case of large collections, previous link leads to the previous page of the
+collection. Presence of this function depends if the previous parameter on resultSet exist.</p>
+<p>Follow previous link is a Ajax GET request.</p></prose>
+              </description>
+              <param name="onResult">
+                <types>
+                  <type ref="function"/>
+                </types>
+                <ctype>
+                  <name name="Function"/>
+                </ctype>
+                <description>
+                  <prose><p>callback that gets triggered with the full response of the next request.</p></prose>
+                </description>
+              </param>
+              <param name="onError">
+                <types>
+                  <type ref="function"/>
+                </types>
+                <ctype>
+                  <name name="Function"/>
+                </ctype>
+                <description>
+                  <prose><p>callback gets triggered in case of network errors or in case of invalid request</p></prose>
+                </description>
+              </param>
+            </method>
+          </class>
+        </ns>
+        <method name="H.places.buildInfo" local-name="buildInfo" access="public" scope="static" virtual="false" published="false" exported="true">
+          <description>
+            <prose><p>Function returns build information</p></prose>
+          </description>
+          <returns>
+            <types>
+              <type ref="H.util.BuildInfo"/>
+            </types>
+            <ctype>
+              <name name="H.util.BuildInfo"/>
+            </ctype>
+            <description>
+              <prose></prose>
+            </description>
+          </returns>
+        </method>
+      </ns>
+    </symbols>
+  </module>
+</modules>

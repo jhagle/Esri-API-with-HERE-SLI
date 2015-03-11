@@ -1,0 +1,173 @@
+* {
+  outline: none;
+  box-sizing: border-box;
+}
+
+body {
+  padding:0;
+  margin:0 auto;
+  height: 100%;
+  width: 100%;
+  font-family: 'Helvetica Neue', Helvetica;
+  background-color: #edf3f5;
+}
+
+div.enlarge {
+	margin-left:0;
+	width: 100%;
+}
+
+div.enlarge #large-img{
+    position:fixed; /*see support section for more info on positioning*/
+    top: 50%;
+    left:-9999px;
+    margin-top: -200px;
+    margin-left: -500px;
+    padding: 0px; /*size of the frame*/
+    background:#eae9d4; /*colour of the frame*/
+    z-index: 100;
+}
+
+div.enlarge:hover {
+    z-index: 50; /*places the popups infront of the thumbnails, which we gave a z-index of 0 in step 1*/
+    cursor:pointer; /*changes the cursor to a hand*/
+}
+
+/***Style the <span> containing the framed images and the caption***/
+div.enlarge #large-img.shown{
+    /**Style the frame**/
+   	z-index: 100px;
+   	left: 50%;
+    /*add a drop shadow to the frame*/
+    -webkit-box-shadow: 0 0 600px 400px rgba(0,0,0, .75));
+    -moz-box-shadow: 0 0 600px 400px rgba(0,0,0, .75);
+    box-shadow: 0 0 600px 400px rgba(0,0,0, .75);
+    /*give the corners a curve*/
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius:8px;
+    /**Style the caption**/
+    font-family: 'Droid Sans', sans-serif; /*Droid Sans is available from Google fonts*/
+    text-align: center;
+    color: #495a62;
+}
+
+#esriMapContainer{
+    height: 50%;
+    top: 0;
+    width: 90%;
+    margin: 0 auto;
+}
+#streetViewContainer  {
+  height: 50%;
+  width: 90%;
+  bottom: 0;
+  border: 0px solid #ebebeb;
+  margin: 0 auto;
+  background: white;
+
+}
+
+#wrapper {
+    width:100%;
+    overflow:hidden;
+    background-color: #edf3f5;
+}
+
+div#left-col {
+	padding: 0;
+	width: 275px;	
+	float: left;
+	overflow: hidden;
+}
+
+div#right-col {
+	padding: 0;
+	margin: 0;
+	float:left;
+	overflow: hidden;
+}
+
+.sidebar {
+    position: relative;
+    overflow: hidden;
+}
+
+#header-box {
+	height: 300px;
+	padding-top: 40px;
+	text-align: center;
+	color: #edf3f5;
+	background-color:#274190;
+	text-align: center;
+	
+}
+
+#header-box p {
+    font-size: .9em;
+    line-height: 22px;
+    margin: 10px 30px 20px 30px;
+}
+
+#search-container {
+	color: #66707e;
+	background-color: #fff;
+	-moz-box-shadow:    inset 0 0 2px #000000;
+	-webkit-box-shadow: inset 0 0 2px #000000;
+	box-shadow:         inset 0 0 2px #000000;
+	width: 235px;
+	margin: 0 auto;
+}
+
+#search {
+	border: none;
+	background: transparent; 
+	height: 40px;
+	width: 205px;
+	padding: 0 10px;
+	font-size: .8em;
+}
+
+#search-icon {
+	position: relative;
+	top: 6px;
+}
+
+#feedbackTxt {
+	font-size: .7em;
+	margin-top: 6px;
+}
+
+p.textOverlay {
+	position: relative;
+	text-align: center;
+	margin: 0px auto;
+	top: 25px;
+}
+
+#thumbnail {
+	margin-top: 0;
+	width: 100%;
+}
+
+#info-box {
+	padding: 30% 40px;
+	color: #66707e;
+	background-color: #edf3f5;
+}
+
+#info-box p {
+	font-size: .8em;
+	text-align: center;
+}
+
+#info-box a {
+	color: #274190;
+	font-weight: bold;
+	text-decoration: none;
+}
+
+#content {
+    margin: 0 0 0 300px;
+}
+

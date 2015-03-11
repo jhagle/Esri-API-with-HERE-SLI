@@ -1,0 +1,3040 @@
+<?xml version="1.0"?>
+<modules>
+  <module name="mapsjs-data">
+    <symbols>
+      <ns name="H.data" local-name="data" access="public" scope="static" virtual="false" published="true" exported="false">
+        <description>
+          <prose><p>The namespace contains classes and functionality for data visualization.</p></prose>
+        </description>
+        <class name="H.data.AbstractReader" local-name="AbstractReader" access="public" scope="static" virtual="false" published="true" exported="true">
+          <description>
+            <prose><p>An abstract reader class defines interface for data readers and has general functionality
+related to fetching data and reader events.</p></prose>
+          </description>
+          <extends>
+            <type ref="H.util.EventTarget"/>
+          </extends>
+          <constructor local-name="AbstractReader" name="H.data.AbstractReader">
+            <param name="url">
+              <types>
+                <type ref="string"/>
+              </types>
+              <ctype>
+                <name name="string"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+          </constructor>
+          <event name="H.data.AbstractReader#event:statechange" local-name="statechange" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Fired when the reader state changes, see <link ref="H.data.AbstractReader#getState" /></p></prose>
+            </description>
+            <types>
+              <type ref="H.data.AbstractReader.Event"/>
+            </types>
+            <ctype>
+              <name name="H.data.AbstractReader.Event"/>
+            </ctype>
+          </event>
+          <property name="H.data.AbstractReader#url" local-name="url" access="protected" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Holds Url string</p></prose>
+            </description>
+            <types>
+              <type ref="string"/>
+            </types>
+            <ctype>
+              <name name="string"/>
+            </ctype>
+          </property>
+          <property name="H.data.AbstractReader#collection" local-name="collection" access="protected" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Contains all root data elements as map objects.</p></prose>
+            </description>
+            <types>
+              <type ref="Array.&lt;H.map.Object&gt;"/>
+            </types>
+            <ctype>
+              <typed>
+                <base>
+                  <name name="Array"/>
+                </base>
+                <app>
+                  <name name="H.map.Object"/>
+                </app>
+              </typed>
+            </ctype>
+          </property>
+          <property name="H.data.AbstractReader#lop" local-name="lop" access="protected" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Local object provider that's populated with map data</p></prose>
+            </description>
+            <types>
+              <type ref="H.map.provider.LocalObjectProvider"/>
+            </types>
+            <ctype>
+              <name name="H.map.provider.LocalObjectProvider"/>
+            </ctype>
+          </property>
+          <enum name="H.data.AbstractReader.State" local-name="State" access="public" scope="static" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>The state types of an Reader. Possible states are:</p>
+<ul>
+   <li><code>ERROR</code> - request failed or data are malformed</li>
+   <li><code>LOADING</code> - fetching data from network resource</li>
+   <li><code>VISIT</code> - parser encountered data at root level</li>
+   <li><code>READY</code> - reader is ready to fetch and parse new data</li>
+</ul></prose>
+            </description>
+            <types>
+              <type ref="number"/>
+            </types>
+            <ctype>
+              <name name="number"/>
+            </ctype>
+            <value name="H.data.AbstractReader.State.ERROR" local-name="ERROR">
+              <description>
+                <prose></prose>
+              </description>
+            </value>
+            <value name="H.data.AbstractReader.State.LOADING" local-name="LOADING">
+              <description>
+                <prose></prose>
+              </description>
+            </value>
+            <value name="H.data.AbstractReader.State.VISIT" local-name="VISIT">
+              <description>
+                <prose></prose>
+              </description>
+            </value>
+            <value name="H.data.AbstractReader.State.READY" local-name="READY">
+              <description>
+                <prose></prose>
+              </description>
+            </value>
+          </enum>
+          <property name="H.data.AbstractReader#state" local-name="state" access="protected" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>The initial state of the reader</p></prose>
+            </description>
+            <types>
+              <type ref="H.data.AbstractReader.State"/>
+            </types>
+            <ctype>
+              <name name="H.data.AbstractReader.State"/>
+            </ctype>
+          </property>
+          <enum name="H.data.AbstractReader#EventType" local-name="EventType" access="public" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Events fired by Reader. Event <code>statechange</code> is fired every time when reader's
+parsing state changes. For possible states see <link ref="H.data.AbstractReader.State" /></p></prose>
+            </description>
+            <types>
+              <type ref="string"/>
+            </types>
+            <ctype>
+              <name name="string"/>
+            </ctype>
+            <value name="H.data.AbstractReader#EventType.STATECHANGE" local-name="STATECHANGE">
+              <description>
+                <prose></prose>
+              </description>
+            </value>
+          </enum>
+          <method name="H.data.AbstractReader#getLayer" local-name="getLayer" access="public" scope="instance" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>Method returns <link ref="H.map.layer.ObjectLayer" /> that contains parsed data, and
+can be added directly to the map. It returns new instance of the class with every invocation.
+If data hasn't been parsed it will return <code>H.map.layer.ObjectLayer</code> that contains
+partial information, and reader will add new parsed objects to the layer's provider later on.</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="H.map.layer.ObjectLayer"/>
+              </types>
+              <ctype>
+                <name name="H.map.layer.ObjectLayer"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.data.AbstractReader#getParsedObjects" local-name="getParsedObjects" access="public" scope="instance" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>Method returns collection of currently parsed, and converted to
+<code>H.map.Object</code> data objects. Method returns only currently parsed objects
+if parsing is ongoing.</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="Array.&lt;H.map.Object&gt;"/>
+              </types>
+              <ctype>
+                <typed>
+                  <base>
+                    <name name="Array"/>
+                  </base>
+                  <app>
+                    <name name="H.map.Object"/>
+                  </app>
+                </typed>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.data.AbstractReader#getUrl" local-name="getUrl" access="public" scope="instance" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>Returns URL of the current file, which is either in process of fetching/parsing or
+file that has been already parsed.</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="string"/>
+              </types>
+              <ctype>
+                <name name="string"/>
+              </ctype>
+              <description>
+                <prose><p>url</p></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.data.AbstractReader#setUrl" local-name="setUrl" access="public" scope="instance" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>Method sets reader's URL. Method resets current Reader's state to its initial values
+(clears data about last parsed objects, etc.), and throws InvalidState exception
+if Reader's state is not <code>READY</code> or <code>ERROR</code>.</p></prose>
+            </description>
+            <param name="url">
+              <types>
+                <type ref="string"/>
+              </types>
+              <ctype>
+                <name name="string"/>
+              </ctype>
+              <description>
+                <prose><p>The new URL</p></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="H.data.AbstractReader"/>
+              </types>
+              <ctype>
+                <name name="H.data.AbstractReader"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.data.AbstractReader#getState" local-name="getState" access="public" scope="instance" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>Returns the reader's processing state for possible states see <link ref="H.data.AbstractReader.State" /></p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="H.data.AbstractReader.State"/>
+              </types>
+              <ctype>
+                <name name="H.data.AbstractReader.State"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.data.AbstractReader#setState" local-name="setState" access="protected" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Sets the state of this reader and dispatch a &quot;statechange&quot; event</p></prose>
+            </description>
+            <param name="state">
+              <types>
+                <type ref="H.data.AbstractReader.State"/>
+              </types>
+              <ctype>
+                <name name="H.data.AbstractReader.State" nullable="false"/>
+              </ctype>
+              <description>
+                <prose><p>current reader state</p></prose>
+              </description>
+            </param>
+            <param name="opt_target" optional="true">
+              <types>
+                <type ref="H.map.Object"/>
+              </types>
+              <ctype>
+                <name name="H.map.Object" optional="true"/>
+              </ctype>
+              <description>
+                <prose><p>optional target that's passed to event listeners</p></prose>
+              </description>
+            </param>
+            <param name="opt_msg" optional="true">
+              <types>
+                <type ref="string"/>
+              </types>
+              <ctype>
+                <name name="string" optional="true"/>
+              </ctype>
+              <description>
+                <prose><p>optional message associated with the state</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.data.AbstractReader#parse" local-name="parse" access="public" scope="instance" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>Method launches parsing of the data file at the current url (see
+<link ref="H.data.AbstractReader#setUrl" /> or <link ref="H.data.AbstractReader" />). Method uses XHR
+as a transport therefore same origin policy applies, or server should respond with proper CORS headers.</p></prose>
+            </description>
+          </method>
+          <property name="H.data.AbstractReader#createObjects" local-name="createObjects" access="protected" scope="instance" virtual="true" published="false" exported="false">
+            <description>
+              <prose><p>Abstracted protected method that is used as a callback when data arrives and is responsible for
+transforming arrived data to <link ref="H.map.Object" /></p></prose>
+            </description>
+          </property>
+          <class name="H.data.AbstractReader.Event" local-name="Event" access="public" scope="static" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>The event class for state events that are dispatched by AbstractReader</p></prose>
+            </description>
+            <extends>
+              <type ref="H.util.Event"/>
+            </extends>
+            <constructor local-name="Event" name="H.data.AbstractReader.Event">
+              <param name="target">
+                <types>
+                  <type ref="H.data.AbstractReader"/>
+                  <type ref="H.map.Object"/>
+                </types>
+                <ctype>
+                  <union>
+                    <type>
+                      <name name="H.data.AbstractReader"/>
+                    </type>
+                    <type>
+                      <name name="H.map.Object"/>
+                    </type>
+                  </union>
+                </ctype>
+                <description>
+                  <prose><p>The target that's passed to event listeners</p></prose>
+                </description>
+              </param>
+              <param name="type">
+                <types>
+                  <type ref="string"/>
+                </types>
+                <ctype>
+                  <name name="string"/>
+                </ctype>
+                <description>
+                  <prose><p>The type of the event</p></prose>
+                </description>
+              </param>
+              <param name="state">
+                <types>
+                  <type ref="H.data.AbstractReader.State"/>
+                </types>
+                <ctype>
+                  <name name="H.data.AbstractReader.State"/>
+                </ctype>
+                <description>
+                  <prose><p>The state of the target firing an event</p></prose>
+                </description>
+              </param>
+              <param name="message">
+                <types>
+                  <type ref="string"/>
+                </types>
+                <ctype>
+                  <name name="string"/>
+                </ctype>
+                <description>
+                  <prose><p>The message associated with an event</p></prose>
+                </description>
+              </param>
+            </constructor>
+          </class>
+        </class>
+        <ns name="H.data.geojson" local-name="geojson" access="public" scope="static" virtual="false" published="true" exported="false">
+          <description>
+            <prose><p>Namespace provides GeoJSON functionality</p></prose>
+          </description>
+          <class name="H.data.geojson.ObjectFactory" local-name="ObjectFactory" access="public" scope="static" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>This class produces map objects.</p></prose>
+            </description>
+            <constructor local-name="ObjectFactory" name="H.data.geojson.ObjectFactory">
+              <param name="style">
+                <types>
+                  <type ref="function"/>
+                </types>
+                <ctype>
+                  <func>
+                    <param>
+                      <name name="H.map.Object"/>
+                    </param>
+                  </func>
+                </ctype>
+                <description>
+                  <prose><p>function that's invoked after object is created and can
+set style on the object</p></prose>
+                </description>
+              </param>
+            </constructor>
+            <method name="H.data.geojson.ObjectFactory#create" local-name="create" access="public" scope="instance" virtual="false" published="false" exported="true">
+              <description>
+                <prose><p>Generates out of a given geoJSON a valid H.map.Object.</p></prose>
+              </description>
+              <param name="obj">
+                <types>
+                  <type ref="Object"/>
+                </types>
+                <ctype>
+                  <name name="Object" nullable="false"/>
+                </ctype>
+                <description>
+                  <prose><p>GeoJSON object</p></prose>
+                </description>
+              </param>
+              <param name="opt_group" optional="true">
+                <types>
+                  <type ref="H.map.Group"/>
+                </types>
+                <ctype>
+                  <name name="H.map.Group" optional="true"/>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </param>
+              <returns>
+                <types>
+                  <type ref="H.map.Object"/>
+                  <type ref="undefined"/>
+                </types>
+                <ctype>
+                  <union>
+                    <type>
+                      <name name="H.map.Object"/>
+                    </type>
+                    <type>
+                      <undefined/>
+                    </type>
+                  </union>
+                </ctype>
+                <description>
+                  <prose><p>mapObject</p></prose>
+                </description>
+              </returns>
+            </method>
+            <method name="H.data.geojson.ObjectFactory#addProperties_" local-name="addProperties_" access="private" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>Method adds geojson's properties object, and object's type to map object</p></prose>
+              </description>
+              <param name="object">
+                <types>
+                  <type ref="H.map.Object"/>
+                </types>
+                <ctype>
+                  <name name="H.map.Object"/>
+                </ctype>
+                <description>
+                  <prose><p>map object</p></prose>
+                </description>
+              </param>
+              <param name="properties">
+                <types>
+                  <type ref="Object"/>
+                </types>
+                <ctype>
+                  <name name="Object"/>
+                </ctype>
+                <description>
+                  <prose><p>geojson property object</p></prose>
+                </description>
+              </param>
+              <param name="opt_type" optional="true">
+                <types>
+                  <type ref="string"/>
+                </types>
+                <ctype>
+                  <name name="string" optional="true"/>
+                </ctype>
+                <description>
+                  <prose><p>optional type of object</p></prose>
+                </description>
+              </param>
+            </method>
+            <method name="H.data.geojson.ObjectFactory#getPoint_" local-name="getPoint_" access="private" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>Returns a Point from given geoJSON point.</p></prose>
+              </description>
+              <param name="coords">
+                <types>
+                  <type ref="Array.&lt;number&gt;"/>
+                </types>
+                <ctype>
+                  <typed>
+                    <base>
+                      <name name="Array"/>
+                    </base>
+                    <app>
+                      <name name="number"/>
+                    </app>
+                  </typed>
+                </ctype>
+                <description>
+                  <prose><p>Array of coordinates</p></prose>
+                </description>
+              </param>
+              <returns>
+                <types>
+                  <type ref="H.geo.Point"/>
+                </types>
+                <ctype>
+                  <name name="H.geo.Point"/>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </returns>
+            </method>
+            <method name="H.data.geojson.ObjectFactory#getStrip_" local-name="getStrip_" access="private" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>Returns a strip from given geoJSON lineString or polygon.</p></prose>
+              </description>
+              <param name="coords">
+                <types>
+                  <type ref="Array.&lt;Array.&lt;number&gt;&gt;"/>
+                </types>
+                <ctype>
+                  <typed>
+                    <base>
+                      <name name="Array"/>
+                    </base>
+                    <app>
+                      <typed>
+                        <base>
+                          <name name="Array"/>
+                        </base>
+                        <app>
+                          <name name="number"/>
+                        </app>
+                      </typed>
+                    </app>
+                  </typed>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </param>
+              <returns>
+                <types>
+                  <type ref="H.geo.Strip"/>
+                </types>
+                <ctype>
+                  <name name="H.geo.Strip"/>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </returns>
+            </method>
+            <method name="H.data.geojson.ObjectFactory#getMultiPoint_" local-name="getMultiPoint_" access="private" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>Creates Points from given geoJSON multiPoint.</p></prose>
+              </description>
+              <param name="group">
+                <types>
+                  <type ref="H.map.Group"/>
+                </types>
+                <ctype>
+                  <name name="H.map.Group"/>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </param>
+              <param name="coords">
+                <types>
+                  <type ref="Array.&lt;Array.&lt;number&gt;&gt;"/>
+                </types>
+                <ctype>
+                  <typed>
+                    <base>
+                      <name name="Array"/>
+                    </base>
+                    <app>
+                      <typed>
+                        <base>
+                          <name name="Array"/>
+                        </base>
+                        <app>
+                          <name name="number"/>
+                        </app>
+                      </typed>
+                    </app>
+                  </typed>
+                </ctype>
+                <description>
+                  <prose><p>Array of coordinates</p></prose>
+                </description>
+              </param>
+            </method>
+            <method name="H.data.geojson.ObjectFactory#getMultiLineString_" local-name="getMultiLineString_" access="private" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>Creates Polylines from given geoJSON multiLineString.</p></prose>
+              </description>
+              <param name="group">
+                <types>
+                  <type ref="H.map.Group"/>
+                </types>
+                <ctype>
+                  <name name="H.map.Group"/>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </param>
+              <param name="coords">
+                <types>
+                  <type ref="Array.&lt;Array.&lt;Array.&lt;number&gt;&gt;&gt;"/>
+                </types>
+                <ctype>
+                  <typed>
+                    <base>
+                      <name name="Array"/>
+                    </base>
+                    <app>
+                      <typed>
+                        <base>
+                          <name name="Array"/>
+                        </base>
+                        <app>
+                          <typed>
+                            <base>
+                              <name name="Array"/>
+                            </base>
+                            <app>
+                              <name name="number"/>
+                            </app>
+                          </typed>
+                        </app>
+                      </typed>
+                    </app>
+                  </typed>
+                </ctype>
+                <description>
+                  <prose><p>Array of coordinates</p></prose>
+                </description>
+              </param>
+            </method>
+            <method name="H.data.geojson.ObjectFactory#getMultiPolygon_" local-name="getMultiPolygon_" access="private" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>Creates Polygons from given geoJSON multiPolygon.</p></prose>
+              </description>
+              <param name="group">
+                <types>
+                  <type ref="H.map.Group"/>
+                </types>
+                <ctype>
+                  <name name="H.map.Group"/>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </param>
+              <param name="coords">
+                <types>
+                  <type ref="Array.&lt;number&gt;"/>
+                </types>
+                <ctype>
+                  <typed>
+                    <base>
+                      <name name="Array"/>
+                    </base>
+                    <app>
+                      <name name="number"/>
+                    </app>
+                  </typed>
+                </ctype>
+                <description>
+                  <prose><p>Array of coordinates</p></prose>
+                </description>
+              </param>
+            </method>
+            <method name="H.data.geojson.ObjectFactory#getGeometryCollection_" local-name="getGeometryCollection_" access="private" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>Iterates over all geojson objects inside the GeometryCollection.</p></prose>
+              </description>
+              <param name="group">
+                <types>
+                  <type ref="H.map.Group"/>
+                </types>
+                <ctype>
+                  <name name="H.map.Group"/>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </param>
+              <param name="objs">
+                <types>
+                  <type ref="Array.&lt;!Object&gt;"/>
+                </types>
+                <ctype>
+                  <typed>
+                    <base>
+                      <name name="Array"/>
+                    </base>
+                    <app>
+                      <name name="Object" nullable="false"/>
+                    </app>
+                  </typed>
+                </ctype>
+                <description>
+                  <prose><p>Array of geojson objects</p></prose>
+                </description>
+              </param>
+            </method>
+          </class>
+          <class name="H.data.geojson.Reader" local-name="Reader" access="public" scope="static" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>The GeoJSON Reader is responsible for fetching and interpreting GeoJSON data. Reader creates
+<code>H.map.Object</code> that can be displayed on the map (for more details on GeoJSON
+see <a href="http://geojson.org/">http://geojson.org/</a>).
+Auxiliary data that accompanies geometries (everthing that <code>properties</code> field contains)
+is binded to the map object and can be fetched with object's
+<code>getData</code> method (see <link ref="H.map.Object#getData" />)</p>
+<p>Note that you can load GeoJSON file even from a different domain, if that domain supports
+Cross-Origin Resource Sharing (see <a href="http://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS">http://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS</a>).</p></prose>
+              <example>var reader = new H.data.geojson.Reader(&apos;/path/to/geojson/file.json&apos;);
+reader.parse();
+//assuming that map already exists
+map.addLayer(reader.getLayer());</example>
+            </description>
+            <extends>
+              <type ref="H.data.AbstractReader"/>
+            </extends>
+            <constructor local-name="Reader" name="H.data.geojson.Reader">
+              <param name="url">
+                <types>
+                  <type ref="string"/>
+                </types>
+                <ctype>
+                  <name name="string"/>
+                </ctype>
+                <description>
+                  <prose><p>url of the data file</p></prose>
+                </description>
+              </param>
+              <param name="opt_options" optional="true">
+                <types>
+                  <type ref="H.data.geojson.Reader.Options"/>
+                </types>
+                <ctype>
+                  <name name="H.data.geojson.Reader.Options" optional="true"/>
+                </ctype>
+                <description>
+                  <prose><p>additional reader parameters</p></prose>
+                </description>
+              </param>
+            </constructor>
+            <method name="H.data.geojson.Reader#createObjects" local-name="createObjects" access="protected" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>Parses passed argument into JSON object (if it is string) and produces map objects out of it.</p></prose>
+              </description>
+              <param name="data">
+                <types>
+                  <type ref="string"/>
+                </types>
+                <ctype>
+                  <name name="string"/>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </param>
+            </method>
+            <method name="H.data.geojson.Reader#defaultStyle_" local-name="defaultStyle_" access="private" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>Default styling function. at the moment it's meant to do nothing.</p></prose>
+              </description>
+            </method>
+            <method name="H.data.geojson.Reader#getFeature_" local-name="getFeature_" access="private" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>The method takes in geojson feature and transforms it into the object that can be consumed by
+object factory.
+TODO: make a typedef for it</p></prose>
+              </description>
+              <param name="obj">
+                <types>
+                  <type ref="Object"/>
+                </types>
+                <ctype>
+                  <name name="Object" nullable="false"/>
+                </ctype>
+                <description>
+                  <prose><p>GeoJSON feature to parse</p></prose>
+                </description>
+              </param>
+              <returns>
+                <types>
+                  <type ref="Object"/>
+                </types>
+                <ctype>
+                  <name name="Object" nullable="false"/>
+                </ctype>
+                <description>
+                  <prose><p>geometry</p></prose>
+                </description>
+              </returns>
+            </method>
+            <method name="H.data.geojson.Reader#addObject_" local-name="addObject_" access="private" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>Is called when a geoJSON object was read and a valid map object was created.</p></prose>
+              </description>
+              <param name="obj">
+                <types>
+                  <type ref="H.map.Object"/>
+                </types>
+                <ctype>
+                  <name name="H.map.Object" nullable="false"/>
+                </ctype>
+                <description>
+                  <prose><p>Is a map object like group, marker, polyline or polygon</p></prose>
+                </description>
+              </param>
+            </method>
+            <typedef name="H.data.geojson.Reader.Options" local-name="Options" access="public" scope="static" virtual="false" published="true" exported="false">
+              <description>
+                <prose><p>Options used to initialize a Reader</p></prose>
+              </description>
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <record>
+                  <field>
+                    <key>
+                      <name name="style"/>
+                    </key>
+                    <value>
+                      <union>
+                        <type>
+                          <func>
+                            <param>
+                              <name name="H.map.Object"/>
+                            </param>
+                          </func>
+                        </type>
+                        <type>
+                          <undefined/>
+                        </type>
+                      </union>
+                    </value>
+                  </field>
+                </record>
+              </ctype>
+              <property name="H.data.geojson.Reader.Options#style" local-name="style" access="public" scope="" virtual="false" published="false" exported="false" optional="true">
+                <description>
+                  <prose><p>Function that is invoked during parsing after object creation,
+          and is used to set style of the object</p></prose>
+                </description>
+                <types>
+                  <type ref="function"/>
+                </types>
+                <ctype>
+                  <func optional="true">
+                    <param>
+                      <name name="H.map.Object"/>
+                    </param>
+                  </func>
+                </ctype>
+              </property>
+            </typedef>
+            <event name="H.data.geojson.Reader#event:statechange" local-name="statechange" access="public" scope="instance" virtual="false" published="true" exported="false" inherited="H.data.AbstractReader#event:statechange">
+              <description>
+                <prose><p>Fired when the reader state changes, see <link ref="H.data.AbstractReader#getState" /></p></prose>
+              </description>
+              <types>
+                <type ref="H.data.AbstractReader.Event"/>
+              </types>
+              <ctype>
+                <name name="H.data.AbstractReader.Event"/>
+              </ctype>
+            </event>
+            <property name="H.data.geojson.Reader#url" local-name="url" access="protected" scope="instance" virtual="false" published="false" exported="false" inherited="H.data.AbstractReader#url">
+              <description>
+                <prose><p>Holds Url string</p></prose>
+              </description>
+              <types>
+                <type ref="string"/>
+              </types>
+              <ctype>
+                <name name="string"/>
+              </ctype>
+            </property>
+            <property name="H.data.geojson.Reader#collection" local-name="collection" access="protected" scope="instance" virtual="false" published="false" exported="false" inherited="H.data.AbstractReader#collection">
+              <description>
+                <prose><p>Contains all root data elements as map objects.</p></prose>
+              </description>
+              <types>
+                <type ref="Array.&lt;H.map.Object&gt;"/>
+              </types>
+              <ctype>
+                <typed>
+                  <base>
+                    <name name="Array"/>
+                  </base>
+                  <app>
+                    <name name="H.map.Object"/>
+                  </app>
+                </typed>
+              </ctype>
+            </property>
+            <property name="H.data.geojson.Reader#lop" local-name="lop" access="protected" scope="instance" virtual="false" published="false" exported="false" inherited="H.data.AbstractReader#lop">
+              <description>
+                <prose><p>Local object provider that's populated with map data</p></prose>
+              </description>
+              <types>
+                <type ref="H.map.provider.LocalObjectProvider"/>
+              </types>
+              <ctype>
+                <name name="H.map.provider.LocalObjectProvider"/>
+              </ctype>
+            </property>
+            <property name="H.data.geojson.Reader#state" local-name="state" access="protected" scope="instance" virtual="false" published="false" exported="false" inherited="H.data.AbstractReader#state">
+              <description>
+                <prose><p>The initial state of the reader</p></prose>
+              </description>
+              <types>
+                <type ref="H.data.AbstractReader.State"/>
+              </types>
+              <ctype>
+                <name name="H.data.AbstractReader.State"/>
+              </ctype>
+            </property>
+            <enum name="H.data.geojson.Reader#EventType" local-name="EventType" access="public" scope="instance" virtual="false" published="false" exported="false" inherited="H.data.AbstractReader#EventType">
+              <description>
+                <prose><p>Events fired by Reader. Event <code>statechange</code> is fired every time when reader's
+parsing state changes. For possible states see <link ref="H.data.AbstractReader.State" /></p></prose>
+              </description>
+              <types>
+                <type ref="string"/>
+              </types>
+              <ctype>
+                <name name="string"/>
+              </ctype>
+              <value name="H.data.geojson.Reader#EventType.STATECHANGE" local-name="STATECHANGE">
+                <description>
+                  <prose></prose>
+                </description>
+              </value>
+            </enum>
+            <method name="H.data.geojson.Reader#getLayer" local-name="getLayer" access="public" scope="instance" virtual="false" published="true" exported="true" inherited="H.data.AbstractReader#getLayer">
+              <description>
+                <prose><p>Method returns <link ref="H.map.layer.ObjectLayer" /> that contains parsed data, and
+can be added directly to the map. It returns new instance of the class with every invocation.
+If data hasn't been parsed it will return <code>H.map.layer.ObjectLayer</code> that contains
+partial information, and reader will add new parsed objects to the layer's provider later on.</p></prose>
+              </description>
+              <returns>
+                <types>
+                  <type ref="H.map.layer.ObjectLayer"/>
+                </types>
+                <ctype>
+                  <name name="H.map.layer.ObjectLayer"/>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </returns>
+            </method>
+            <method name="H.data.geojson.Reader#getParsedObjects" local-name="getParsedObjects" access="public" scope="instance" virtual="false" published="true" exported="true" inherited="H.data.AbstractReader#getParsedObjects">
+              <description>
+                <prose><p>Method returns collection of currently parsed, and converted to
+<code>H.map.Object</code> data objects. Method returns only currently parsed objects
+if parsing is ongoing.</p></prose>
+              </description>
+              <returns>
+                <types>
+                  <type ref="Array.&lt;H.map.Object&gt;"/>
+                </types>
+                <ctype>
+                  <typed>
+                    <base>
+                      <name name="Array"/>
+                    </base>
+                    <app>
+                      <name name="H.map.Object"/>
+                    </app>
+                  </typed>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </returns>
+            </method>
+            <method name="H.data.geojson.Reader#getUrl" local-name="getUrl" access="public" scope="instance" virtual="false" published="true" exported="true" inherited="H.data.AbstractReader#getUrl">
+              <description>
+                <prose><p>Returns URL of the current file, which is either in process of fetching/parsing or
+file that has been already parsed.</p></prose>
+              </description>
+              <returns>
+                <types>
+                  <type ref="string"/>
+                </types>
+                <ctype>
+                  <name name="string"/>
+                </ctype>
+                <description>
+                  <prose><p>url</p></prose>
+                </description>
+              </returns>
+            </method>
+            <method name="H.data.geojson.Reader#setUrl" local-name="setUrl" access="public" scope="instance" virtual="false" published="true" exported="true" inherited="H.data.AbstractReader#setUrl">
+              <description>
+                <prose><p>Method sets reader's URL. Method resets current Reader's state to its initial values
+(clears data about last parsed objects, etc.), and throws InvalidState exception
+if Reader's state is not <code>READY</code> or <code>ERROR</code>.</p></prose>
+              </description>
+              <param name="url">
+                <types>
+                  <type ref="string"/>
+                </types>
+                <ctype>
+                  <name name="string"/>
+                </ctype>
+                <description>
+                  <prose><p>The new URL</p></prose>
+                </description>
+              </param>
+              <returns>
+                <types>
+                  <type ref="H.data.AbstractReader"/>
+                </types>
+                <ctype>
+                  <name name="H.data.AbstractReader"/>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </returns>
+            </method>
+            <method name="H.data.geojson.Reader#getState" local-name="getState" access="public" scope="instance" virtual="false" published="true" exported="true" inherited="H.data.AbstractReader#getState">
+              <description>
+                <prose><p>Returns the reader's processing state for possible states see <link ref="H.data.AbstractReader.State" /></p></prose>
+              </description>
+              <returns>
+                <types>
+                  <type ref="H.data.AbstractReader.State"/>
+                </types>
+                <ctype>
+                  <name name="H.data.AbstractReader.State"/>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </returns>
+            </method>
+            <method name="H.data.geojson.Reader#setState" local-name="setState" access="protected" scope="instance" virtual="false" published="false" exported="false" inherited="H.data.AbstractReader#setState">
+              <description>
+                <prose><p>Sets the state of this reader and dispatch a &quot;statechange&quot; event</p></prose>
+              </description>
+              <param name="state">
+                <types>
+                  <type ref="H.data.AbstractReader.State"/>
+                </types>
+                <ctype>
+                  <name name="H.data.AbstractReader.State" nullable="false"/>
+                </ctype>
+                <description>
+                  <prose><p>current reader state</p></prose>
+                </description>
+              </param>
+              <param name="opt_target" optional="true">
+                <types>
+                  <type ref="H.map.Object"/>
+                </types>
+                <ctype>
+                  <name name="H.map.Object" optional="true"/>
+                </ctype>
+                <description>
+                  <prose><p>optional target that's passed to event listeners</p></prose>
+                </description>
+              </param>
+              <param name="opt_msg" optional="true">
+                <types>
+                  <type ref="string"/>
+                </types>
+                <ctype>
+                  <name name="string" optional="true"/>
+                </ctype>
+                <description>
+                  <prose><p>optional message associated with the state</p></prose>
+                </description>
+              </param>
+            </method>
+            <method name="H.data.geojson.Reader#parse" local-name="parse" access="public" scope="instance" virtual="false" published="true" exported="true" inherited="H.data.AbstractReader#parse">
+              <description>
+                <prose><p>Method launches parsing of the data file at the current url (see
+<link ref="H.data.AbstractReader#setUrl" /> or <link ref="H.data.AbstractReader" />). Method uses XHR
+as a transport therefore same origin policy applies, or server should respond with proper CORS headers.</p></prose>
+              </description>
+            </method>
+          </class>
+        </ns>
+        <ns name="H.data.kml" local-name="kml" access="public" scope="static" virtual="false" published="true" exported="false">
+          <description>
+            <prose><p>Namespace provides KML functionality</p></prose>
+          </description>
+          <class name="H.data.kml.HotSpot" local-name="HotSpot" access="public" scope="static" virtual="false" published="false" exported="true">
+            <description>
+              <prose><p>This class represents the &lt;HotSpot&gt; tag from the KML specification.</p></prose>
+            </description>
+            <constructor local-name="HotSpot" name="H.data.kml.HotSpot">
+              <param name="node">
+                <types>
+                  <type ref="Object"/>
+                </types>
+                <ctype>
+                  <name name="Object" nullable="false"/>
+                </ctype>
+                <description>
+                  <prose><p>An XML node from the KML document which is currently being parsed.</p></prose>
+                </description>
+              </param>
+            </constructor>
+          </class>
+          <class name="H.data.kml.Icon" local-name="Icon" access="public" scope="static" virtual="false" published="false" exported="true">
+            <description>
+              <prose><p>This class represents the &lt;Icon&gt; tag from the KML specification.</p></prose>
+            </description>
+            <constructor local-name="Icon" name="H.data.kml.Icon">
+              <param name="node">
+                <types>
+                  <type ref="Object"/>
+                </types>
+                <ctype>
+                  <name name="Object" nullable="false"/>
+                </ctype>
+                <description>
+                  <prose><p>An XML node from the KML document which is currently being parsed.</p></prose>
+                </description>
+              </param>
+            </constructor>
+          </class>
+          <class name="H.data.kml.IconStyle" local-name="IconStyle" access="public" scope="static" virtual="false" published="false" exported="true">
+            <description>
+              <prose><p>This class represents the &lt;IconStyle&gt; tag from the KML specification.
+The constructor initializes a new instance of the class, using the arguments provided by the caller.</p></prose>
+            </description>
+            <constructor local-name="IconStyle" name="H.data.kml.IconStyle">
+              <param name="node">
+                <types>
+                  <type ref="Object"/>
+                </types>
+                <ctype>
+                  <name name="Object" nullable="false"/>
+                </ctype>
+                <description>
+                  <prose><p>An XML node from the KML document which is currently being parsed.</p></prose>
+                </description>
+              </param>
+            </constructor>
+          </class>
+          <class name="H.data.kml.BalloonStyle" local-name="BalloonStyle" access="public" scope="static" virtual="false" published="false" exported="true">
+            <description>
+              <prose><p>This class represents the abstract &lt;ColorStyle&gt; tag from the KML specification.</p></prose>
+            </description>
+            <constructor local-name="BalloonStyle" name="H.data.kml.BalloonStyle">
+              <param name="node">
+                <types>
+                  <type ref="Object"/>
+                </types>
+                <ctype>
+                  <name name="Object" nullable="false"/>
+                </ctype>
+                <description>
+                  <prose><p>XML A node from the KML document that is being parsed</p></prose>
+                </description>
+              </param>
+            </constructor>
+          </class>
+          <class name="H.data.kml.ColorStyle" local-name="ColorStyle" access="public" scope="static" virtual="false" published="false" exported="true">
+            <description>
+              <prose><p>This class represents the abstract &lt;ColorStyle&gt; tag from the KML specification.</p></prose>
+            </description>
+            <constructor local-name="ColorStyle" name="H.data.kml.ColorStyle">
+              <param name="node">
+                <types>
+                  <type ref="Object"/>
+                </types>
+                <ctype>
+                  <name name="Object" nullable="false"/>
+                </ctype>
+                <description>
+                  <prose><p>XML A node from the KML document that is being parsed</p></prose>
+                </description>
+              </param>
+            </constructor>
+          </class>
+          <class name="H.data.kml.PolyStyle" local-name="PolyStyle" access="public" scope="static" virtual="false" published="false" exported="true">
+            <description>
+              <prose><p>This class represents the &lt;PolyStyle&gt; tag from KML specification.</p></prose>
+            </description>
+            <constructor local-name="PolyStyle" name="H.data.kml.PolyStyle">
+              <param name="node">
+                <types>
+                  <type ref="Object"/>
+                </types>
+                <ctype>
+                  <name name="Object" nullable="false"/>
+                </ctype>
+                <description>
+                  <prose><p>An XML node from the KML document that is currently being parsed.</p></prose>
+                </description>
+              </param>
+            </constructor>
+          </class>
+          <class name="H.data.kml.LineStyle" local-name="LineStyle" access="public" scope="static" virtual="false" published="false" exported="true">
+            <description>
+              <prose><p>This class represents the &lt;LineStyle&gt; tag from the KML specification.</p></prose>
+            </description>
+            <constructor local-name="LineStyle" name="H.data.kml.LineStyle">
+              <param name="node">
+                <types>
+                  <type ref="Object"/>
+                </types>
+                <ctype>
+                  <name name="Object" nullable="false"/>
+                </ctype>
+                <description>
+                  <prose><p>An XML node from KML document which is currently being parsed</p></prose>
+                </description>
+              </param>
+            </constructor>
+          </class>
+          <class name="H.data.kml.Style" local-name="Style" access="public" scope="static" virtual="false" published="false" exported="true">
+            <description>
+              <prose><p>This class represents the &lt;Style&gt; tag from KML specification.</p></prose>
+            </description>
+            <constructor local-name="Style" name="H.data.kml.Style">
+              <param name="node">
+                <types>
+                  <type ref="Node"/>
+                </types>
+                <ctype>
+                  <name name="Node"/>
+                </ctype>
+                <description>
+                  <prose><p>An XML node from the KML document which is currently being parsed.</p></prose>
+                </description>
+              </param>
+            </constructor>
+          </class>
+          <class name="H.data.kml.StyleContainer" local-name="StyleContainer" access="public" scope="static" virtual="false" published="false" exported="true">
+            <description>
+              <prose><p>It is mainly used for holding the global styles on which the
+attribute <code>id</code> is set. If a style does not have the
+<code>id</code> attribute, it is not added to the array neither in the
+constructor nor in the <code>addStyle()</code> method.</p></prose>
+            </description>
+            <constructor local-name="StyleContainer" name="H.data.kml.StyleContainer"/>
+            <method name="H.data.kml.StyleContainer#addStyle" local-name="addStyle" access="public" scope="instance" virtual="false" published="false" exported="true">
+              <description>
+                <prose><p>This method adds new element to the internal array.</p></prose>
+              </description>
+              <param name="style">
+                <types>
+                  <type ref="H.data.kml.Style"/>
+                  <type ref="H.data.kml.StyleMap"/>
+                </types>
+                <ctype>
+                  <union>
+                    <type>
+                      <name name="H.data.kml.Style"/>
+                    </type>
+                    <type>
+                      <name name="H.data.kml.StyleMap"/>
+                    </type>
+                  </union>
+                </ctype>
+                <description>
+                  <prose><p>That provides the style definition; it must contain
+the attribute <code>id</code></p></prose>
+                </description>
+              </param>
+            </method>
+            <method name="H.data.kml.StyleContainer#getStyleById" local-name="getStyleById" access="public" scope="instance" virtual="false" published="false" exported="true">
+              <description>
+                <prose><p>This method gets the concrete style for the feature.</p></prose>
+              </description>
+              <param name="id">
+                <types>
+                  <type ref="string"/>
+                </types>
+                <ctype>
+                  <name name="string"/>
+                </ctype>
+                <description>
+                  <prose><p>A unique identifier for the <code>StyleSelector</code></p></prose>
+                </description>
+              </param>
+              <param name="highlighted">
+                <types>
+                  <type ref="boolean"/>
+                </types>
+                <ctype>
+                  <name name="boolean"/>
+                </ctype>
+                <description>
+                  <prose><p>A Boolean value that indicates if the
+    method is to return the style for a highlighted case
+    (<code>true</code>); if the value is <code>true</code> and if the
+    particular style is not a <code>StyleMap</code>, then the method returns <code>null</code>,
+    because there is no highlighted style for the <code>H.data.kml.Style</code> object</p></prose>
+                </description>
+              </param>
+              <returns>
+                <types>
+                  <type ref="undefined"/>
+                  <type ref="H.data.kml.Style"/>
+                </types>
+                <ctype>
+                  <union>
+                    <type>
+                      <undefined/>
+                    </type>
+                    <type>
+                      <name name="H.data.kml.Style"/>
+                    </type>
+                  </union>
+                </ctype>
+                <description>
+                  <prose><p>style matching the id specified by the caller</p></prose>
+                </description>
+              </returns>
+            </method>
+          </class>
+          <class name="H.data.kml.Feature" local-name="Feature" access="public" scope="static" virtual="false" published="false" exported="true">
+            <description>
+              <prose><p>This class represents the abstract &lt;Feature&gt; tag from KML specification.</p></prose>
+            </description>
+            <constructor local-name="Feature" name="H.data.kml.Feature">
+              <param name="node">
+                <types>
+                  <type ref="Node"/>
+                </types>
+                <ctype>
+                  <name name="Node"/>
+                </ctype>
+                <description>
+                  <prose><p>An XML node from a KML document that is being parsed.</p></prose>
+                </description>
+              </param>
+              <param name="stylesContainer">
+                <types>
+                  <type ref="H.data.kml.StyleContainer"/>
+                </types>
+                <ctype>
+                  <name name="H.data.kml.StyleContainer"/>
+                </ctype>
+                <description>
+                  <prose><p>Instance of H.data.kml.StyleContainer.</p></prose>
+                </description>
+              </param>
+            </constructor>
+          </class>
+          <class name="H.data.kml.Pair" local-name="Pair" access="public" scope="static" virtual="false" published="false" exported="true">
+            <description>
+              <prose><p>This class represents the &lt;Pair&gt; tag from the KML specification.</p></prose>
+            </description>
+            <constructor local-name="Pair" name="H.data.kml.Pair">
+              <param name="node">
+                <types>
+                  <type ref="Object"/>
+                </types>
+                <ctype>
+                  <name name="Object" nullable="false"/>
+                </ctype>
+                <description>
+                  <prose><p>An XML node from the KML document that is currently being parsed</p></prose>
+                </description>
+              </param>
+              <param name="styleContainer">
+                <types>
+                  <type ref="H.data.kml.StyleContainer"/>
+                </types>
+                <ctype>
+                  <name name="H.data.kml.StyleContainer"/>
+                </ctype>
+                <description>
+                  <prose><p>A list of
+<code>StyleSelector</code> objects, this is
+a list of all global styles which can be referenced by id</p></prose>
+                </description>
+              </param>
+            </constructor>
+            <method name="H.data.kml.Pair#getStyle" local-name="getStyle" access="public" scope="instance" virtual="false" published="false" exported="true">
+              <description>
+                <prose><p>This method retrieves the styles for the given object.</p></prose>
+              </description>
+              <returns>
+                <types>
+                  <type ref="undefined"/>
+                  <type ref="H.data.kml.Style"/>
+                </types>
+                <ctype>
+                  <union>
+                    <type>
+                      <undefined/>
+                    </type>
+                    <type>
+                      <name name="H.data.kml.Style"/>
+                    </type>
+                  </union>
+                </ctype>
+                <description>
+                  <prose><p>A style object, or <code>undefined</code>
+if no style is defined</p></prose>
+                </description>
+              </returns>
+            </method>
+          </class>
+          <class name="H.data.kml.StyleMap" local-name="StyleMap" access="public" scope="static" virtual="false" published="false" exported="true">
+            <description>
+              <prose><p>This class represents the &lt;StyleMap&gt; element, which provides separate normal
+and highlighted styles for a placemark so that the highlighted version
+appears when the user's mouse pointer moves over an icon.
+The constructor initializes a new instance of the class, using the
+arguments provided by the caller.</p></prose>
+            </description>
+            <constructor local-name="StyleMap" name="H.data.kml.StyleMap">
+              <param name="node">
+                <types>
+                  <type ref="Node"/>
+                </types>
+                <ctype>
+                  <name name="Node"/>
+                </ctype>
+                <description>
+                  <prose><p>An XML node from the KML document that is being parsed.</p></prose>
+                </description>
+              </param>
+              <param name="styleContainer">
+                <types>
+                  <type ref="H.data.kml.StyleContainer"/>
+                </types>
+                <ctype>
+                  <name name="H.data.kml.StyleContainer"/>
+                </ctype>
+                <description>
+                  <prose><p>Instance of H.data.kml.StyleContainer</p></prose>
+                </description>
+              </param>
+            </constructor>
+            <method name="H.data.kml.StyleMap#getStyle" local-name="getStyle" access="public" scope="instance" virtual="false" published="false" exported="true">
+              <description>
+                <prose><p>This method retrieves the style for the given object.</p></prose>
+              </description>
+              <param name="highlighted">
+                <types>
+                  <type ref="boolean"/>
+                </types>
+                <ctype>
+                  <name name="boolean"/>
+                </ctype>
+                <description>
+                  <prose><p>A Boolean value that indicates if the
+method is to return the style for a highlighted case (<code>true</code>)</p></prose>
+                </description>
+              </param>
+              <returns>
+                <types>
+                  <type ref="H.data.kml.Style"/>
+                </types>
+                <ctype>
+                  <name name="H.data.kml.Style"/>
+                </ctype>
+                <description>
+                  <prose><p>An object encapsulating the style for
+the given class instance</p></prose>
+                </description>
+              </returns>
+            </method>
+          </class>
+          <class name="H.data.kml.Point" local-name="Point" access="public" scope="static" virtual="false" published="false" exported="true">
+            <description>
+              <prose><p>This class represents the &lt;Point&gt; tag from the KML specification.
+The constructor initializes a new instance of the class, using the arguments provided by the caller.</p></prose>
+            </description>
+            <constructor local-name="Point" name="H.data.kml.Point">
+              <param name="node">
+                <types>
+                  <type ref="Object"/>
+                </types>
+                <ctype>
+                  <name name="Object" nullable="false"/>
+                </ctype>
+                <description>
+                  <prose><p>An XML node from the KML document, which is currently being parsed</p></prose>
+                </description>
+              </param>
+            </constructor>
+            <method name="H.data.kml.Point#getCoordinates" local-name="getCoordinates" access="public" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>Returns a point.</p></prose>
+              </description>
+              <returns>
+                <types>
+                  <type ref="H.geo.Point"/>
+                </types>
+                <ctype>
+                  <name name="H.geo.Point"/>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </returns>
+            </method>
+          </class>
+          <class name="H.data.kml.Polygon" local-name="Polygon" access="public" scope="static" virtual="false" published="false" exported="true">
+            <description>
+              <prose><p>This class represents the &lt;Polygon&gt; tag from the KML specification.</p></prose>
+            </description>
+            <constructor local-name="Polygon" name="H.data.kml.Polygon">
+              <param name="node">
+                <types>
+                  <type ref="Object"/>
+                </types>
+                <ctype>
+                  <name name="Object" nullable="false"/>
+                </ctype>
+                <description>
+                  <prose><p>An XML node from the KML document, which is currently being parsed</p></prose>
+                </description>
+              </param>
+            </constructor>
+            <method name="H.data.kml.Polygon#getCoordinates" local-name="getCoordinates" access="public" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>Returns the strip.</p></prose>
+              </description>
+              <returns>
+                <types>
+                  <type ref="H.geo.Strip"/>
+                </types>
+                <ctype>
+                  <name name="H.geo.Strip"/>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </returns>
+            </method>
+          </class>
+          <class name="H.data.kml.Line" local-name="Line" access="public" scope="static" virtual="false" published="false" exported="true">
+            <description>
+              <prose><p>This class represents the &lt;LineString&gt; or &lt;LinearRing&gt; tag from the KML specification.</p></prose>
+            </description>
+            <constructor local-name="Line" name="H.data.kml.Line">
+              <param name="node">
+                <types>
+                  <type ref="Object"/>
+                </types>
+                <ctype>
+                  <name name="Object" nullable="false"/>
+                </ctype>
+                <description>
+                  <prose><p>An XML node from the KML document, which is currently being parsed</p></prose>
+                </description>
+              </param>
+            </constructor>
+            <method name="H.data.kml.Line#parseCoords_" local-name="parseCoords_" access="private" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>This method converts the coordinates from string format to an array. If the array
+has fewer than two coordinates, then empty array is returned.
+A reference to the first element from the array is added at the end
+of the path to close the path, if they are different.</p></prose>
+              </description>
+              <param name="coords">
+                <types>
+                  <type ref="string"/>
+                </types>
+                <ctype>
+                  <name name="string"/>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </param>
+              <returns>
+                <types>
+                  <type ref="Array.&lt;H.geo.Point&gt;"/>
+                </types>
+                <ctype>
+                  <typed>
+                    <base>
+                      <name name="Array"/>
+                    </base>
+                    <app>
+                      <name name="H.geo.Point"/>
+                    </app>
+                  </typed>
+                </ctype>
+                <description>
+                  <prose><p>An array of points</p></prose>
+                </description>
+              </returns>
+            </method>
+            <method name="H.data.kml.Line#getCoordinates" local-name="getCoordinates" access="public" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>Returns the strip.</p></prose>
+              </description>
+              <returns>
+                <types>
+                  <type ref="H.geo.Strip"/>
+                </types>
+                <ctype>
+                  <name name="H.geo.Strip"/>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </returns>
+            </method>
+          </class>
+          <class name="H.data.kml.ObjectFactory" local-name="ObjectFactory" access="public" scope="static" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>This class produces map objects.</p></prose>
+            </description>
+            <constructor local-name="ObjectFactory" name="H.data.kml.ObjectFactory">
+              <param name="styleContainer">
+                <types>
+                  <type ref="H.data.kml.StyleContainer"/>
+                </types>
+                <ctype>
+                  <name name="H.data.kml.StyleContainer"/>
+                </ctype>
+                <description>
+                  <prose><p>Instance of StyleContainer</p></prose>
+                </description>
+              </param>
+              <param name="opt_baseUrl" optional="true">
+                <types>
+                  <type ref="string"/>
+                </types>
+                <ctype>
+                  <name name="string" optional="true"/>
+                </ctype>
+                <description>
+                  <prose><p>The base URL of the KML file which is used to correctly resolve relative paths</p></prose>
+                </description>
+              </param>
+            </constructor>
+            <property name="H.data.kml.ObjectFactory#styleContainer" local-name="styleContainer" access="public" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>Instance of StyleContainer that holds all shared styles</p></prose>
+              </description>
+              <types>
+                <type ref="H.data.kml.StyleContainer"/>
+              </types>
+              <ctype>
+                <name name="H.data.kml.StyleContainer"/>
+              </ctype>
+            </property>
+            <property name="H.data.kml.ObjectFactory#iconCache_" local-name="iconCache_" access="private" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>Icons cache</p></prose>
+              </description>
+              <types>
+                <type ref="Object.&lt;string, H.map.Icon&gt;"/>
+              </types>
+              <ctype>
+                <typed>
+                  <base>
+                    <name name="Object"/>
+                  </base>
+                  <app>
+                    <name name="string"/>
+                  </app>
+                  <app>
+                    <name name="H.map.Icon"/>
+                  </app>
+                </typed>
+              </ctype>
+            </property>
+            <property name="H.data.kml.ObjectFactory#pendingIcons_" local-name="pendingIcons_" access="private" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>Holds pending icons</p></prose>
+              </description>
+              <types>
+                <type ref="Object.&lt;string, H.map.Icon&gt;"/>
+              </types>
+              <ctype>
+                <typed>
+                  <base>
+                    <name name="Object"/>
+                  </base>
+                  <app>
+                    <name name="string"/>
+                  </app>
+                  <app>
+                    <name name="H.map.Icon"/>
+                  </app>
+                </typed>
+              </ctype>
+            </property>
+            <property name="H.data.kml.ObjectFactory#emptyIcon_" local-name="emptyIcon_" access="private" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose></prose>
+              </description>
+              <types>
+                <type ref="H.map.Icon"/>
+              </types>
+              <ctype>
+                <name name="H.map.Icon"/>
+              </ctype>
+            </property>
+            <property name="H.data.kml.ObjectFactory#baseUrl_" local-name="baseUrl_" access="private" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose></prose>
+              </description>
+              <types>
+                <type ref="string"/>
+              </types>
+              <ctype>
+                <name name="string"/>
+              </ctype>
+            </property>
+            <method name="H.data.kml.ObjectFactory#create" local-name="create" access="public" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>Generates out of a given placemark node a valid H.map.Object.</p></prose>
+              </description>
+              <param name="placemarkNode">
+                <types>
+                  <type ref="Node"/>
+                </types>
+                <ctype>
+                  <name name="Node"/>
+                </ctype>
+                <description>
+                  <prose><p>A placemark node to parse</p></prose>
+                </description>
+              </param>
+              <returns>
+                <types>
+                  <type ref="H.map.Object"/>
+                  <type ref="undefined"/>
+                </types>
+                <ctype>
+                  <union>
+                    <type>
+                      <name name="H.map.Object" nullable="false"/>
+                    </type>
+                    <type>
+                      <undefined/>
+                    </type>
+                  </union>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </returns>
+            </method>
+            <method name="H.data.kml.ObjectFactory#getMapObject_" local-name="getMapObject_" access="private" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose></prose>
+              </description>
+              <param name="node">
+                <types>
+                  <type ref="Node"/>
+                </types>
+                <ctype>
+                  <name name="Node"/>
+                </ctype>
+                <description>
+                  <prose><p>The node to parse</p></prose>
+                </description>
+              </param>
+              <param name="group">
+                <types>
+                  <type ref="H.map.Group"/>
+                </types>
+                <ctype>
+                  <name name="H.map.Group"/>
+                </ctype>
+                <description>
+                  <prose><p>When a placemark consists MultiGeometry tag a
+group is given</p></prose>
+                </description>
+              </param>
+              <returns>
+                <types>
+                  <type ref="H.map.Object"/>
+                  <type ref="undefined"/>
+                </types>
+                <ctype>
+                  <union>
+                    <type>
+                      <name name="H.map.Object" nullable="false"/>
+                    </type>
+                    <type>
+                      <undefined/>
+                    </type>
+                  </union>
+                </ctype>
+                <description>
+                  <prose><p>mapObject</p></prose>
+                </description>
+              </returns>
+            </method>
+            <method name="H.data.kml.ObjectFactory#getOptions_" local-name="getOptions_" access="private" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>Creates the opt_options for the map object like style, visibility or icon.</p></prose>
+              </description>
+              <param name="type">
+                <types>
+                  <type ref="string"/>
+                </types>
+                <ctype>
+                  <name name="string"/>
+                </ctype>
+                <description>
+                  <prose><p>Type of map object</p></prose>
+                </description>
+              </param>
+              <returns>
+                <types>
+                  <type ref="Object"/>
+                </types>
+                <ctype>
+                  <name name="Object" nullable="false"/>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </returns>
+            </method>
+            <method name="H.data.kml.ObjectFactory#mergeStyles_" local-name="mergeStyles_" access="private" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>Method iterates over own properties of style object and merges it with supplied object</p></prose>
+              </description>
+              <param name="style">
+                <types>
+                  <type ref="H.data.kml.Style"/>
+                </types>
+                <ctype>
+                  <name name="H.data.kml.Style"/>
+                </ctype>
+                <description>
+                  <prose><p>style ot merge</p></prose>
+                </description>
+              </param>
+              <param name="opt_mergedStyle" optional="true">
+                <types>
+                  <type ref="Object"/>
+                </types>
+                <ctype>
+                  <name name="Object" optional="true"/>
+                </ctype>
+                <description>
+                  <prose><p>object to merge to</p></prose>
+                </description>
+              </param>
+              <returns>
+                <types>
+                  <type ref="Object"/>
+                </types>
+                <ctype>
+                  <name name="Object"/>
+                </ctype>
+                <description>
+                  <prose><p>object that contains merged style</p></prose>
+                </description>
+              </returns>
+            </method>
+            <method name="H.data.kml.ObjectFactory#getIconKey_" local-name="getIconKey_" access="private" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>Method creates key string for icon cache</p></prose>
+              </description>
+              <param name="href">
+                <types>
+                  <type ref="string"/>
+                </types>
+                <ctype>
+                  <name name="string"/>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </param>
+              <param name="anchor">
+                <types>
+                  <type ref="Object"/>
+                </types>
+                <ctype>
+                  <name name="Object"/>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </param>
+              <param name="scale">
+                <types>
+                  <type ref="number"/>
+                </types>
+                <ctype>
+                  <name name="number"/>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </param>
+              <returns>
+                <types>
+                  <type ref="string"/>
+                </types>
+                <ctype>
+                  <name name="string"/>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </returns>
+            </method>
+            <method name="H.data.kml.ObjectFactory#getIconOptions_" local-name="getIconOptions_" access="private" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>Method returns scaled icon options.</p></prose>
+              </description>
+              <param name="scale">
+                <types>
+                  <type ref="number"/>
+                </types>
+                <ctype>
+                  <name name="number"/>
+                </ctype>
+                <description>
+                  <prose><p>KML scale factor</p></prose>
+                </description>
+              </param>
+              <param name="anchor">
+                <types>
+                  <type ref="Object"/>
+                </types>
+                <ctype>
+                  <name name="Object"/>
+                </ctype>
+                <description>
+                  <prose><p>KML anchor</p></prose>
+                </description>
+              </param>
+              <returns>
+                <types>
+                  <type ref="H.map.Icon.Options"/>
+                </types>
+                <ctype>
+                  <name name="H.map.Icon.Options"/>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </returns>
+            </method>
+            <property name="H.data.kml.ObjectFactory.absoluteUrlRegExp_" local-name="absoluteUrlRegExp_" access="private" scope="static" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>Regular expression for checking whether sepcified URL is an absolute or no</p></prose>
+              </description>
+              <types>
+                <type ref="RegExp"/>
+              </types>
+              <ctype>
+                <name name="RegExp"/>
+              </ctype>
+            </property>
+            <method name="H.data.kml.ObjectFactory#getDefaultIcon_" local-name="getDefaultIcon_" access="private" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>Gives back the HERE maps default marker as svg.</p></prose>
+              </description>
+              <returns>
+                <types>
+                  <type ref="string"/>
+                </types>
+                <ctype>
+                  <name name="string"/>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </returns>
+            </method>
+          </class>
+          <class name="H.data.kml.Reader" local-name="Reader" access="public" scope="static" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>The KML Reader is responsible for fetching and interpreting KML data. Reader creates
+<code>H.map.Object</code> that can be displayed on the map, from KML Features and
+geometries as described by OGC.
+Auxiliary data that accompanies geometries (such as name, description,
+kml node itself etc.) is binded to the map object and can be fetched with object's
+<code>getData</code> method (see <link ref="H.map.Object#getData" />).</p>
+<p>Note that you can load KML file even from a different domain, if that domain supports
+Cross-Origin Resource Sharing (see <a href="http://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS">http://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS</a>).</p></prose>
+              <example>var reader = new H.data.kml.Reader(&apos;/path/to/kml/file.kml&apos;);
+reader.parse();
+//assuming that map already exists
+map.addLayer(reader.getLayer());</example>
+            </description>
+            <extends>
+              <type ref="H.data.AbstractReader"/>
+            </extends>
+            <constructor local-name="Reader" name="H.data.kml.Reader">
+              <param name="url">
+                <types>
+                  <type ref="string"/>
+                </types>
+                <ctype>
+                  <name name="string"/>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </param>
+            </constructor>
+            <property name="H.data.kml.Reader#queue_" local-name="queue_" access="private" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>Contains kml-folder entries that must converted to map objects and placed into the
+group associated with the node.</p></prose>
+              </description>
+              <types>
+                <type ref="Array.&lt;H.data.kml.Reader.QueueEntry&gt;"/>
+              </types>
+              <ctype>
+                <typed>
+                  <base>
+                    <name name="Array"/>
+                  </base>
+                  <app>
+                    <name name="H.data.kml.Reader.QueueEntry"/>
+                  </app>
+                </typed>
+              </ctype>
+            </property>
+            <property name="H.data.kml.Reader#kmlPath_" local-name="kmlPath_" access="private" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>Contains path to the KML file excluding it's name</p></prose>
+              </description>
+              <types>
+                <type ref="string"/>
+              </types>
+              <ctype>
+                <name name="string"/>
+              </ctype>
+            </property>
+            <method name="H.data.kml.Reader#createObjects" local-name="createObjects" access="protected" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>Converts passed argument into XML Document, parses KML Nodes and produces map objects out of it.
+The hierarchy of map objects in the KML tree is preserved.</p></prose>
+              </description>
+              <param name="data">
+                <types>
+                  <type ref="string"/>
+                </types>
+                <ctype>
+                  <name name="string" nullable="false"/>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </param>
+            </method>
+            <method name="H.data.kml.Reader#fetchStyles_" local-name="fetchStyles_" access="private" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>Find all styles e.g. in line and shared styles.</p></prose>
+              </description>
+              <param name="root">
+                <types>
+                  <type ref="Node"/>
+                </types>
+                <ctype>
+                  <name name="Node"/>
+                </ctype>
+                <description>
+                  <prose><p>This node represents the root tag of KML file. It can be the kml or
+Document node</p></prose>
+                </description>
+              </param>
+              <returns>
+                <types>
+                  <type ref="H.data.kml.StyleContainer"/>
+                </types>
+                <ctype>
+                  <name name="H.data.kml.StyleContainer"/>
+                </ctype>
+                <description>
+                  <prose><p>stylesContainer Consists an array of all
+found styles in kml DOM.</p></prose>
+                </description>
+              </returns>
+            </method>
+            <method name="H.data.kml.Reader#addObject_" local-name="addObject_" access="private" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>Is called when a KML node was read and a valid map object was created.</p></prose>
+              </description>
+              <param name="obj">
+                <types>
+                  <type ref="H.map.Object"/>
+                </types>
+                <ctype>
+                  <name name="H.map.Object" nullable="false"/>
+                </ctype>
+                <description>
+                  <prose><p>Is a map object like group, marker, polyline or polygon</p></prose>
+                </description>
+              </param>
+              <param name="group">
+                <types>
+                  <type ref="null"/>
+                  <type ref="H.map.Group"/>
+                </types>
+                <ctype>
+                  <union>
+                    <type>
+                      <null/>
+                    </type>
+                    <type>
+                      <name name="H.map.Group"/>
+                    </type>
+                  </union>
+                </ctype>
+                <description>
+                  <prose><p>The group represents the KML folder tag</p></prose>
+                </description>
+              </param>
+            </method>
+            <method name="H.data.kml.Reader#parseNode_" local-name="parseNode_" access="private" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>Method produces map objects from given node.</p></prose>
+              </description>
+              <param name="node">
+                <types>
+                  <type ref="Node"/>
+                </types>
+                <ctype>
+                  <name name="Node"/>
+                </ctype>
+                <description>
+                  <prose><p>The KML node to parse</p></prose>
+                </description>
+              </param>
+              <param name="group">
+                <types>
+                  <type ref="null"/>
+                  <type ref="H.map.Group"/>
+                </types>
+                <ctype>
+                  <union>
+                    <type>
+                      <null/>
+                    </type>
+                    <type>
+                      <name name="H.map.Group"/>
+                    </type>
+                  </union>
+                </ctype>
+                <description>
+                  <prose><p>The group represents the KML folder tag</p></prose>
+                </description>
+              </param>
+            </method>
+            <method name="H.data.kml.Reader#getRoot_" local-name="getRoot_" access="private" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>This method returns root document that contains KML data. In case that the KML file has no 'Document' tag
+it will start from the 'kml' tag.</p></prose>
+              </description>
+              <param name="doc">
+                <types>
+                  <type ref="Document"/>
+                </types>
+                <ctype>
+                  <name name="Document"/>
+                </ctype>
+                <description>
+                  <prose><p>KML document</p></prose>
+                </description>
+              </param>
+              <returns>
+                <types>
+                  <type ref="undefined"/>
+                  <type ref="Node"/>
+                </types>
+                <ctype>
+                  <union>
+                    <type>
+                      <undefined/>
+                    </type>
+                    <type>
+                      <name name="Node"/>
+                    </type>
+                  </union>
+                </ctype>
+                <description>
+                  <prose><p>node Starting node to parse the KML file correctly or
+undefined when no &lt;kml&gt; tag was found</p></prose>
+                </description>
+              </returns>
+            </method>
+            <method name="H.data.kml.Reader#fetchNodes_" local-name="fetchNodes_" access="private" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>Searches for a specific tag in the given node children and returns it as array.</p></prose>
+              </description>
+              <param name="nodes">
+                <types>
+                  <type ref="NodeList"/>
+                </types>
+                <ctype>
+                  <name name="NodeList"/>
+                </ctype>
+                <description>
+                  <prose><p>These are the children where you expect to find your tag</p></prose>
+                </description>
+              </param>
+              <param name="tag">
+                <types>
+                  <type ref="string"/>
+                </types>
+                <ctype>
+                  <name name="string"/>
+                </ctype>
+                <description>
+                  <prose><p>This string represents the tag to find e.g. 'Style' or 'StyleMap'</p></prose>
+                </description>
+              </param>
+              <param name="opt_docOnly" optional="true">
+                <types>
+                  <type ref="boolean"/>
+                </types>
+                <ctype>
+                  <name name="boolean" optional="true"/>
+                </ctype>
+                <description>
+                  <prose><p>Flags that function return only one node (if we look up Document node)</p></prose>
+                </description>
+              </param>
+              <returns>
+                <types>
+                  <type ref="Array.&lt;Node&gt;"/>
+                </types>
+                <ctype>
+                  <typed>
+                    <base>
+                      <name name="Array"/>
+                    </base>
+                    <app>
+                      <name name="Node"/>
+                    </app>
+                  </typed>
+                </ctype>
+                <description>
+                  <prose><p>requestedNodes Returns the nodes as array</p></prose>
+                </description>
+              </returns>
+            </method>
+            <typedef name="H.data.kml.Reader.QueueEntry" local-name="QueueEntry" access="public" scope="static" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>Entry of the parsing queue that holds relation between already created H.map.Group
+and node that contains data that should be parsed and added to the group.</p></prose>
+              </description>
+              <types>
+                <type ref="Object"/>
+              </types>
+              <ctype>
+                <record>
+                  <field>
+                    <key>
+                      <name name="group"/>
+                    </key>
+                    <value>
+                      <union>
+                        <type>
+                          <name name="H.map.Group"/>
+                        </type>
+                      </union>
+                    </value>
+                  </field>
+                  <field>
+                    <key>
+                      <name name="node"/>
+                    </key>
+                    <value>
+                      <union>
+                        <type>
+                          <name name="Node"/>
+                        </type>
+                      </union>
+                    </value>
+                  </field>
+                </record>
+              </ctype>
+              <property name="H.data.kml.Reader.QueueEntry#group" local-name="group" access="public" scope="" virtual="false" published="false" exported="false">
+                <description>
+                  <prose></prose>
+                </description>
+                <types>
+                  <type ref="H.map.Group"/>
+                </types>
+                <ctype>
+                  <name name="H.map.Group"/>
+                </ctype>
+              </property>
+              <property name="H.data.kml.Reader.QueueEntry#node" local-name="node" access="public" scope="" virtual="false" published="false" exported="false">
+                <description>
+                  <prose></prose>
+                </description>
+                <types>
+                  <type ref="Node"/>
+                </types>
+                <ctype>
+                  <name name="Node"/>
+                </ctype>
+              </property>
+            </typedef>
+            <event name="H.data.kml.Reader#event:statechange" local-name="statechange" access="public" scope="instance" virtual="false" published="true" exported="false" inherited="H.data.AbstractReader#event:statechange">
+              <description>
+                <prose><p>Fired when the reader state changes, see <link ref="H.data.AbstractReader#getState" /></p></prose>
+              </description>
+              <types>
+                <type ref="H.data.AbstractReader.Event"/>
+              </types>
+              <ctype>
+                <name name="H.data.AbstractReader.Event"/>
+              </ctype>
+            </event>
+            <property name="H.data.kml.Reader#url" local-name="url" access="protected" scope="instance" virtual="false" published="false" exported="false" inherited="H.data.AbstractReader#url">
+              <description>
+                <prose><p>Holds Url string</p></prose>
+              </description>
+              <types>
+                <type ref="string"/>
+              </types>
+              <ctype>
+                <name name="string"/>
+              </ctype>
+            </property>
+            <property name="H.data.kml.Reader#collection" local-name="collection" access="protected" scope="instance" virtual="false" published="false" exported="false" inherited="H.data.AbstractReader#collection">
+              <description>
+                <prose><p>Contains all root data elements as map objects.</p></prose>
+              </description>
+              <types>
+                <type ref="Array.&lt;H.map.Object&gt;"/>
+              </types>
+              <ctype>
+                <typed>
+                  <base>
+                    <name name="Array"/>
+                  </base>
+                  <app>
+                    <name name="H.map.Object"/>
+                  </app>
+                </typed>
+              </ctype>
+            </property>
+            <property name="H.data.kml.Reader#lop" local-name="lop" access="protected" scope="instance" virtual="false" published="false" exported="false" inherited="H.data.AbstractReader#lop">
+              <description>
+                <prose><p>Local object provider that's populated with map data</p></prose>
+              </description>
+              <types>
+                <type ref="H.map.provider.LocalObjectProvider"/>
+              </types>
+              <ctype>
+                <name name="H.map.provider.LocalObjectProvider"/>
+              </ctype>
+            </property>
+            <property name="H.data.kml.Reader#state" local-name="state" access="protected" scope="instance" virtual="false" published="false" exported="false" inherited="H.data.AbstractReader#state">
+              <description>
+                <prose><p>The initial state of the reader</p></prose>
+              </description>
+              <types>
+                <type ref="H.data.AbstractReader.State"/>
+              </types>
+              <ctype>
+                <name name="H.data.AbstractReader.State"/>
+              </ctype>
+            </property>
+            <enum name="H.data.kml.Reader#EventType" local-name="EventType" access="public" scope="instance" virtual="false" published="false" exported="false" inherited="H.data.AbstractReader#EventType">
+              <description>
+                <prose><p>Events fired by Reader. Event <code>statechange</code> is fired every time when reader's
+parsing state changes. For possible states see <link ref="H.data.AbstractReader.State" /></p></prose>
+              </description>
+              <types>
+                <type ref="string"/>
+              </types>
+              <ctype>
+                <name name="string"/>
+              </ctype>
+              <value name="H.data.kml.Reader#EventType.STATECHANGE" local-name="STATECHANGE">
+                <description>
+                  <prose></prose>
+                </description>
+              </value>
+            </enum>
+            <method name="H.data.kml.Reader#getLayer" local-name="getLayer" access="public" scope="instance" virtual="false" published="true" exported="true" inherited="H.data.AbstractReader#getLayer">
+              <description>
+                <prose><p>Method returns <link ref="H.map.layer.ObjectLayer" /> that contains parsed data, and
+can be added directly to the map. It returns new instance of the class with every invocation.
+If data hasn't been parsed it will return <code>H.map.layer.ObjectLayer</code> that contains
+partial information, and reader will add new parsed objects to the layer's provider later on.</p></prose>
+              </description>
+              <returns>
+                <types>
+                  <type ref="H.map.layer.ObjectLayer"/>
+                </types>
+                <ctype>
+                  <name name="H.map.layer.ObjectLayer"/>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </returns>
+            </method>
+            <method name="H.data.kml.Reader#getParsedObjects" local-name="getParsedObjects" access="public" scope="instance" virtual="false" published="true" exported="true" inherited="H.data.AbstractReader#getParsedObjects">
+              <description>
+                <prose><p>Method returns collection of currently parsed, and converted to
+<code>H.map.Object</code> data objects. Method returns only currently parsed objects
+if parsing is ongoing.</p></prose>
+              </description>
+              <returns>
+                <types>
+                  <type ref="Array.&lt;H.map.Object&gt;"/>
+                </types>
+                <ctype>
+                  <typed>
+                    <base>
+                      <name name="Array"/>
+                    </base>
+                    <app>
+                      <name name="H.map.Object"/>
+                    </app>
+                  </typed>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </returns>
+            </method>
+            <method name="H.data.kml.Reader#getUrl" local-name="getUrl" access="public" scope="instance" virtual="false" published="true" exported="true" inherited="H.data.AbstractReader#getUrl">
+              <description>
+                <prose><p>Returns URL of the current file, which is either in process of fetching/parsing or
+file that has been already parsed.</p></prose>
+              </description>
+              <returns>
+                <types>
+                  <type ref="string"/>
+                </types>
+                <ctype>
+                  <name name="string"/>
+                </ctype>
+                <description>
+                  <prose><p>url</p></prose>
+                </description>
+              </returns>
+            </method>
+            <method name="H.data.kml.Reader#setUrl" local-name="setUrl" access="public" scope="instance" virtual="false" published="true" exported="true" inherited="H.data.AbstractReader#setUrl">
+              <description>
+                <prose><p>Method sets reader's URL. Method resets current Reader's state to its initial values
+(clears data about last parsed objects, etc.), and throws InvalidState exception
+if Reader's state is not <code>READY</code> or <code>ERROR</code>.</p></prose>
+              </description>
+              <param name="url">
+                <types>
+                  <type ref="string"/>
+                </types>
+                <ctype>
+                  <name name="string"/>
+                </ctype>
+                <description>
+                  <prose><p>The new URL</p></prose>
+                </description>
+              </param>
+              <returns>
+                <types>
+                  <type ref="H.data.AbstractReader"/>
+                </types>
+                <ctype>
+                  <name name="H.data.AbstractReader"/>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </returns>
+            </method>
+            <method name="H.data.kml.Reader#getState" local-name="getState" access="public" scope="instance" virtual="false" published="true" exported="true" inherited="H.data.AbstractReader#getState">
+              <description>
+                <prose><p>Returns the reader's processing state for possible states see <link ref="H.data.AbstractReader.State" /></p></prose>
+              </description>
+              <returns>
+                <types>
+                  <type ref="H.data.AbstractReader.State"/>
+                </types>
+                <ctype>
+                  <name name="H.data.AbstractReader.State"/>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </returns>
+            </method>
+            <method name="H.data.kml.Reader#setState" local-name="setState" access="protected" scope="instance" virtual="false" published="false" exported="false" inherited="H.data.AbstractReader#setState">
+              <description>
+                <prose><p>Sets the state of this reader and dispatch a &quot;statechange&quot; event</p></prose>
+              </description>
+              <param name="state">
+                <types>
+                  <type ref="H.data.AbstractReader.State"/>
+                </types>
+                <ctype>
+                  <name name="H.data.AbstractReader.State" nullable="false"/>
+                </ctype>
+                <description>
+                  <prose><p>current reader state</p></prose>
+                </description>
+              </param>
+              <param name="opt_target" optional="true">
+                <types>
+                  <type ref="H.map.Object"/>
+                </types>
+                <ctype>
+                  <name name="H.map.Object" optional="true"/>
+                </ctype>
+                <description>
+                  <prose><p>optional target that's passed to event listeners</p></prose>
+                </description>
+              </param>
+              <param name="opt_msg" optional="true">
+                <types>
+                  <type ref="string"/>
+                </types>
+                <ctype>
+                  <name name="string" optional="true"/>
+                </ctype>
+                <description>
+                  <prose><p>optional message associated with the state</p></prose>
+                </description>
+              </param>
+            </method>
+            <method name="H.data.kml.Reader#parse" local-name="parse" access="public" scope="instance" virtual="false" published="true" exported="true" inherited="H.data.AbstractReader#parse">
+              <description>
+                <prose><p>Method launches parsing of the data file at the current url (see
+<link ref="H.data.AbstractReader#setUrl" /> or <link ref="H.data.AbstractReader" />). Method uses XHR
+as a transport therefore same origin policy applies, or server should respond with proper CORS headers.</p></prose>
+              </description>
+            </method>
+          </class>
+        </ns>
+        <ns name="H.data.utils" local-name="utils" access="public" scope="static" virtual="false" published="false" exported="false">
+          <description>
+            <prose></prose>
+          </description>
+          <class name="H.data.utils.Dom" local-name="Dom" access="public" scope="static" virtual="false" published="false" exported="true">
+            <description>
+              <prose><p>This is a kml dom helper class. It provides some functionality to handle kml dom.</p></prose>
+            </description>
+            <constructor local-name="Dom" name="H.data.utils.Dom"/>
+            <method name="H.data.utils.Dom#getBoolean" local-name="getBoolean" access="public" scope="instance" virtual="false" published="false" exported="true">
+              <description>
+                <prose><p>This method parses the value of an XML DOM node to a
+Boolean value.</p></prose>
+              </description>
+              <param name="node">
+                <types>
+                  <type ref="Object"/>
+                </types>
+                <ctype>
+                  <name name="Object" nullable="false"/>
+                </ctype>
+                <description>
+                  <prose><p>An XML DOM node to parse</p></prose>
+                </description>
+              </param>
+              <returns>
+                <types>
+                  <type ref="boolean"/>
+                </types>
+                <ctype>
+                  <name name="boolean"/>
+                </ctype>
+                <description>
+                  <prose><p>A Boolean representation of the node value</p></prose>
+                </description>
+              </returns>
+            </method>
+            <method name="H.data.utils.Dom#getString" local-name="getString" access="public" scope="instance" virtual="false" published="false" exported="true">
+              <description>
+                <prose><p>This can be used to parse a DOM node and to get the value as string back.</p></prose>
+              </description>
+              <param name="node">
+                <types>
+                  <type ref="Object"/>
+                </types>
+                <ctype>
+                  <name name="Object" nullable="false"/>
+                </ctype>
+                <description>
+                  <prose><p>A DOM node is required.</p></prose>
+                </description>
+              </param>
+              <returns>
+                <types>
+                  <type ref="string"/>
+                </types>
+                <ctype>
+                  <name name="string"/>
+                </ctype>
+                <description>
+                  <prose><p>Returns parsed node content.</p></prose>
+                </description>
+              </returns>
+            </method>
+            <method name="H.data.utils.Dom#getFloat" local-name="getFloat" access="public" scope="instance" virtual="false" published="false" exported="true">
+              <description>
+                <prose><p>This method parses the value of an XML DOM node to
+a Floating point number.</p></prose>
+              </description>
+              <param name="node">
+                <types>
+                  <type ref="Object"/>
+                </types>
+                <ctype>
+                  <name name="Object" nullable="false"/>
+                </ctype>
+                <description>
+                  <prose><p>An XML DOM node to parse</p></prose>
+                </description>
+              </param>
+              <returns>
+                <types>
+                  <type ref="number"/>
+                </types>
+                <ctype>
+                  <name name="number"/>
+                </ctype>
+                <description>
+                  <prose><p>The value of the node as a float</p></prose>
+                </description>
+              </returns>
+            </method>
+            <method name="H.data.utils.Dom#parseCoords" local-name="parseCoords" access="public" scope="instance" virtual="false" published="false" exported="true">
+              <description>
+                <prose><p>This method parses a string containing coordinates to an
+array of objects, each containing the properties 'lat', 'lng' and
+'alt'. The return value contains only valid coordinates.</p></prose>
+              </description>
+              <param name="coordsString">
+                <types>
+                  <type ref="string"/>
+                </types>
+                <ctype>
+                  <name name="string"/>
+                </ctype>
+                <description>
+                  <prose><p>A string containing a list of coordinates as
+  specified in KML specification, for example: '13,53.5,0
+14,53,0 13,52.5,0 14,52.5,0' or non standard comma separated list of
+coordinates like '13,53.5,0,14,53,0,13,52.5,0,14,52.5,0'.
+In this case specifying altitude(3rd component in each tuple) is required.
+Please do not use spaces in case if you provide coordinates in 2nd format.</p></prose>
+                </description>
+              </param>
+              <returns>
+                <types>
+                  <type ref="Array.&lt;H.geo.Point&gt;"/>
+                </types>
+                <ctype>
+                  <typed>
+                    <base>
+                      <name name="Array"/>
+                    </base>
+                    <app>
+                      <name name="H.geo.Point"/>
+                    </app>
+                  </typed>
+                </ctype>
+                <description>
+                  <prose><p>A list of objects containing
+parsed geographical coordinates</p></prose>
+                </description>
+              </returns>
+            </method>
+            <method name="H.data.utils.Dom#parseCoord" local-name="parseCoord" access="public" scope="instance" virtual="false" published="false" exported="true">
+              <description>
+                <prose><p>This method parses a object containing geographical coordinates
+from a string. If the input does not contain valid
+coordinates, the return value is undefined.</p></prose>
+              </description>
+              <param name="coordStr">
+                <types>
+                  <type ref="string"/>
+                  <type ref="Array.&lt;String&gt;"/>
+                </types>
+                <ctype>
+                  <union>
+                    <type>
+                      <name name="string"/>
+                    </type>
+                    <type>
+                      <typed>
+                        <base>
+                          <name name="Array"/>
+                        </base>
+                        <app>
+                          <name name="String"/>
+                        </app>
+                      </typed>
+                    </type>
+                  </union>
+                </ctype>
+                <description>
+                  <prose><p>A string containing the values of
+    geographical coordinate as specified in KML specification,
+    for example: '13,53.5,0' or '13,53.5'
+    Or an Array of strings like ['13','53.5','0'] or ['13','53.5']</p></prose>
+                </description>
+              </param>
+              <returns>
+                <types>
+                  <type ref="H.geo.Point"/>
+                </types>
+                <ctype>
+                  <name name="H.geo.Point"/>
+                </ctype>
+                <description>
+                  <prose><p>An object containing an
+object containing geographical coordinates (the properties are
+'lat', 'lng', and 'alt'</p></prose>
+                </description>
+              </returns>
+            </method>
+            <method name="H.data.utils.Dom#getColor" local-name="getColor" access="public" scope="instance" virtual="false" published="false" exported="true">
+              <description>
+                <prose><p>This method parses the value of an XML DOM node to a string that
+represents a color in RGBA format, reversing the order, because
+the KML specification uses the ABGR format. If parsing
+fails, the method returns the default hard-coded color.</p></prose>
+              </description>
+              <param name="node">
+                <types>
+                  <type ref="Object"/>
+                </types>
+                <ctype>
+                  <name name="Object" nullable="false"/>
+                </ctype>
+                <description>
+                  <prose><p>An XML DOM node to parse</p></prose>
+                </description>
+              </param>
+              <returns>
+                <types>
+                  <type ref="string"/>
+                </types>
+                <ctype>
+                  <name name="string"/>
+                </ctype>
+                <description>
+                  <prose><p>A string representing a color in #RGBA format</p></prose>
+                </description>
+              </returns>
+            </method>
+          </class>
+          <class name="H.data.utils.ColorHelper" local-name="ColorHelper" access="public" scope="static" virtual="false" published="false" exported="true">
+            <description>
+              <prose><p>This is a kml color helper class. It provides some functionality to handle kml
+colors.</p></prose>
+            </description>
+            <constructor local-name="ColorHelper" name="H.data.utils.ColorHelper"/>
+            <method name="H.data.utils.ColorHelper#shortHandHexToInt_" local-name="shortHandHexToInt_" access="private" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose></prose>
+              </description>
+              <param name="str">
+                <types>
+                  <type ref="string"/>
+                </types>
+                <ctype>
+                  <name name="string"/>
+                </ctype>
+                <description>
+                  <prose><p>Input string.</p></prose>
+                </description>
+              </param>
+              <returns>
+                <types>
+                  <type ref="number"/>
+                </types>
+                <ctype>
+                  <name name="number"/>
+                </ctype>
+                <description>
+                  <prose><p>num Returns an integer number.</p></prose>
+                </description>
+              </returns>
+            </method>
+            <method name="H.data.utils.ColorHelper#intToHex_" local-name="intToHex_" access="private" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose></prose>
+              </description>
+              <param name="val">
+                <types>
+                  <type ref="number"/>
+                </types>
+                <ctype>
+                  <name name="number"/>
+                </ctype>
+                <description>
+                  <prose><p>Input integer to convert.</p></prose>
+                </description>
+              </param>
+              <returns>
+                <types>
+                  <type ref="string"/>
+                </types>
+                <ctype>
+                  <name name="string"/>
+                </ctype>
+                <description>
+                  <prose><p>hex Returns the converted hex number.</p></prose>
+                </description>
+              </returns>
+            </method>
+            <method name="H.data.utils.ColorHelper#isNamedColor_" local-name="isNamedColor_" access="private" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose></prose>
+              </description>
+              <param name="str">
+                <types>
+                  <type ref="string"/>
+                </types>
+                <ctype>
+                  <name name="string"/>
+                </ctype>
+                <description>
+                  <prose><p>Color string.</p></prose>
+                </description>
+              </param>
+              <returns>
+                <types>
+                  <type ref="boolean"/>
+                </types>
+                <ctype>
+                  <name name="boolean"/>
+                </ctype>
+                <description>
+                  <prose><p>bol Returns true if the given string is a named color.</p></prose>
+                </description>
+              </returns>
+            </method>
+            <method name="H.data.utils.ColorHelper#normalize_" local-name="normalize_" access="private" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose></prose>
+              </description>
+              <param name="str">
+                <types>
+                  <type ref="string"/>
+                </types>
+                <ctype>
+                  <name name="string"/>
+                </ctype>
+                <description>
+                  <prose></prose>
+                </description>
+              </param>
+              <returns>
+                <types>
+                  <type ref="string"/>
+                </types>
+                <ctype>
+                  <name name="string" nullable="false"/>
+                </ctype>
+                <description>
+                  <prose><p>result Normalized number is returned.</p></prose>
+                </description>
+              </returns>
+            </method>
+            <method name="H.data.utils.ColorHelper#getRandomInt_" local-name="getRandomInt_" access="private" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose></prose>
+              </description>
+              <param name="min">
+                <types>
+                  <type ref="number"/>
+                </types>
+                <ctype>
+                  <name name="number"/>
+                </ctype>
+                <description>
+                  <prose><p>Below border.</p></prose>
+                </description>
+              </param>
+              <param name="max">
+                <types>
+                  <type ref="number"/>
+                </types>
+                <ctype>
+                  <name name="number"/>
+                </ctype>
+                <description>
+                  <prose><p>Top border.</p></prose>
+                </description>
+              </param>
+              <returns>
+                <types>
+                  <type ref="number"/>
+                </types>
+                <ctype>
+                  <name name="number"/>
+                </ctype>
+                <description>
+                  <prose><p>num Random number is returned.</p></prose>
+                </description>
+              </returns>
+            </method>
+            <method name="H.data.utils.ColorHelper#getRandomStr_" local-name="getRandomStr_" access="private" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose></prose>
+              </description>
+              <returns>
+                <types>
+                  <type ref="string"/>
+                </types>
+                <ctype>
+                  <name name="string"/>
+                </ctype>
+                <description>
+                  <prose><p>text Random text is returned.</p></prose>
+                </description>
+              </returns>
+            </method>
+            <method name="H.data.utils.ColorHelper#toRGBA" local-name="toRGBA" access="public" scope="instance" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>Converts a color string into a 4 element array of RGBA values ranging from
+0-255. If the color cannot be converted, it is assumed to be fully opaque black.
+The argument color string can be in short-hand (<code>#rgb[a]</code>) or long-hand
+(<code>#rrggbb[aa]</code>) hexadecimal notation. The CSS <code>rgb(r, g, b)</code>
+notation with absolute values ranging from 0 - 255, as well as the
+<code>rgba(r, g, b, a)</code> notation with absolute values is also permitted, but
+causes more conversion overhead.</p></prose>
+              </description>
+              <param name="str">
+                <types>
+                  <type ref="string"/>
+                </types>
+                <ctype>
+                  <name name="string"/>
+                </ctype>
+                <description>
+                  <prose><p>The color string</p></prose>
+                </description>
+              </param>
+              <param name="normalized">
+                <types>
+                  <type ref="boolean"/>
+                </types>
+                <ctype>
+                  <name name="boolean"/>
+                </ctype>
+                <description>
+                  <prose><p>If true the color string is assumed to be in normalized form</p></prose>
+                </description>
+              </param>
+              <returns>
+                <types>
+                  <type ref="Array.&lt;number&gt;"/>
+                </types>
+                <ctype>
+                  <typed>
+                    <base>
+                      <name name="Array"/>
+                    </base>
+                    <app>
+                      <name name="number"/>
+                    </app>
+                  </typed>
+                </ctype>
+                <description>
+                  <prose><p>An array of RGBA color components</p></prose>
+                </description>
+              </returns>
+            </method>
+            <method name="H.data.utils.ColorHelper#toRandomRGBA" local-name="toRandomRGBA" access="public" scope="instance" virtual="false" published="false" exported="true">
+              <description>
+                <prose><p>Converts a color string into a randomized RGBA string with values ranging from 0 to specified
+color component. If the color cannot be converted, it is assumed to be fully opaque black.</p>
+<p>The argument color string can be in short-hand (<code>#rgb[a]</code>) or long-hand
+(<code>#rrggbb[aa]</code>) hexadecimal notation. The CSS <code>rgb(r, g, b)</code>
+notation with absolute values ranging from 0 - 255, as well as the <code>rgba(r, g, b, a)</code>
+notation with absolute values is also permitted, but causes more conversion overhead.</p>
+<p>The opacity of a color stays as it is from the alpha component of the passed string and is never randomized.</p></prose>
+              </description>
+              <param name="str">
+                <types>
+                  <type ref="string"/>
+                </types>
+                <ctype>
+                  <name name="string"/>
+                </ctype>
+                <description>
+                  <prose><p>The color string</p></prose>
+                </description>
+              </param>
+              <param name="normalized">
+                <types>
+                  <type ref="boolean"/>
+                </types>
+                <ctype>
+                  <name name="boolean"/>
+                </ctype>
+                <description>
+                  <prose><p>If true the color string is assumed to be in normalized form</p></prose>
+                </description>
+              </param>
+              <returns>
+                <types>
+                  <type ref="string"/>
+                </types>
+                <ctype>
+                  <name name="string"/>
+                </ctype>
+                <description>
+                  <prose><p>Randomized RGBA color string</p></prose>
+                </description>
+              </returns>
+            </method>
+          </class>
+        </ns>
+        <method name="H.data.buildInfo" local-name="buildInfo" access="public" scope="static" virtual="false" published="false" exported="true">
+          <description>
+            <prose><p>Function returns build information</p></prose>
+          </description>
+          <returns>
+            <types>
+              <type ref="Object"/>
+            </types>
+            <ctype>
+              <name name="Object"/>
+            </ctype>
+            <description>
+              <prose></prose>
+            </description>
+          </returns>
+        </method>
+      </ns>
+    </symbols>
+  </module>
+</modules>

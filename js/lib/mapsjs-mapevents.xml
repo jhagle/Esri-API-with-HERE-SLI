@@ -1,0 +1,1796 @@
+<?xml version="1.0"?>
+<modules>
+  <module name="mapsjs-mapevents">
+    <symbols>
+      <ns name="H.mapevents" local-name="mapevents" access="public" scope="static" virtual="false" published="true" exported="false">
+        <description>
+          <prose><p>This namespace contains classes and all functionality
+related to map events and map behavior</p></prose>
+        </description>
+        <class name="H.mapevents.Pointer" local-name="Pointer" access="public" scope="static" virtual="false" published="true" exported="true">
+          <description>
+            <prose><p>Class representing pointer on the map surface. A pointer
+in platform specific definition would mean either mouse,
+touch, pen or any pointing device which can trigger browser events.</p></prose>
+          </description>
+          <constructor local-name="Pointer" name="H.mapevents.Pointer">
+            <param name="viewportX">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose><p>pointer position on x-axis</p></prose>
+              </description>
+            </param>
+            <param name="viewportY">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose><p>pointer position on y-axis</p></prose>
+              </description>
+            </param>
+            <param name="id">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose><p>unique pointer identifier among currently available pointers</p></prose>
+              </description>
+            </param>
+            <param name="type">
+              <types>
+                <type ref="string"/>
+              </types>
+              <ctype>
+                <name name="string"/>
+              </ctype>
+              <description>
+                <prose><p>type of pointer can be i.e 'mouse', 'touch'. 'pen'</p></prose>
+              </description>
+            </param>
+          </constructor>
+          <property name="H.mapevents.Pointer.viewportX" local-name="viewportX" access="public" scope="static" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>X coordinate on the map's viewport</p></prose>
+            </description>
+            <types>
+              <type ref="number"/>
+            </types>
+            <ctype>
+              <name name="number"/>
+            </ctype>
+          </property>
+          <property name="H.mapevents.Pointer.viewportY" local-name="viewportY" access="public" scope="static" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Y coordinate on the map's viewport</p></prose>
+            </description>
+            <types>
+              <type ref="number"/>
+            </types>
+            <ctype>
+              <name name="number"/>
+            </ctype>
+          </property>
+          <property name="H.mapevents.Pointer.target" local-name="target" access="public" scope="static" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Map object directly under the pointer. Can be null if if pointer is out of the
+map viewport</p></prose>
+            </description>
+            <types>
+              <type ref="H.map.Object"/>
+              <type ref="H.Map"/>
+            </types>
+            <ctype>
+              <union>
+                <type>
+                  <name name="H.map.Object"/>
+                </type>
+                <type>
+                  <name name="H.Map"/>
+                </type>
+              </union>
+            </ctype>
+          </property>
+          <property name="H.mapevents.Pointer.id" local-name="id" access="public" scope="static" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Pointer unique identifier.</p></prose>
+            </description>
+            <types>
+              <type ref="number"/>
+            </types>
+            <ctype>
+              <name name="number"/>
+            </ctype>
+          </property>
+          <property name="H.mapevents.Pointer.type" local-name="type" access="public" scope="static" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Pointer type can be: 'mouse', 'touch' or 'pen'</p></prose>
+            </description>
+            <types>
+              <type ref="string"/>
+            </types>
+            <ctype>
+              <name name="string"/>
+            </ctype>
+          </property>
+          <property name="H.mapevents.Pointer.dragTarget" local-name="dragTarget" access="public" scope="static" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Object which is currently dragged by the pointer</p></prose>
+            </description>
+            <types>
+              <type ref="H.map.Object"/>
+              <type ref="H.Map"/>
+            </types>
+            <ctype>
+              <union>
+                <type>
+                  <name name="H.map.Object"/>
+                </type>
+                <type>
+                  <name name="H.Map"/>
+                </type>
+              </union>
+            </ctype>
+          </property>
+          <method name="H.mapevents.Pointer#updatePosition" local-name="updatePosition" access="public" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Update pointer map position.</p></prose>
+            </description>
+            <param name="x">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <param name="y">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.mapevents.Pointer#setTarget" local-name="setTarget" access="public" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Updates pointer's target</p></prose>
+            </description>
+            <param name="target">
+              <types>
+                <type ref="*"/>
+              </types>
+              <ctype>
+                <all/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.mapevents.Pointer#setDragTarget" local-name="setDragTarget" access="public" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Updates pointer dragging target</p></prose>
+            </description>
+            <param name="dragTarget">
+              <types>
+                <type ref="*"/>
+              </types>
+              <ctype>
+                <all/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+          </method>
+        </class>
+        <class name="H.mapevents.Event" local-name="Event" access="public" scope="static" virtual="false" published="true" exported="true">
+          <description>
+            <prose><p>Custom map event. Contains list of pointers on the map, list of changed pointers
+and original event. Inherits from H.util.Event.</p></prose>
+          </description>
+          <extends>
+            <type ref="H.util.Event"/>
+          </extends>
+          <constructor local-name="Event" name="H.mapevents.Event">
+            <param name="type">
+              <types>
+                <type ref="string"/>
+              </types>
+              <ctype>
+                <name name="string"/>
+              </ctype>
+              <description>
+                <prose><p>type of event</p></prose>
+              </description>
+            </param>
+            <param name="pointers">
+              <types>
+                <type ref="Array.&lt;H.mapevents.Pointer&gt;"/>
+              </types>
+              <ctype>
+                <typed>
+                  <base>
+                    <name name="Array"/>
+                  </base>
+                  <app>
+                    <name name="H.mapevents.Pointer"/>
+                  </app>
+                </typed>
+              </ctype>
+              <description>
+                <prose><p>pointers which are currently on the screen</p></prose>
+              </description>
+            </param>
+            <param name="changedPointers">
+              <types>
+                <type ref="Array.&lt;H.mapevents.Pointer&gt;"/>
+              </types>
+              <ctype>
+                <typed>
+                  <base>
+                    <name name="Array"/>
+                  </base>
+                  <app>
+                    <name name="H.mapevents.Pointer"/>
+                  </app>
+                </typed>
+              </ctype>
+              <description>
+                <prose><p>pointers which changed during event</p></prose>
+              </description>
+            </param>
+            <param name="targetPointers">
+              <types>
+                <type ref="Array.&lt;H.mapevents.Pointer&gt;"/>
+              </types>
+              <ctype>
+                <typed>
+                  <base>
+                    <name name="Array"/>
+                  </base>
+                  <app>
+                    <name name="H.mapevents.Pointer"/>
+                  </app>
+                </typed>
+              </ctype>
+              <description>
+                <prose><p>pointers on the event target</p></prose>
+              </description>
+            </param>
+            <param name="currentPointer">
+              <types>
+                <type ref="H.mapevents.Pointer"/>
+              </types>
+              <ctype>
+                <name name="H.mapevents.Pointer"/>
+              </ctype>
+              <description>
+                <prose><p>pointer which triggered the event</p></prose>
+              </description>
+            </param>
+            <param name="target">
+              <types>
+                <type ref="H.Map"/>
+                <type ref="H.map.Object"/>
+              </types>
+              <ctype>
+                <union>
+                  <type>
+                    <name name="H.Map"/>
+                  </type>
+                  <type>
+                    <name name="H.map.Object"/>
+                  </type>
+                </union>
+              </ctype>
+              <description>
+                <prose><p>target map object which triggered event</p></prose>
+              </description>
+            </param>
+            <param name="originalEvent">
+              <types>
+                <type ref="Event"/>
+              </types>
+              <ctype>
+                <name name="Event"/>
+              </ctype>
+              <description>
+                <prose><p>original dom event</p></prose>
+              </description>
+            </param>
+          </constructor>
+          <property name="H.mapevents.Event#pointers" local-name="pointers" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Pointers which are currently on the screen</p></prose>
+            </description>
+            <types>
+              <type ref="Array.&lt;H.mapevents.Pointer&gt;"/>
+            </types>
+            <ctype>
+              <typed>
+                <base>
+                  <name name="Array"/>
+                </base>
+                <app>
+                  <name name="H.mapevents.Pointer"/>
+                </app>
+              </typed>
+            </ctype>
+          </property>
+          <property name="H.mapevents.Event#changedPointers" local-name="changedPointers" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Pointers which has changed in course of event</p></prose>
+            </description>
+            <types>
+              <type ref="Array.&lt;H.mapevents.Pointer&gt;"/>
+            </types>
+            <ctype>
+              <typed>
+                <base>
+                  <name name="Array"/>
+                </base>
+                <app>
+                  <name name="H.mapevents.Pointer"/>
+                </app>
+              </typed>
+            </ctype>
+          </property>
+          <property name="H.mapevents.Event#targetPointers" local-name="targetPointers" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Pointers which are on same target as the current pointer</p></prose>
+            </description>
+            <types>
+              <type ref="Array.&lt;H.mapevents.Pointer&gt;"/>
+            </types>
+            <ctype>
+              <typed>
+                <base>
+                  <name name="Array"/>
+                </base>
+                <app>
+                  <name name="H.mapevents.Pointer"/>
+                </app>
+              </typed>
+            </ctype>
+          </property>
+          <property name="H.mapevents.Event#currentPointer" local-name="currentPointer" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Current pointer</p></prose>
+            </description>
+            <types>
+              <type ref="H.mapevents.Pointer"/>
+            </types>
+            <ctype>
+              <name name="H.mapevents.Pointer"/>
+            </ctype>
+          </property>
+          <property name="H.mapevents.Event#originalEvent" local-name="originalEvent" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Original event fired by the browser</p></prose>
+            </description>
+            <types>
+              <type ref="Event"/>
+            </types>
+            <ctype>
+              <name name="Event"/>
+            </ctype>
+          </property>
+          <property name="H.mapevents.Event#target" local-name="target" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Object which triggered event. Can be the map object (i.e marker or polyline)
+or the map itself</p></prose>
+            </description>
+            <types>
+              <type ref="H.map.Object"/>
+              <type ref="H.Map"/>
+            </types>
+            <ctype>
+              <union>
+                <type>
+                  <name name="H.map.Object"/>
+                </type>
+                <type>
+                  <name name="H.Map"/>
+                </type>
+              </union>
+            </ctype>
+          </property>
+          <property name="H.mapevents.Event#currentTarget" local-name="currentTarget" access="public" scope="instance" virtual="false" published="true" exported="false" inherited="H.util.Event#currentTarget">
+            <description>
+              <prose><p>Object which has listener attached</p></prose>
+            </description>
+            <types>
+              <type ref="H.map.Object"/>
+              <type ref="H.Map"/>
+            </types>
+            <ctype>
+              <union>
+                <type>
+                  <name name="H.map.Object"/>
+                </type>
+                <type>
+                  <name name="H.Map"/>
+                </type>
+              </union>
+            </ctype>
+          </property>
+          <property name="H.mapevents.Event#type" local-name="type" access="public" scope="instance" virtual="false" published="true" exported="false" inherited="H.util.Event#type">
+            <description>
+              <prose><p>Name of the dispatched event</p></prose>
+            </description>
+            <types>
+              <type ref="string"/>
+            </types>
+            <ctype>
+              <name name="string"/>
+            </ctype>
+          </property>
+          <property name="H.mapevents.Event#defaultPrevented" local-name="defaultPrevented" access="public" scope="instance" virtual="false" published="true" exported="false" inherited="H.util.Event#defaultPrevented">
+            <description>
+              <prose><p>Indicates if preventDefault was called on the current event</p></prose>
+            </description>
+            <types>
+              <type ref="boolean"/>
+            </types>
+            <ctype>
+              <name name="boolean"/>
+            </ctype>
+          </property>
+          <method name="H.mapevents.Event#preventDefault" local-name="preventDefault" access="public" scope="instance" virtual="false" published="true" exported="false" inherited="H.util.Event#preventDefault">
+            <description>
+              <prose><p>Sets defaultPrevented to true. Which can be used to prevent
+some default behavior.</p></prose>
+            </description>
+          </method>
+          <method name="H.mapevents.Event#stopPropagation" local-name="stopPropagation" access="public" scope="instance" virtual="false" published="true" exported="true" inherited="H.util.Event#stopPropagation">
+            <description>
+              <prose><p>Stops propagation for current event.</p></prose>
+            </description>
+          </method>
+        </class>
+        <class name="H.mapevents.PointerList" local-name="PointerList" access="public" scope="static" virtual="false" published="false" exported="false">
+          <description>
+            <prose><p>Class represents a list of pointers with some convinience methods
+used by the handlers to sort out the map pointer events. This class is
+used internally by the handlers.</p></prose>
+          </description>
+          <constructor local-name="PointerList" name="H.mapevents.PointerList">
+            <param name="opt_pointers" optional="true">
+              <types>
+                <type ref="Array"/>
+              </types>
+              <ctype>
+                <name name="Array" optional="true"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+          </constructor>
+          <property name="H.mapevents.PointerList#list_" local-name="list_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+          </property>
+          <method name="H.mapevents.PointerList#clear" local-name="clear" access="public" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Removes all pointers from the list</p></prose>
+            </description>
+          </method>
+          <method name="H.mapevents.PointerList#length" local-name="length" access="public" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Returns lengths of the list.</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.mapevents.PointerList#item" local-name="item" access="public" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Returns element on the give index position</p></prose>
+            </description>
+            <param name="idx">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="H.mapevents.Pointer"/>
+              </types>
+              <ctype>
+                <name name="H.mapevents.Pointer"/>
+              </ctype>
+              <description>
+                <prose><p>pointer</p></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.mapevents.PointerList#indexOf" local-name="indexOf" access="public" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Returns position of the pointer for given pointerID</p></prose>
+            </description>
+            <param name="pointerId">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose><p>position of the pointer which ahs given ID  or -1;</p></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.mapevents.PointerList#byId" local-name="byId" access="public" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Returns pointer fetched from the list by ID or null if there is not any</p></prose>
+            </description>
+            <param name="pointerId">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="H.mapevents.Pointer"/>
+              </types>
+              <ctype>
+                <name name="H.mapevents.Pointer"/>
+              </ctype>
+              <description>
+                <prose><p>pointer which has been found by given id (or null)</p></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.mapevents.PointerList#remove" local-name="remove" access="public" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Removes pointer with given identifier from the list.</p></prose>
+            </description>
+            <param name="pointerId">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose><p>id of the pointer</p></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="H.mapevents.Pointer"/>
+              </types>
+              <ctype>
+                <name name="H.mapevents.Pointer" nullable="true"/>
+              </ctype>
+              <description>
+                <prose><p>removed pointer or null in case it was not found</p></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.mapevents.PointerList#removeByType" local-name="removeByType" access="public" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>This method removes pointer of given type from the list.</p></prose>
+            </description>
+            <param name="type">
+              <types>
+                <type ref="string"/>
+              </types>
+              <ctype>
+                <name name="string"/>
+              </ctype>
+              <description>
+                <prose><p>type of pointer i.e 'mouse', 'touch', 'pen'</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.mapevents.PointerList#getOnTarget" local-name="getOnTarget" access="public" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Thie methos returns an array of pointers which are on the given target.</p></prose>
+            </description>
+            <param name="target">
+              <types>
+                <type ref="*"/>
+              </types>
+              <ctype>
+                <all/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="Array.&lt;H.mapevents.Pointer&gt;"/>
+              </types>
+              <ctype>
+                <typed>
+                  <base>
+                    <name name="Array"/>
+                  </base>
+                  <app>
+                    <name name="H.mapevents.Pointer"/>
+                  </app>
+                </typed>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.mapevents.PointerList#isDragTarget" local-name="isDragTarget" access="public" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>This method returns true if object is dragged by one
+of the pointers in the list</p></prose>
+            </description>
+            <param name="obj">
+              <types>
+                <type ref="H.map.Object"/>
+                <type ref="H.Map"/>
+              </types>
+              <ctype>
+                <union>
+                  <type>
+                    <name name="H.map.Object"/>
+                  </type>
+                  <type>
+                    <name name="H.Map"/>
+                  </type>
+                </union>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="boolean"/>
+              </types>
+              <ctype>
+                <name name="boolean"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.mapevents.PointerList#push" local-name="push" access="public" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Adds pointer to the list</p></prose>
+            </description>
+            <param name="pointer">
+              <types>
+                <type ref="H.mapevents.Pointer"/>
+              </types>
+              <ctype>
+                <name name="H.mapevents.Pointer"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.mapevents.PointerList#asArray" local-name="asArray" access="public" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Returns pointers as array</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="Array.&lt;H.mapevents.Pointer&gt;"/>
+              </types>
+              <ctype>
+                <typed>
+                  <base>
+                    <name name="Array"/>
+                  </base>
+                  <app>
+                    <name name="H.mapevents.Pointer"/>
+                  </app>
+                </typed>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.mapevents.PointerList#clone" local-name="clone" access="public" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Clones the list</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="H.mapevents.PointerList"/>
+              </types>
+              <ctype>
+                <name name="H.mapevents.PointerList"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+        </class>
+        <class name="H.mapevents.WheelEvent" local-name="WheelEvent" access="public" scope="static" virtual="false" published="true" exported="true">
+          <description>
+            <prose><p>WheelEvent is fired when the mouse wheel is used over the map. It contains information
+about cursor position and the map object which resides directly
+under the cursor.</p></prose>
+          </description>
+          <extends>
+            <type ref="H.util.Event"/>
+          </extends>
+          <constructor local-name="WheelEvent" name="H.mapevents.WheelEvent">
+            <param name="deltaY">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose><p>The wheel move delta on y-axis</p></prose>
+              </description>
+            </param>
+            <param name="viewportX">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose><p>The x coordinate on the viewport</p></prose>
+              </description>
+            </param>
+            <param name="viewportY">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose><p>The y coordinate on the viewport</p></prose>
+              </description>
+            </param>
+            <param name="target">
+              <types>
+                <type ref="H.Map"/>
+                <type ref="H.map.Object"/>
+              </types>
+              <ctype>
+                <union>
+                  <type>
+                    <name name="H.Map"/>
+                  </type>
+                  <type>
+                    <name name="H.map.Object"/>
+                  </type>
+                </union>
+              </ctype>
+              <description>
+                <prose><p>The event's target element</p></prose>
+              </description>
+            </param>
+            <param name="originalEvent">
+              <types>
+                <type ref="Event"/>
+              </types>
+              <ctype>
+                <name name="Event"/>
+              </ctype>
+              <description>
+                <prose><p>target of the event</p></prose>
+              </description>
+            </param>
+          </constructor>
+          <property name="H.mapevents.WheelEvent#delta" local-name="delta" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Wheel move delta</p></prose>
+            </description>
+            <types>
+              <type ref="number"/>
+            </types>
+            <ctype>
+              <name name="number"/>
+            </ctype>
+          </property>
+          <property name="H.mapevents.WheelEvent#viewportX" local-name="viewportX" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Map viewport x position</p></prose>
+            </description>
+            <types>
+              <type ref="number"/>
+            </types>
+            <ctype>
+              <name name="number"/>
+            </ctype>
+          </property>
+          <property name="H.mapevents.WheelEvent#viewportY" local-name="viewportY" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Map viewport y position</p></prose>
+            </description>
+            <types>
+              <type ref="number"/>
+            </types>
+            <ctype>
+              <name name="number"/>
+            </ctype>
+          </property>
+          <property name="H.mapevents.WheelEvent#target" local-name="target" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Target for the event</p></prose>
+            </description>
+            <types>
+              <type ref="H.map.Object"/>
+              <type ref="H.Map"/>
+            </types>
+            <ctype>
+              <union>
+                <type>
+                  <name name="H.map.Object"/>
+                </type>
+                <type>
+                  <name name="H.Map"/>
+                </type>
+              </union>
+            </ctype>
+          </property>
+          <property name="H.mapevents.WheelEvent#originalEvent" local-name="originalEvent" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Original mouse wheel event</p></prose>
+            </description>
+            <types>
+              <type ref="Event"/>
+            </types>
+            <ctype>
+              <name name="Event"/>
+            </ctype>
+          </property>
+          <property name="H.mapevents.WheelEvent#currentTarget" local-name="currentTarget" access="public" scope="instance" virtual="false" published="true" exported="false" inherited="H.util.Event#currentTarget">
+            <description>
+              <prose><p>Object which has listener attached</p></prose>
+            </description>
+            <types>
+              <type ref="H.map.Object"/>
+              <type ref="H.Map"/>
+            </types>
+            <ctype>
+              <union>
+                <type>
+                  <name name="H.map.Object"/>
+                </type>
+                <type>
+                  <name name="H.Map"/>
+                </type>
+              </union>
+            </ctype>
+          </property>
+          <property name="H.mapevents.WheelEvent#type" local-name="type" access="public" scope="instance" virtual="false" published="true" exported="false" inherited="H.util.Event#type">
+            <description>
+              <prose><p>Name of the dispatched event</p></prose>
+            </description>
+            <types>
+              <type ref="string"/>
+            </types>
+            <ctype>
+              <name name="string"/>
+            </ctype>
+          </property>
+          <property name="H.mapevents.WheelEvent#defaultPrevented" local-name="defaultPrevented" access="public" scope="instance" virtual="false" published="true" exported="false" inherited="H.util.Event#defaultPrevented">
+            <description>
+              <prose><p>Indicates if preventDefault was called on the current event</p></prose>
+            </description>
+            <types>
+              <type ref="boolean"/>
+            </types>
+            <ctype>
+              <name name="boolean"/>
+            </ctype>
+          </property>
+          <method name="H.mapevents.WheelEvent#preventDefault" local-name="preventDefault" access="public" scope="instance" virtual="false" published="true" exported="false" inherited="H.util.Event#preventDefault">
+            <description>
+              <prose><p>Sets defaultPrevented to true. Which can be used to prevent
+some default behavior.</p></prose>
+            </description>
+          </method>
+          <method name="H.mapevents.WheelEvent#stopPropagation" local-name="stopPropagation" access="public" scope="instance" virtual="false" published="true" exported="true" inherited="H.util.Event#stopPropagation">
+            <description>
+              <prose><p>Stops propagation for current event.</p></prose>
+            </description>
+          </method>
+        </class>
+        <class name="H.mapevents.MapEvents" local-name="MapEvents" access="public" scope="static" virtual="false" published="true" exported="true">
+          <description>
+            <prose><p>MapEvents enable the events functionality on the map and one the map objects.
+By using this extension it is possible to listen to events on map objects
+like markers, polyline and the mapevents object itself. Events are triggered
+depending on user interaction. Please check the Events Summary section
+for the list of events fired my this class and by the map objects.</p></prose>
+            <example>//prerequisites: mapInstance and marker is initialized
+mapInstance.addObject(marker);
+var mapevts = new H.mapevents.MapEvents(mapInstance);
+//add listener to map
+map.addEventListener(&apos;pointermove&apos;, function(e) {...});
+//add listener to the marker
+marker.addEventListener(&apos;pointerenter&apos;, function(e) {...});
+marker.addEventListener(&apos;pointerleave&apos;, function(e) {...});</example>
+          </description>
+          <extends>
+            <type ref="H.util.Disposable"/>
+          </extends>
+          <constructor local-name="MapEvents" name="H.mapevents.MapEvents">
+            <param name="map">
+              <types>
+                <type ref="H.Map"/>
+              </types>
+              <ctype>
+                <name name="H.Map"/>
+              </ctype>
+              <description>
+                <prose><p>map instance which is used for firing events</p></prose>
+              </description>
+            </param>
+          </constructor>
+          <event name="H.mapevents.MapEvents#event:pointerdown" local-name="pointerdown" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Signifies this the pointer (mouse, pen, touch) has reached the map surface.
+It equalivement to platform: mousedown, touchstart, pointerdown.</p></prose>
+            </description>
+            <types>
+              <type ref="H.mapevents.Event"/>
+            </types>
+            <ctype>
+              <name name="H.mapevents.Event"/>
+            </ctype>
+          </event>
+          <event name="H.mapevents.MapEvents#event:pointerup" local-name="pointerup" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Signifies this the pointer (mouse, pen, touch) has left the map surface.
+It equalivement to platform's: mouseup, touchend, pointerup.</p></prose>
+            </description>
+            <types>
+              <type ref="H.mapevents.Event"/>
+            </types>
+            <ctype>
+              <name name="H.mapevents.Event"/>
+            </ctype>
+          </event>
+          <event name="H.mapevents.MapEvents#event:pointermove" local-name="pointermove" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Signifies this the pointer (mouse, pen, touch) is moved over the surface.
+It equalivement to platform's: mousemove, touchmove, pointermove.</p></prose>
+            </description>
+            <types>
+              <type ref="H.mapevents.Event"/>
+            </types>
+            <ctype>
+              <name name="H.mapevents.Event"/>
+            </ctype>
+          </event>
+          <event name="H.mapevents.MapEvents#event:pointerenter" local-name="pointerenter" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Signifies this the pointer (mouse, pen, touch) has entered the object area.
+It equalivement to platform's: mouseenter, touchenter, pointerenter.
+Note: this events is not propagated to the mapEvents object if triggered by the
+map object (i.e marker).</p></prose>
+            </description>
+            <types>
+              <type ref="H.mapevents.Event"/>
+            </types>
+            <ctype>
+              <name name="H.mapevents.Event"/>
+            </ctype>
+          </event>
+          <event name="H.mapevents.MapEvents#event:pointerleave" local-name="pointerleave" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Signifies this the pointer (mouse, pen, touch) has left the target object area.
+It equalivement to platform's: mouseleave, touchleave, pointerleave.
+Note: this events is not propagated to the mapEvents object if triggered by the
+map object (i.e marker).</p></prose>
+            </description>
+            <types>
+              <type ref="H.mapevents.Event"/>
+            </types>
+            <ctype>
+              <name name="H.mapevents.Event"/>
+            </ctype>
+          </event>
+          <event name="H.mapevents.MapEvents#event:pointercancel" local-name="pointercancel" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Signifies this the pointer (mouse, pen, touch) has been cancelled by the browser.
+It equalivement to platform's: touchcancel, pointercancel.</p></prose>
+            </description>
+            <types>
+              <type ref="H.mapevents.Event"/>
+            </types>
+            <ctype>
+              <name name="H.mapevents.Event"/>
+            </ctype>
+          </event>
+          <event name="H.mapevents.MapEvents#event:dragstart" local-name="dragstart" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Signifies this the pointer (mouse, pen, touch) started dragging the target.
+This event is only fired if the target object has <code>draggable</code> property set
+to true.</p></prose>
+            </description>
+            <types>
+              <type ref="H.mapevents.Event"/>
+            </types>
+            <ctype>
+              <name name="H.mapevents.Event"/>
+            </ctype>
+          </event>
+          <event name="H.mapevents.MapEvents#event:drag" local-name="drag" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Signifies this the pointer (mouse, pen, touch) is dragging the target.
+This event is only fired if the target object has <code>draggable</code> property set
+to true.</p></prose>
+            </description>
+            <types>
+              <type ref="H.mapevents.Event"/>
+            </types>
+            <ctype>
+              <name name="H.mapevents.Event"/>
+            </ctype>
+          </event>
+          <event name="H.mapevents.MapEvents#event:dragend" local-name="dragend" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Signifies this the pointer (mouse, pen, touch) stopped dragging the target.
+This event is only fired if the target object has <code>draggable</code> property set
+to true.</p></prose>
+            </description>
+            <types>
+              <type ref="H.mapevents.Event"/>
+            </types>
+            <ctype>
+              <name name="H.mapevents.Event"/>
+            </ctype>
+          </event>
+          <event name="H.mapevents.MapEvents#event:tap" local-name="tap" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Signifies this the pointer (touch, pen, mouse) has touched the map (or object)
+surface for a moment.</p></prose>
+            </description>
+            <types>
+              <type ref="H.mapevents.Event"/>
+            </types>
+            <ctype>
+              <name name="H.mapevents.Event"/>
+            </ctype>
+          </event>
+          <event name="H.mapevents.MapEvents#event:dbltap" local-name="dbltap" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Signifies this the pointer (touch, pen) has touched the map (or object)
+surface twice in a row for a moment.</p></prose>
+            </description>
+            <types>
+              <type ref="H.mapevents.Event"/>
+            </types>
+            <ctype>
+              <name name="H.mapevents.Event"/>
+            </ctype>
+          </event>
+          <event name="H.mapevents.MapEvents#event:longpress" local-name="longpress" access="public" scope="instance" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>This event is dispatched on pointer target after pointer down has occured
+and no pointer up was triggered and pointer stayed in place for a longer time.</p></prose>
+            </description>
+            <types>
+              <type ref="H.mapevents.Event"/>
+            </types>
+            <ctype>
+              <name name="H.mapevents.Event"/>
+            </ctype>
+          </event>
+          <property name="H.mapevents.MapEvents#touchHandler_" local-name="touchHandler_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+          </property>
+          <property name="H.mapevents.MapEvents#mouseHandler_" local-name="mouseHandler_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+          </property>
+          <property name="H.mapevents.MapEvents#wheelHandler_" local-name="wheelHandler_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+          </property>
+          <property name="H.mapevents.MapEvents.usedBy_" local-name="usedBy_" access="private" scope="static" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Array stores references to H.Map instances to prevent double instantiation
+of MapEvents with the same map.</p></prose>
+            </description>
+            <types>
+              <type ref="Array.&lt;H.Map&gt;"/>
+            </types>
+            <ctype>
+              <typed>
+                <base>
+                  <name name="Array"/>
+                </base>
+                <app>
+                  <name name="H.Map"/>
+                </app>
+              </typed>
+            </ctype>
+          </property>
+          <method name="H.mapevents.MapEvents#setupHandlers_" local-name="setupHandlers_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>This method sets up the plaform handlers which will
+itnernally conver native events to custom map events</p></prose>
+            </description>
+          </method>
+          <enum name="H.mapevents.MapEvents.EventType" local-name="EventType" access="public" scope="static" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>List of event fired by <link ref="H.Map" /> and all map objects added to map i.e <link ref="H.map.Marker" />
+To enable the listed events on map and map objects you need to initialize the MapEvents instance
+and pass the Map instance as an argument to the constructor.</p></prose>
+              <example>var mapEvents = new H.mapevents.MapEvents(mapInstance);
+mapInstance.addEventListener(&apos;drag&apos;, function(mapEvent) {
+  //execute code when map is being dragged
+})</example>
+            </description>
+            <types>
+              <type ref="string"/>
+            </types>
+            <ctype>
+              <name name="string"/>
+            </ctype>
+            <value name="H.mapevents.MapEvents.EventType.POINTERDOWN" local-name="POINTERDOWN">
+              <description>
+                <prose></prose>
+              </description>
+            </value>
+            <value name="H.mapevents.MapEvents.EventType.POINTERUP" local-name="POINTERUP">
+              <description>
+                <prose></prose>
+              </description>
+            </value>
+            <value name="H.mapevents.MapEvents.EventType.POINTERMOVE" local-name="POINTERMOVE">
+              <description>
+                <prose></prose>
+              </description>
+            </value>
+            <value name="H.mapevents.MapEvents.EventType.POINTERENTER" local-name="POINTERENTER">
+              <description>
+                <prose></prose>
+              </description>
+            </value>
+            <value name="H.mapevents.MapEvents.EventType.POINTERLEAVE" local-name="POINTERLEAVE">
+              <description>
+                <prose></prose>
+              </description>
+            </value>
+            <value name="H.mapevents.MapEvents.EventType.POINTERCANCEL" local-name="POINTERCANCEL">
+              <description>
+                <prose></prose>
+              </description>
+            </value>
+            <value name="H.mapevents.MapEvents.EventType.DRAGSTART" local-name="DRAGSTART">
+              <description>
+                <prose></prose>
+              </description>
+            </value>
+            <value name="H.mapevents.MapEvents.EventType.DRAG" local-name="DRAG">
+              <description>
+                <prose></prose>
+              </description>
+            </value>
+            <value name="H.mapevents.MapEvents.EventType.DRAGEND" local-name="DRAGEND">
+              <description>
+                <prose></prose>
+              </description>
+            </value>
+            <value name="H.mapevents.MapEvents.EventType.TAP" local-name="TAP">
+              <description>
+                <prose></prose>
+              </description>
+            </value>
+            <value name="H.mapevents.MapEvents.EventType.DBLTAP" local-name="DBLTAP">
+              <description>
+                <prose></prose>
+              </description>
+            </value>
+            <value name="H.mapevents.MapEvents.EventType.LONGPRESS" local-name="LONGPRESS">
+              <description>
+                <prose></prose>
+              </description>
+            </value>
+          </enum>
+          <method name="H.mapevents.MapEvents#dispose" local-name="dispose" access="public" scope="instance" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>This method destroys the MapEvents by removing all handlers from the map object.
+After calling this function mapEvents and map objects will not trigger any events.
+This object will be disposed automatically if the corresponding map object
+is disposed.</p></prose>
+            </description>
+          </method>
+          <method name="H.mapevents.MapEvents#getAttachedMap" local-name="getAttachedMap" access="public" scope="instance" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>This method returns map into which events are attached</p></prose>
+            </description>
+            <returns>
+              <types>
+                <type ref="H.Map"/>
+              </types>
+              <ctype>
+                <name name="H.Map"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+        </class>
+        <class name="H.mapevents.Behavior" local-name="Behavior" access="public" scope="static" virtual="false" published="true" exported="true">
+          <description>
+            <prose><p>Behavior class uses map events and adds behavior funcitonality to the map.
+This allows map panning and zooming via using mouse wheel</p></prose>
+            <example>//add map events functionality to the map
+var mapEvents = new H.mapevents.MapEvents(mapInstance);
+//add behavior to the map
+var behavior = new H.mapevents.Behavior(mapEvents);
+//from here map is pannable</example>
+          </description>
+          <extends>
+            <type ref="H.util.Disposable"/>
+          </extends>
+          <constructor local-name="Behavior" name="H.mapevents.Behavior">
+            <param name="mapEvents">
+              <types>
+                <type ref="H.mapevents.MapEvents"/>
+              </types>
+              <ctype>
+                <name name="H.mapevents.MapEvents"/>
+              </ctype>
+              <description>
+                <prose><p>previously initialized map events instance</p></prose>
+              </description>
+            </param>
+            <param name="options">
+              <types>
+                <type ref="H.mapevents.Behavior.Options"/>
+              </types>
+              <ctype>
+                <name name="H.mapevents.Behavior.Options"/>
+              </ctype>
+              <description>
+                <prose><p>additional options (i.e kinetics)</p></prose>
+              </description>
+            </param>
+          </constructor>
+          <property name="H.mapevents.Behavior#map_" local-name="map_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+          </property>
+          <property name="H.mapevents.Behavior#mapEvents_" local-name="mapEvents_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+            <types>
+              <type ref="H.mapevents.MapEvents"/>
+            </types>
+            <ctype>
+              <name name="H.mapevents.MapEvents"/>
+            </ctype>
+          </property>
+          <property name="H.mapevents.Behavior#zoomDuration_" local-name="zoomDuration_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+          </property>
+          <property name="H.mapevents.Behavior#kinetics_" local-name="kinetics_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+          </property>
+          <property name="H.mapevents.Behavior#enableAll_" local-name="enableAll_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+          </property>
+          <property name="H.mapevents.Behavior#viewPort_" local-name="viewPort_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+          </property>
+          <property name="H.mapevents.Behavior#viewPortElement_" local-name="viewPortElement_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+          </property>
+          <property name="H.mapevents.Behavior#viewModel_" local-name="viewModel_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+          </property>
+          <property name="H.mapevents.Behavior#zooming_" local-name="zooming_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+          </property>
+          <property name="H.mapevents.Behavior#p2dType_" local-name="p2dType_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+          </property>
+          <property name="H.mapevents.Behavior.usedBy_" local-name="usedBy_" access="private" scope="static" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>Array stores references to H.mapevents.MapEvents instances to prevent double instantiation
+of Behavior with the same MapEvents.</p></prose>
+            </description>
+            <types>
+              <type ref="Array.&lt;H.mapevents.MapEvents&gt;"/>
+            </types>
+            <ctype>
+              <typed>
+                <base>
+                  <name name="Array"/>
+                </base>
+                <app>
+                  <name name="H.mapevents.MapEvents"/>
+                </app>
+              </typed>
+            </ctype>
+          </property>
+          <property name="H.mapevents.Behavior#enabled_" local-name="enabled_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+            <types>
+              <type ref="number"/>
+            </types>
+            <ctype>
+              <name name="number"/>
+            </ctype>
+          </property>
+          <property name="H.mapevents.Behavior.DRAGGING" local-name="DRAGGING" access="public" scope="static" virtual="false" published="true" exported="true" constant="true">
+            <description>
+              <prose><p>Map responds to user dragging via mouse or touch</p></prose>
+            </description>
+            <types>
+              <type ref="number"/>
+            </types>
+            <ctype>
+              <name name="number"/>
+            </ctype>
+          </property>
+          <property name="H.mapevents.Behavior.WHEELZOOM" local-name="WHEELZOOM" access="public" scope="static" virtual="false" published="true" exported="true" constant="true">
+            <description>
+              <prose><p>Map zooms in or out in respond to mouse wheel events</p></prose>
+            </description>
+            <types>
+              <type ref="number"/>
+            </types>
+            <ctype>
+              <name name="number"/>
+            </ctype>
+          </property>
+          <property name="H.mapevents.Behavior.DBLTAPZOOM" local-name="DBLTAPZOOM" access="public" scope="static" virtual="false" published="true" exported="true" constant="true">
+            <description>
+              <prose><p>Map zooms in or out in response to double click or double tap.
+For double tap if more that one touches are on the screen map will zoom out.</p></prose>
+            </description>
+            <types>
+              <type ref="number"/>
+            </types>
+            <ctype>
+              <name name="number"/>
+            </ctype>
+          </property>
+          <method name="H.mapevents.Behavior#ondragstart_" local-name="ondragstart_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>This methos is being called when map dragging is initialized. It
+handles the drag and initializes map interaction.</p></prose>
+            </description>
+            <param name="evt">
+              <types>
+                <type ref="H.mapevents.Event"/>
+              </types>
+              <ctype>
+                <name name="H.mapevents.Event"/>
+              </ctype>
+              <description>
+                <prose><p>event fired by the map</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.mapevents.Behavior#ondrag_" local-name="ondrag_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>This method is being called during the map dragging. It handles
+interaction and repositions the map</p></prose>
+            </description>
+            <param name="evt">
+              <types>
+                <type ref="H.mapevents.Event"/>
+              </types>
+              <ctype>
+                <name name="H.mapevents.Event"/>
+              </ctype>
+              <description>
+                <prose><p>event fired by the map</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.mapevents.Behavior#ondragend_" local-name="ondragend_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>This method is being called when map dragging is finished. It
+ends map interaction.</p></prose>
+            </description>
+            <param name="evt">
+              <types>
+                <type ref="H.mapevents.Event"/>
+              </types>
+              <ctype>
+                <name name="H.mapevents.Event"/>
+              </ctype>
+              <description>
+                <prose><p>event fired by the map</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.mapevents.Behavior#zoom" local-name="zoom" access="public" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>This method does the actuall zooming on the map</p></prose>
+            </description>
+            <param name="from">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose><p>start zoom</p></prose>
+              </description>
+            </param>
+            <param name="to">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose><p>destination zoom</p></prose>
+              </description>
+            </param>
+            <param name="atX">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose><p>zoom target x map viewport coordinate</p></prose>
+              </description>
+            </param>
+            <param name="atY">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose><p>zoom target y map viewport coordinate</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.mapevents.Behavior#onwheel_" local-name="onwheel_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>This method handles the mouse wheel events triggered on
+the map. It zooms in or out depending on the wheel delta</p></prose>
+            </description>
+            <param name="evt">
+              <types>
+                <type ref="H.mapevents.Event"/>
+              </types>
+              <ctype>
+                <name name="H.mapevents.Event"/>
+              </ctype>
+              <description>
+                <prose><p>event fired by the map</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.mapevents.Behavior#ontap_" local-name="ontap_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+            <param name="evt">
+              <types>
+                <type ref="H.mapevents.Event"/>
+              </types>
+              <ctype>
+                <name name="H.mapevents.Event"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.mapevents.Behavior#pointermove_" local-name="pointermove_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose></prose>
+            </description>
+            <param name="evt">
+              <types>
+                <type ref="H.mapevents.Event"/>
+              </types>
+              <ctype>
+                <name name="H.mapevents.Event"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.mapevents.Behavior#ondoubletap_" local-name="ondoubletap_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>This method handles double tap zoom. Whenever use taps the map quickly two times,
+map will zoom in by one level. If there are two fingers on the map and
+one of the double tap map will zoom out for one level.</p></prose>
+            </description>
+            <param name="evt">
+              <types>
+                <type ref="H.mapevents.Event"/>
+              </types>
+              <ctype>
+                <name name="H.mapevents.Event"/>
+              </ctype>
+              <description>
+                <prose><p>event fired by the map</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.mapevents.Behavior#oncontextmenu_" local-name="oncontextmenu_" access="private" scope="instance" virtual="false" published="false" exported="false">
+            <description>
+              <prose><p>This methis prevents browser menu from being displayed</p></prose>
+            </description>
+            <param name="evt">
+              <types>
+                <type ref="H.mapevents.Event"/>
+              </types>
+              <ctype>
+                <name name="H.mapevents.Event"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="boolean"/>
+              </types>
+              <ctype>
+                <name name="boolean"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <method name="H.mapevents.Behavior#dispose" local-name="dispose" access="public" scope="instance" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>This method destroys all map interaction handling. Should be
+used when the behavior functionality is disposed. Behavior object
+will also be disposed (this function will be called)
+when attached <link ref="H.mapevents.MapEvents" /> object is dispose.</p></prose>
+            </description>
+          </method>
+          <method name="H.mapevents.Behavior#disable" local-name="disable" access="public" scope="instance" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>This method disables the behavior functionality for
+the map</p></prose>
+            </description>
+            <param name="opt_behavior" optional="true">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number" optional="true"/>
+              </ctype>
+              <description>
+                <prose><p>value from <link ref="H.mapevents.Behavior.Behaviors" /> which
+specifies particular behavior to be disabled. If no arguments passed it will disable all.</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.mapevents.Behavior#enable" local-name="enable" access="public" scope="instance" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>This method re-enables the behavior functionality for the map.</p></prose>
+            </description>
+            <param name="opt_behavior" optional="true">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number" optional="true"/>
+              </ctype>
+              <description>
+                <prose><p>value from <link ref="H.mapevents.Behavior.Behaviors" /> which
+specifies particular behavior to be enabled. If no arguments passed it will enable all.</p></prose>
+              </description>
+            </param>
+          </method>
+          <method name="H.mapevents.Behavior#isEnabled" local-name="isEnabled" access="public" scope="instance" virtual="false" published="true" exported="true">
+            <description>
+              <prose><p>This method checks if certain functionality is enabled</p></prose>
+            </description>
+            <param name="behavior">
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+              <description>
+                <prose><p>value from <link ref="H.mapevents.Behavior.Behaviors" /> against
+which the check is being performed</p></prose>
+              </description>
+            </param>
+            <returns>
+              <types>
+                <type ref="boolean"/>
+              </types>
+              <ctype>
+                <name name="boolean"/>
+              </ctype>
+              <description>
+                <prose></prose>
+              </description>
+            </returns>
+          </method>
+          <typedef name="H.mapevents.Behavior.Options" local-name="Options" access="public" scope="static" virtual="false" published="true" exported="false">
+            <description>
+              <prose><p>Options which are used to initialize the Behavior class.</p></prose>
+            </description>
+            <types>
+              <type ref="Object"/>
+            </types>
+            <ctype>
+              <record>
+                <field>
+                  <key>
+                    <name name="kinetics"/>
+                  </key>
+                  <value>
+                    <union>
+                      <type>
+                        <name name="H.util.kinetics.IKinetics"/>
+                      </type>
+                      <type>
+                        <undefined/>
+                      </type>
+                    </union>
+                  </value>
+                </field>
+                <field>
+                  <key>
+                    <name name="enable"/>
+                  </key>
+                  <value>
+                    <union>
+                      <type>
+                        <name name="number"/>
+                      </type>
+                    </union>
+                  </value>
+                </field>
+              </record>
+            </ctype>
+            <property name="H.mapevents.Behavior.Options#kinetics" local-name="kinetics" access="public" scope="" virtual="false" published="false" exported="false" optional="true">
+              <description>
+                <prose><p>parameters for kinetic movement.
+If set to false will prevent default settings from being used.</p></prose>
+              </description>
+              <types>
+                <type ref="H.util.kinetics.IKinetics"/>
+              </types>
+              <ctype>
+                <name name="H.util.kinetics.IKinetics" optional="true"/>
+              </ctype>
+            </property>
+            <property name="H.mapevents.Behavior.Options#enable" local-name="enable" access="public" scope="" virtual="false" published="false" exported="false">
+              <description>
+                <prose><p>is a bitmask of <link ref="H.mapevents.Behavior.Behaviors" />
+which can enable only certain functionalities (all are enabled by default)</p></prose>
+              </description>
+              <types>
+                <type ref="number"/>
+              </types>
+              <ctype>
+                <name name="number"/>
+              </ctype>
+            </property>
+          </typedef>
+        </class>
+        <method name="H.mapevents.buildInfo" local-name="buildInfo" access="public" scope="static" virtual="false" published="false" exported="true">
+          <description>
+            <prose><p>Function returns the module build information</p></prose>
+          </description>
+          <returns>
+            <types>
+              <type ref="H.util.BuildInfo"/>
+            </types>
+            <ctype>
+              <name name="H.util.BuildInfo"/>
+            </ctype>
+            <description>
+              <prose></prose>
+            </description>
+          </returns>
+        </method>
+      </ns>
+    </symbols>
+  </module>
+</modules>
